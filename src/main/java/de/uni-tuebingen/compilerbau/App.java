@@ -1,4 +1,4 @@
-package org.example;
+package de.uni-tuebingen.compilerbau;
 
 /**
  * Hello world!

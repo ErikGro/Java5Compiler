@@ -4,11 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
-  <artifactId>Compiler</artifactId>
+  <groupId>de.uni-tuebingen.compilerbau</groupId>
+  <artifactId>compilerbau_ws2021</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>Compiler</name>
+  <name>compilerbau_ws2021</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
