@@ -1,4 +1,4 @@
-package de.uni-tuebingen.compilerbau;
+package de.unituebingen.compilerbau;
 
 import static org.junit.Assert.assertTrue;
 
