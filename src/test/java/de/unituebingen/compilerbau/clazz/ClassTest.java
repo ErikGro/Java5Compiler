@@ -10,7 +10,7 @@ import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import static org.junit.Assert.assertEquals;
 
-public class ClazzTest extends CompilerTest {
+public class ClassTest extends CompilerTest {
     @Override
     public String getFileName() {
         return "Clazz";
