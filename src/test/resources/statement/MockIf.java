@@ -10,7 +10,7 @@ public class MockIf {
 
         if (42 == 42) {
 
-        } else if {
+        } else if (true) {
 
         } else {
 

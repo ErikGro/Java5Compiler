@@ -10,6 +10,6 @@ public class MockClass {
     }
 
     int test2() {
-
+        return 42;
     }
 }

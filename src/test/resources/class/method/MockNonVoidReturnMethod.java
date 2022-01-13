@@ -1,4 +1,4 @@
-public class MockStaticMethod {
+public class MockNonVoidReturnMethod {
     int intMethod() {
         return 42;
     }

@@ -1,3 +1,3 @@
-public class MockClass {
+public class MockEmptyClass {
 
 }

@@ -1,3 +1,3 @@
-public class MockPrivateField {
+public class MockPublicField {
     public int a;
 }
