@@ -4,7 +4,7 @@ package de.unituebingen.compilerbau.ast;
  * @author Matthias Walz
  * @version 1.0
  */
-public abstract class Statement
+public abstract class Statement implements Node
 {
     private Type type;
 

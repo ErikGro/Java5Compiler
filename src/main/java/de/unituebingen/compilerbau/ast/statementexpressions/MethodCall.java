@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau.ast.statementexpressions;
 
+import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 
 import java.util.List;
@@ -35,5 +36,11 @@ public class MethodCall extends StatementExpression
     public List<Expression> getArgs()
     {
         return args;
+    }
+
+    @Override
+    public void visit(ASTVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau.ast.statements;
 
+import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Statement;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * @author Matthias Walz
  * @version 1.0
  */
-public class Block
+public class Block extends Statement
 {
     private List<Statement> body;
 
@@ -20,5 +21,14 @@ public class Block
     public List<Statement> getBody()
     {
         return body;
+    }
+
+    @Override
+    public void visit(ASTVisitor visitor)
+    {
+        for (Statement statement : body)
+        {
+            statement.visit(visitor);
+        }
     }
 }

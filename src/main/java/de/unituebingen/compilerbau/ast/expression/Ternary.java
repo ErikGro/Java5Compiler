@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau.ast.expression;
 
+import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Type;
 
@@ -22,5 +23,11 @@ public class Ternary implements Expression {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    @Override
+    public void visit(ASTVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

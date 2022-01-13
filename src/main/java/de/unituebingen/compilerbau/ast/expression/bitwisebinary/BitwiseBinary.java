@@ -7,7 +7,7 @@ import de.unituebingen.compilerbau.ast.expression.Binary;
  * @author Matthias Walz
  * @version 1.0
  */
-public class BitwiseBinary extends Binary
+public abstract class BitwiseBinary extends Binary
 {
     public BitwiseBinary(
             Expression left, Expression right)

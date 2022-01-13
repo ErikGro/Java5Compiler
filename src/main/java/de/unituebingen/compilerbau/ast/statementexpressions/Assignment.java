@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau.ast.statementexpressions;
 
+import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 
 /**
@@ -26,5 +27,11 @@ public class Assignment extends StatementExpression
     public Expression getRight()
     {
         return right;
+    }
+
+    @Override
+    public void visit(ASTVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }
