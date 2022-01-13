@@ -1,20 +1,21 @@
-package de.unituebingen.compilerbau.clazz.method;
+package de.unituebingen.compilerbau.expression.binary.bitwise;
 
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
+
+import java.io.IOException;
+
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
-import java.io.IOException;
-
 import static org.junit.Assert.assertEquals;
 
-public class VoidMethodTest extends CompilerTest {
+public class TestBitAnd extends CompilerTest {
     @Override
     public String getFileName() {
-        return "MockVoidMethod";
+        return "MockBitAnd";
     }
 
     @Override

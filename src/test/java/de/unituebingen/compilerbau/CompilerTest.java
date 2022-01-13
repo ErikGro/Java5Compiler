@@ -6,10 +6,7 @@ import de.unituebingen.compilerbau.exception.TypeCheckException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public abstract class CompilerTest {
     public final Compiler compiler = new Compiler();
@@ -31,13 +28,17 @@ public abstract class CompilerTest {
 
     @Before
     public void loadTestFiles() {
-        String sourceFilePath = getFileName() + ".java";
-        String byteCodeFilePath = getFileName() + ".class";
+        String sourceFileName = getFileName() + ".java";
+        String byteCodeFileName = getFileName() + ".class";
 
-        InputStream isSource = getClass().getClassLoader().getResourceAsStream(sourceFilePath);
-        InputStream isByteCode = getClass().getClassLoader().getResourceAsStream(byteCodeFilePath);
+        ClassLoader classLoader = this.getClass().getClassLoader();
+
+        File source = new File(this.getClass().getResource(sourceFileName).getFile());
+        File byteCode = new File(this.getClass().getResource(sourceFileName).getFile());
 
         try {
+            InputStream isSource = new FileInputStream(source);
+            InputStream isByteCode = new FileInputStream(byteCode);
             sourceFile = readFromInputStream(isSource);
             expectedByteCode = readFromInputStream(isByteCode);
         } catch (IOException e) {

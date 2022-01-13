@@ -3,17 +3,19 @@ package de.unituebingen.compilerbau.clazz;
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
+
 import java.io.IOException;
+
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import static org.junit.Assert.assertEquals;
 
-public class ClassTest extends CompilerTest {
+public class TestClass extends CompilerTest {
     @Override
     public String getFileName() {
-        return "Clazz";
+        return "MockClass";
     }
 
     @Override
