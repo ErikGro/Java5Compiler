@@ -6,5 +6,5 @@ package de.unituebingen.compilerbau.ast;
  */
 public interface Expression
 {
-    String getType();
+    Type getType();
 }
