@@ -1,5 +1,7 @@
 # Compilerbau_WS2021
 
+Execute compileTestSources.sh in order to compile the test source files.
+
 ## Participants
 - Matthias - Parser
 - Daniel - Parser
