@@ -3,6 +3,10 @@ package de.unituebingen.compilerbau.ast;
 import java.util.Objects;
 
 public class Type {
+    public static final Type CHAR = new Type("char");
+    public static final Type INT = new Type("int");
+    public static final Type BOOLEAN = new Type("boolean");
+
     public String name;
 
     Type(String name) {
