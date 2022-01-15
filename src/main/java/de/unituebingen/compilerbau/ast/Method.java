@@ -18,4 +18,22 @@ public class Method {
         this.parameters = parameters;
         this.body = body;
     }
+
+    private String descriptor;
+    public String getDescriptor() {
+        if (descriptor != null) {
+            return descriptor;
+        }
+        descriptor = "(";
+        for (Type par : parameters.values()) {
+            descriptor += par.name;
+        }
+        descriptor += ")";
+        if (returnType == null) {
+            descriptor += "V";
+        } else {
+            descriptor += returnType.name;
+        }
+        return descriptor;
+    }
 }

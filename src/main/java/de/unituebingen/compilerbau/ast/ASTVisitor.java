@@ -60,4 +60,6 @@ public interface ASTVisitor {
     void visit(LocalVarDeclaration localVarDeclaration);
     void visit(Return _return);
     void visit(While _while);
+
+    void visit(Block block);
 }

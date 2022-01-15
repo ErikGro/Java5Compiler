@@ -21,9 +21,6 @@ public class Block extends Statement
     @Override
     public void visit(ASTVisitor visitor)
     {
-        for (Statement statement : body)
-        {
-            statement.visit(visitor);
-        }
+        visitor.visit(this);
     }
 }
