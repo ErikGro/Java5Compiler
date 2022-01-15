@@ -27,15 +27,4 @@ public class Field implements LocalOrFieldVar {
     public Type getType() {
         return type;
     }
-
-    // Codegen
-    @Override
-    public void load(MethodVisitor mv) {
-        mv.visitFieldInsn(isStatic ? Opcodes.GETSTATIC : Opcodes.GETFIELD, owner.name, name, type.name);
-    }
-
-    @Override
-    public void store(MethodVisitor mv) {
-        mv.visitFieldInsn(isStatic ? Opcodes.PUTSTATIC : Opcodes.PUTFIELD, owner.name, name, type.name);
-    }
 }

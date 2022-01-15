@@ -23,15 +23,4 @@ public class Local implements LocalOrFieldVar {
     public Type getType() {
         return type;
     }
-
-    // Codegen
-    @Override
-    public void load(MethodVisitor mv) {
-        mv.visitVarInsn(Opcodes.ILOAD, index);
-    }
-
-    @Override
-    public void store(MethodVisitor mv) {
-        mv.visitVarInsn(Opcodes.ISTORE, index);
-    }
 }

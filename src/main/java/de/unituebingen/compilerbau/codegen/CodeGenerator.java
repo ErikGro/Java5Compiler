@@ -44,7 +44,7 @@ public class CodeGenerator {
             if (variable == null && parent != null) {
                 return parent.get(name);
             }
-            return null;
+            throw new CodeGenException("Couldn't find symbol '" + name + "'");
         }
     }
 
@@ -65,21 +65,37 @@ public class CodeGenerator {
 
         @Override
         public void visit(Identifier identifier) {
+            LocalOrFieldVar var = scope.get(identifier.name);
+            if (var instanceof Local) {
+                Local local = (Local) var;
+                // TODO Other types need different load instructions
+                mv.visitVarInsn(ILOAD, local.index);
+            } else if (var instanceof Field) {
+                Field field = (Field) var;
+                if (!field.isStatic) {
+                    mv.visitVarInsn(ALOAD, 0);
+                }
+                mv.visitFieldInsn(GETSTATIC, field.owner.name, field.getName(), field.getType().name);
+            }
         }
 
         @Override
         public void visit(IntLiteral intLiteral) {
-
+            mv.visitLdcInsn(intLiteral.value);
         }
 
         @Override
         public void visit(BooleanLiteral booleanLiteral) {
-
+            if (booleanLiteral.value) {
+                mv.visitInsn(ICONST_1);
+            } else {
+                mv.visitInsn(ICONST_0);
+            }
         }
 
         @Override
         public void visit(CharLiteral charLiteral) {
-
+            mv.visitLdcInsn(charLiteral.value);
         }
 
         @Override
