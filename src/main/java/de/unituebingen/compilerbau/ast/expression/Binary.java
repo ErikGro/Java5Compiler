@@ -4,8 +4,8 @@ import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Type;
 
 public abstract class Binary implements Expression {
-    public Expression left;
-    public Expression right;
+    public final Expression left;
+    public final Expression right;
     protected Type type;
 
     public Binary(Expression left, Expression right) {

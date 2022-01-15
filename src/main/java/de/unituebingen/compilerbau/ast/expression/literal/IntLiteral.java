@@ -4,7 +4,7 @@ import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Type;
 
 public class IntLiteral extends Literal {
-    public int value;
+    public final int value;
 
     public IntLiteral(int value) {
         super(Type.INT);

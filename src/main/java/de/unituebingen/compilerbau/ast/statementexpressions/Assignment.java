@@ -9,24 +9,13 @@ import de.unituebingen.compilerbau.ast.Expression;
  */
 public class Assignment extends StatementExpression
 {
-    private Expression left;
-
-    private Expression right;
+    public final Expression left;
+    public final Expression right;
 
     public Assignment(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;
-    }
-
-    public Expression getLeft()
-    {
-        return left;
-    }
-
-    public Expression getRight()
-    {
-        return right;
     }
 
     @Override

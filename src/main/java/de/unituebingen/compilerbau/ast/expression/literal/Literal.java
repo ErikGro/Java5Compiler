@@ -4,7 +4,7 @@ import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Type;
 
 public abstract class Literal implements Expression {
-    public final Type type;
+    protected final Type type;
 
     public Literal(Type type) {
         this.type = type;

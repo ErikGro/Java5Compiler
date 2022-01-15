@@ -10,16 +10,11 @@ import de.unituebingen.compilerbau.ast.Statement;
  */
 public class Return extends Statement
 {
-    private Expression expr;
+    public final Expression expr;
 
     public Return(Expression expr)
     {
         this.expr = expr;
-    }
-
-    public Expression getExpr()
-    {
-        return expr;
     }
 
     @Override

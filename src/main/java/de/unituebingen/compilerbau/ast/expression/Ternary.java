@@ -5,9 +5,9 @@ import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Type;
 
 public class Ternary implements Expression {
-    public Expression first;
-    public Expression second;
-    public Expression third;
+    public final Expression first;
+    public final Expression second;
+    public final Expression third;
     protected Type type;
 
     public Ternary(Expression first, Expression second, Expression third) {

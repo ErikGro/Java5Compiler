@@ -10,30 +10,15 @@ import de.unituebingen.compilerbau.ast.Statement;
  */
 public class If extends Statement
 {
-    private Expression condition;
-    private Statement body;
-    private Statement elseBody;
+    public final Expression condition;
+    public final Statement body;
+    public final Statement elseBody;
 
     public If(Expression condition, Statement body, Statement elseBody)
     {
         this.condition = condition;
         this.body = body;
         this.elseBody = elseBody;
-    }
-
-    public Expression getCondition()
-    {
-        return condition;
-    }
-
-    public Statement getBody()
-    {
-        return body;
-    }
-
-    public Statement getElseBody()
-    {
-        return elseBody;
     }
 
     @Override

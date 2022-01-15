@@ -6,7 +6,7 @@ package de.unituebingen.compilerbau.ast;
  */
 public abstract class Statement implements Node
 {
-    private Type type;
+    protected Type type;
 
     public Type getType()
     {

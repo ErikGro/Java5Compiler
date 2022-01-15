@@ -5,8 +5,8 @@ import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Type;
 
 public class Identifier implements Expression {
-    public String name;
-    public Type type;
+    public final String name;
+    protected Type type;
 
     public Identifier(String name, Type type) {
         this.name = name;

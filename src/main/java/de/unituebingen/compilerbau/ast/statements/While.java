@@ -10,23 +10,13 @@ import de.unituebingen.compilerbau.ast.Statement;
  */
 public class While extends Statement
 {
-    private Expression condition;
-    private Statement body;
+    public final Expression condition;
+    public final Statement body;
 
     public While(Expression condition, Statement body)
     {
         this.condition = condition;
         this.body = body;
-    }
-
-    public Expression getCondition()
-    {
-        return condition;
-    }
-
-    public Statement getBody()
-    {
-        return body;
     }
 
     @Override

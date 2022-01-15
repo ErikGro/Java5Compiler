@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class MethodCall extends StatementExpression
 {
-    private Expression expr;
-    private String name;
-    private List<Expression> args;
+    public final Expression expr;
+    public final String name;
+    public final List<Expression> args;
 
     public MethodCall(
             Expression expr, String name, List<Expression> args)
@@ -21,21 +21,6 @@ public class MethodCall extends StatementExpression
         this.expr = expr;
         this.name = name;
         this.args = args;
-    }
-
-    public Expression getExpr()
-    {
-        return expr;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public List<Expression> getArgs()
-    {
-        return args;
     }
 
     @Override

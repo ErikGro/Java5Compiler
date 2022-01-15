@@ -10,23 +10,10 @@ import de.unituebingen.compilerbau.ast.Type;
  */
 public class LocalVarDeclaration extends Statement
 {
-    private String name;
-    private Type type;
+    public final String name;
 
-    public LocalVarDeclaration(String name, Type type)
-    {
+    public LocalVarDeclaration(String name) {
         this.name = name;
-        this.type = type;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public Type getType()
-    {
-        return type;
     }
 
     @Override

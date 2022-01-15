@@ -11,16 +11,11 @@ import java.util.List;
  */
 public class Block extends Statement
 {
-    private List<Statement> body;
+    public final List<Statement> body;
 
     public Block(List<Statement> body)
     {
         this.body = body;
-    }
-
-    public List<Statement> getBody()
-    {
-        return body;
     }
 
     @Override

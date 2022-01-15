@@ -4,7 +4,7 @@ import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Type;
 
 public class BooleanLiteral extends Literal {
-    public boolean value;
+    public final boolean value;
 
     public BooleanLiteral(boolean value) {
         super(Type.BOOLEAN);

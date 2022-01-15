@@ -11,16 +11,11 @@ import java.util.List;
  */
 public class New extends StatementExpression
 {
-    private List<Expression> args;
+    public final List<Expression> args;
 
     public New(List<Expression> args)
     {
         this.args = args;
-    }
-
-    public List<Expression> getArgs()
-    {
-        return args;
     }
 
     @Override

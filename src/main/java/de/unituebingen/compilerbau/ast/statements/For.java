@@ -10,10 +10,10 @@ import de.unituebingen.compilerbau.ast.Statement;
  */
 public class For extends Statement
 {
-    private Statement init;
-    private Expression termination;
-    private Statement increment;
-    private Statement body;
+    public final Statement init;
+    public final Expression termination;
+    public final Statement increment;
+    public final Statement body;
 
     public For(
             Statement init, Expression termination, Statement increment, Statement body)
@@ -22,26 +22,6 @@ public class For extends Statement
         this.termination = termination;
         this.increment = increment;
         this.body = body;
-    }
-
-    public Statement getInit()
-    {
-        return init;
-    }
-
-    public Expression getTermination()
-    {
-        return termination;
-    }
-
-    public Statement getIncrement()
-    {
-        return increment;
-    }
-
-    public Statement getBody()
-    {
-        return body;
     }
 
     @Override
