@@ -65,7 +65,6 @@ public class CodeGenerator {
 
         @Override
         public void visit(Identifier identifier) {
-
         }
 
         @Override
