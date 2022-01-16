@@ -3,34 +3,56 @@ grammar Exp;
 /* This will be the entry point of our parser. */
 eval
     :   exp
+    | statement
     ;
 
-/* Addition and subtraction have the lowest precedence. */
-additionExp
-    :    multiplyExp
-         ( '+' multiplyExp
-         | '-' multiplyExp
-         )*
+statement
+    :   methodCallStatement ';'
+    |   newStatement ';'
+    |   assignmentStatement ';'
     ;
 
-/* Multiplication and division have a higher precedence. */
-multiplyExp
-    :    atomExp
-         ( '*' atomExp
-         | '/' atomExp
-         )*
+/* These are statement expressions defined statements they require a semicolon at the end */
+methodCallStatement
+    :   Identifier '.' Identifier '(' pureExp? ')'
+    |   Identifier '.' Identifier '(' (pureExp ',')+ pureExp ')'
     ;
 
-/* An expression atom is the smallest part of an expression: a number. Or
-   when we encounter parenthesis, we're making a recursive call back to the
-   rule 'additionExp'. As you can see, an 'atomExp' has the highest precedence. */
-atomExp
-    :    Number
-    |    '(' additionExp ')'
+newStatement
+    :   'new' Identifier '(' pureExp? ')'
+    |   'new' Identifier '(' (pureExp ',')+ pureExp ')'
+    ;
+
+assignmentStatement
+    :   (Identifier '=')+ pureExp
     ;
 
 exp
-    : '(' exp ')'
+    :   methodCallExp
+    |   newExp
+    |   assignmentExp
+    |   pureExp
+    ;
+
+/* These are statement expressions but defined as expressions so we can use them without the semicolon
+    as method arguments, etc. */
+methodCallExp
+    :   Identifier '.' Identifier '(' exp? ')'
+    |   Identifier '.' Identifier '(' (exp ',')+ exp ')'
+    ;
+
+newExp
+    :   'new' Identifier '(' exp? ')'
+    |   'new' Identifier '(' (exp ',')+ exp ')'
+    ;
+
+assignmentExp
+    :   (Identifier '=')+ exp
+    ;
+
+/* Pure expressions are all expressions that are not statements at the same time */
+pureExp
+    : '(' pureExp ')'
     |   postAndPrefixExp
     |   unaryExp
     |   arithmeticExp
