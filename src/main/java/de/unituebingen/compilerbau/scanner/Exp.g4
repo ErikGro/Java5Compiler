@@ -3,39 +3,80 @@ grammar Exp;
 /* This will be the entry point of our parser. */
 eval
     :   exp
-    | statement
+    |   statement
     ;
 
+/* All statements: Note that the definitions of the statements do not require a semicolon that is so we can
+    use them in a for loop without the */
 statement
-    :   methodCallStatement ';'
-    |   newStatement ';'
-    |   assignmentStatement ';'
+    :   ifStatement
+    |   whileStatement
+    |   forStatement
+    |   localVarDeclarationStatement ';'
+    |   blockStatement
+    |   returnStatement ';'
+    |   methodCallExp ';'
+    |   newExp ';'
+    |   assignmentExp ';'
+    |   postAndPrefixExp ';' // Can also use them as a statement... (these guys are everywhere!!)
     ;
 
-/* These are statement expressions defined statements they require a semicolon at the end */
-methodCallStatement
-    :   Identifier '.' Identifier '(' pureExp? ')'
-    |   Identifier '.' Identifier '(' (pureExp ',')+ pureExp ')'
+/* Note that the precedence of the rules is important otherwise the blocks of the if will not be
+    recognized as the body!!! (same applies for the while and for loop)*/
+ifStatement
+    :   'if' '(' boolExp ')' blockStatement ('else' (ifStatement|blockStatement))?
+    |   'if' '(' boolExp ')' ';'?
     ;
 
-newStatement
-    :   'new' Identifier '(' pureExp? ')'
-    |   'new' Identifier '(' (pureExp ',')+ pureExp ')'
+
+whileStatement
+    :   'while' '(' boolExp ')' blockStatement
+    |   'while' '(' boolExp ')' ';'?
     ;
 
-assignmentStatement
-    :   (Identifier '=')+ pureExp
+/* for loop in all variations */
+forStatement
+    :   forDeclaration blockStatement
+    |   forDeclaration  ';'?
     ;
 
+/* The for declaration without any block */
+forDeclaration
+    :   'for' '(' (statementExp (',' statementExp)*)* ';'
+                    boolExp? ';'
+                    (statementExp (',' statementExp)*)* ')' // includes for(;;) as infinite loop
+    |   'for' '(' localVarDeclarationStatement (',' assignmentExp)* ';'
+                        boolExp? ';'
+                        (statementExp (',' statementExp)*)* ')'
+    ;
+
+localVarDeclarationStatement
+    :   Identifier assignmentExp
+    ;
+
+blockStatement
+    :   '{' statement* '}'
+    ;
+
+returnStatement
+    :   'return' exp?
+    ;
+
+/* All expressions and statement expressions */
 exp
+    :   pureExp
+    |   statementExp
+    ;
+
+/* These are statement expressions but defined without the semicolon so we can use the as expressions e.g.
+    as method arguments, etc. */
+statementExp
     :   methodCallExp
     |   newExp
     |   assignmentExp
-    |   pureExp
+    |   postAndPrefixExp // need them for for-loops
     ;
 
-/* These are statement expressions but defined as expressions so we can use them without the semicolon
-    as method arguments, etc. */
 methodCallExp
     :   Identifier '.' Identifier '(' exp? ')'
     |   Identifier '.' Identifier '(' (exp ',')+ exp ')'
