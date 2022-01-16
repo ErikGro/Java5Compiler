@@ -78,8 +78,7 @@ statementExp
     ;
 
 methodCallExp
-    :   Identifier '.' Identifier '(' exp? ')'
-    |   Identifier '.' Identifier '(' (exp ',')+ exp ')'
+    :   Identifier '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)* ')'
     ;
 
 newExp
