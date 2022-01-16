@@ -1,9 +1,20 @@
 grammar Exp;
 
 /* This will be the entry point of our parser. */
-eval
-    :   exp
-    |   statement
+javaProgram
+    :   class
+    ;
+
+class
+    :   'public' 'class' Identifier '{' field* method* '}'
+    ;
+
+method
+    :   AccessModifier 'static'? type Identifier '(' ')' blockStatement
+    ;
+
+field
+    :   AccessModifier 'static'? localVarDeclarationStatement ';'
     ;
 
 /* All statements: Note that the definitions of the statements do not require a semicolon that is so we can
@@ -42,16 +53,17 @@ forStatement
 
 /* The for declaration without any block */
 forDeclaration
-    :   'for' '(' (statementExp (',' statementExp)*)* ';'
+    :   'for' '(' (statementExp (',' statementExp)*)? ';'
                     boolExp? ';'
-                    (statementExp (',' statementExp)*)* ')' // includes for(;;) as infinite loop
+                    (statementExp (',' statementExp)*)? ')' // includes for(;;) as infinite loop
     |   'for' '(' localVarDeclarationStatement (',' assignmentExp)* ';'
                         boolExp? ';'
-                        (statementExp (',' statementExp)*)* ')'
+                        (statementExp (',' statementExp)*)? ')'
     ;
 
 localVarDeclarationStatement
-    :   Identifier assignmentExp
+    :   type Identifier
+    |   type assignmentExp
     ;
 
 blockStatement
@@ -60,6 +72,12 @@ blockStatement
 
 returnStatement
     :   'return' exp?
+    ;
+
+/* Primitive type or some class type */
+type
+    :   Primitive
+    |   Identifier
     ;
 
 /* All expressions and statement expressions */
@@ -78,7 +96,7 @@ statementExp
     ;
 
 methodCallExp
-    :   Identifier '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)* ')'
+    :   Identifier '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)? ')'
     ;
 
 newExp
@@ -92,7 +110,8 @@ assignmentExp
 
 /* Pure expressions are all expressions that are not statements at the same time */
 pureExp
-    : '(' pureExp ')'
+    :   Number|Char|Bool|Identifier
+    |   '(' pureExp ')'
     |   postAndPrefixExp
     |   unaryExp
     |   arithmeticExp
@@ -161,8 +180,8 @@ boolIdentifierOrNumberBoolExp
     ;
 
 /* All operators that compare numbers with each other and produce a boolean value
-    Note that number boolean expressions are not allowed to evaluate recursively because to prevent 1<1<1
-    which be a comparison between boolean and a number*/
+    Note that number boolean expressions are not allowed to evaluate recursively to prevent 1<1<1
+    which would be a comparison between boolean and number */
 
 numberBoolExp
     :   '(' numberBoolExp ')'
@@ -244,11 +263,56 @@ numberCharOrIdentifier
   * Terminal symbols.
   */
 
+AccessModifier
+    :   'public'
+    |   'private'
+    ;
+
+Primitive
+    :   'char'
+    |   'int'
+    |   'boolean'
+    |   'void'
+    ;
+
+/* A boolean value true or false */
+Bool
+    :   'true'
+    |   'false'
+    ;
+
+/* Keywords per java specification that are relevant to our task
+    (https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.9)
+    TODO switch and do-while missing
+    */
+KeyWord
+    :   'static'
+    |   'for'
+    |   'while'
+    |   'if'
+    |   'else'
+    |   'return'
+    |   'this'
+    |   'new'
+    |   'break'
+    |   'continue'
+    |   Bool
+    |   AccessModifier
+    |   Primitive
+    ;
+
 /* A number: can be an integer value (decimal is disallowed)
     Number has to go on top of Digit otherwise the parser see's an JavaLetterOrDigit instead
     of a number and everything goes to hell*/
 Number
     :    Digit+
+    ;
+
+/* A character value
+    TODO Escape chars (\t, \n,...) and unicode values (\u0000,...)
+    */
+Char
+    :   '\'' [ a-zA-Z0-9] '\''
     ;
 
 /* An identifer is a class name, method name or field that does not match a keyword
@@ -258,7 +322,6 @@ Number
 Identifier
     :   IdentifierChars
     ;
-
 
 IdentifierChars
     :   JavaLetter JavaLetterOrDigit*
@@ -276,43 +339,6 @@ Digit
 */
 JavaLetter
     :   [a-zA-Z_$]
-    ;
-
-/* Keywords per java specification that are relevant to our task
-    (https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.9)
-    TODO switch and do-while missing
-    */
-KeyWord
-    :   'public'
-    |   'private'
-    |   'static'
-    |   'for'
-    |   'while'
-    |   'if'
-    |   'else'
-    |   'return'
-    |   'void'
-    |   'int'
-    |   'char'
-    |   'boolean'
-    |   'this'
-    |   'new'
-    |   'break'
-    |   'continue'
-    |   Bool
-    ;
-
-/* A boolean value true or false */
-Bool
-    :   'true'
-    |   'false'
-    ;
-
-/* A character value
-    TODO Escape chars (\t, \n,...) and unicode values (\u0000,...)
-    */
-Char
-    :   '\'' [ a-zA-Z0-9] '\''
     ;
 
 /* We're going to ignore all white space characters */
