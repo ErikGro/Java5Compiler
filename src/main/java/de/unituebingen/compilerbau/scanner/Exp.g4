@@ -60,7 +60,8 @@ bitwiseExp
     (https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html) */
 
 boolExp
-    :  unaryBoolExp
+    :   boolIdentifierOrNumberBoolExp
+    |   unaryBoolExp
     |   boolEqualityExp
     |   boolBitwiseExp
     |   logicalExp
@@ -68,7 +69,6 @@ boolExp
 
 unaryBoolExp
     :   '!' boolIdentifierOrNumberBoolExp
-    |   boolIdentifierOrNumberBoolExp
     ;
 
 boolEqualityExp
@@ -98,27 +98,28 @@ boolIdentifierOrNumberBoolExp
     |   numberBoolExp
     ;
 
-/* All operators that compare numbers with each other and produce a boolean value */
+/* All operators that compare numbers with each other and produce a boolean value
+    Note that number boolean expressions are not allowed to evaluate recursively because to prevent 1<1<1
+    which be a comparison between boolean and a number*/
+
 numberBoolExp
-    :   numberExp
+    :   '(' numberBoolExp ')'
     |   relationalExp
     |   numberEqualityExp
     ;
-/* These can evaluate down to a number but it should not e.g. !1 is possible
-    */
+
 relationalExp
-    :   relationalExp '<' numberExp
-    |   relationalExp '<=' numberExp
-    |   relationalExp '>=' numberExp
-    |   relationalExp '>' numberExp
-    |   numberExp
+    :   numberExp '<' numberExp
+    |   numberExp '<=' numberExp
+    |   numberExp '>=' numberExp
+    |   numberExp '>' numberExp
     ;
 
 numberEqualityExp
-    :   numberEqualityExp '==' numberExp
-    |   numberEqualityExp '!=' numberExp
-    |   numberExp
+    :   numberExp '==' numberExp
+    |   numberExp '!=' numberExp
     ;
+
 
 /* All expressions that produce a number or as a result
     (https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html) */
