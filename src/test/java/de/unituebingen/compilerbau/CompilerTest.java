@@ -7,12 +7,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.file.Files;
 
 public abstract class CompilerTest {
     public final Compiler compiler = new Compiler();
 
     public String sourceFile;
-    public String expectedByteCode;
+    public byte[] expectedByteCode;
 
     // File name to test from resource folder without suffix
     public abstract String getFileName();
@@ -31,16 +32,14 @@ public abstract class CompilerTest {
         String sourceFileName = getFileName() + ".java";
         String byteCodeFileName = getFileName() + ".class";
 
-        ClassLoader classLoader = this.getClass().getClassLoader();
-
         File source = new File(this.getClass().getResource(sourceFileName).getFile());
-        File byteCode = new File(this.getClass().getResource(sourceFileName).getFile());
+        File byteCode = new File(this.getClass().getResource(byteCodeFileName).getFile());
 
         try {
             InputStream isSource = new FileInputStream(source);
-            InputStream isByteCode = new FileInputStream(byteCode);
             sourceFile = readFromInputStream(isSource);
-            expectedByteCode = readFromInputStream(isByteCode);
+
+            expectedByteCode = Files.readAllBytes(byteCode.toPath());
         } catch (IOException e) {
             System.err.println("Couldnt read file: " + getFileName());
             System.err.println("Input file need to be in the classpath");

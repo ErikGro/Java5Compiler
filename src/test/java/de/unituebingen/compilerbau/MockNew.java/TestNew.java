@@ -1,4 +1,4 @@
-package de.unituebingen.compilerbau.clazz.method;
+package de.unituebingen.compilerbau.MockNew.java;
 
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.exception.ASTException;
@@ -13,10 +13,10 @@ import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestStaticMethod extends CompilerTest {
+public class TestNew extends CompilerTest {
     @Override
     public String getFileName() {
-        return "/clazz/method/MockStaticMethod";
+        return "/MockNew.java/MockNew";
     }
 
     @Override

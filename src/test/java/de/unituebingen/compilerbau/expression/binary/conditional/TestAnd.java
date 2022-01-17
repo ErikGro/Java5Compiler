@@ -3,6 +3,7 @@ package de.unituebingen.compilerbau.expression.binary.conditional;
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
+import de.unituebingen.compilerbau.ast.Clazz;
 
 import java.io.IOException;
 
@@ -15,16 +16,16 @@ import static org.junit.Assert.assertEquals;
 public class TestAnd extends CompilerTest {
     @Override
     public String getFileName() {
-        return "MockAnd";
+        return "/expression/binary/conditional/MockAnd";
     }
 
     @Override
     public void testAST() throws ASTException, IOException {
         // TODO: Implement test for AST generation
         ScannerParser scannerParser = new ScannerParser();
-        String ast = scannerParser.parse(sourceFile);
+        Clazz ast = scannerParser.parse(sourceFile);
 
-        String expectedAST = "";
+        Clazz expectedAST = null;
 
         assertEquals(ast, expectedAST);
     }
@@ -32,19 +33,19 @@ public class TestAnd extends CompilerTest {
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
         // TODO: Implement test for type checked AST
-        String ast = "ast";
+        Clazz ast = null;
 
         TypeChecker typeChecker = new TypeChecker();
-        String modifiedAST = typeChecker.check(ast);
+        Clazz modifiedAST = typeChecker.check(ast);
 
-        String expectedAST = "";
+        Clazz expectedAST = null;
 
         assertEquals(modifiedAST, expectedAST);
     }
 
     @Override
     public void testGeneratedBytecode() throws CompilerException, IOException {
-        String byteCode = compiler.compile(getFileName() + ".java");
+        byte[] byteCode = compiler.compile(getFileName() + ".java");
         assertEquals(byteCode, expectedByteCode);
     }
 }

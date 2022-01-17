@@ -13,7 +13,7 @@ copyFileToTestFolder () {
   # create folder if not exist
   mkdir -p ${testFolder}/${folder}
 
-  # copy template file to destination
+  # copy template file to destination (Only if it doesnt already exist!)
   if [ ! -f "${destinationPath}" ];
   then
       echo "Creating: ${destinationPath}"
@@ -25,13 +25,14 @@ copyFileToTestFolder () {
 
   # replace placeholder in template file
   placeholder="Template"
+  placeholderFolder="MockFolder"
   className=${${fileName#Test}%*.java}
-  sed -i '' "s/${placeholder}/${className}/g" "${destinationPath}"
+  sed -i '' "s|${placeholder}|${className}|g" "${destinationPath}"
+  sed -i '' "s|${placeholderFolder}|${folder}|g" "${destinationPath}"
 
   # Insert package name to top of file
   packageLine="package de.unituebingen.compilerbau.${folder//[\/]/.};"
   echo "${packageLine}\n" | cat - ${destinationPath} > temp && mv temp ${destinationPath}
-
 }
 
 for x in ${resourcesFolder}/**/*.java; do copyFileToTestFolder "$x"; done
