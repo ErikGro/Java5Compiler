@@ -3,6 +3,8 @@ grammar Exp;
 /* This will be the entry point of our parser. */
 javaProgram
     :   class
+    |   statement
+    |   exp
     ;
 
 class
@@ -96,7 +98,7 @@ statementExp
     ;
 
 methodCallExp
-    :   Identifier '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)? ')'
+    :   (This|Identifier) '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)? ')'
     ;
 
 newExp
