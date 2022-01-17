@@ -317,7 +317,6 @@ Bool:'true'|'false';
 
 /* Keywords per java specification that are relevant to our task
     (https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.9)
-    TODO switch and do-while missing
     */
 Class:'class';
 Static:'static';
