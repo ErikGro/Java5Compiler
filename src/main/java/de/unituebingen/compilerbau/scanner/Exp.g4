@@ -26,6 +26,7 @@ field
 statement
     :   ifStatement
     |   whileStatement
+    |   dowhileStatement
     |   forStatement
     |   localVarDeclarationStatement ';'
     |   blockStatement
@@ -49,6 +50,12 @@ ifStatement
 whileStatement
     :   While '(' boolExp ')' blockStatement
     |   While '(' boolExp ')' ';'?
+    ;
+
+dowhileStatement
+    :   Do ';' While '(' boolExp ')' ';'
+    |   Do statement While '(' boolExp ')' ';'
+    |   Do blockStatement While '(' boolExp ')' ';'
     ;
 
 /* for loop in all variations */
@@ -310,6 +317,7 @@ Class:'class';
 Static:'static';
 For:'for';
 While:'while';
+Do:'do';
 If:'if';
 Else:'else';
 Return:'return';
