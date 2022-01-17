@@ -6,15 +6,15 @@ javaProgram
     ;
 
 class
-    :   AccessModifier 'class' Identifier '{' field* method* '}'
+    :   AccessModifier Class Identifier '{' field* method* '}'
     ;
 
 method
-    :   AccessModifier 'static'? type Identifier '(' ')' blockStatement
+    :   AccessModifier Static? type Identifier '(' ')' blockStatement
     ;
 
 field
-    :   AccessModifier 'static'? localVarDeclarationStatement ';'
+    :   AccessModifier Static? localVarDeclarationStatement ';'
     ;
 
 /* All statements: Note that the definitions of the statements do not require a semicolon that is so we can
@@ -35,14 +35,14 @@ statement
 /* Note that the precedence of the rules is important otherwise the blocks of the if will not be
     recognized as the body!!! (same applies for the while and for loop)*/
 ifStatement
-    :   'if' '(' boolExp ')' blockStatement ('else' (ifStatement|blockStatement))?
-    |   'if' '(' boolExp ')' ';'?
+    :   If '(' boolExp ')' blockStatement ('else' (ifStatement|blockStatement))?
+    |   If '(' boolExp ')' ';'?
     ;
 
 
 whileStatement
-    :   'while' '(' boolExp ')' blockStatement
-    |   'while' '(' boolExp ')' ';'?
+    :   While '(' boolExp ')' blockStatement
+    |   While '(' boolExp ')' ';'?
     ;
 
 /* for loop in all variations */
@@ -53,10 +53,10 @@ forStatement
 
 /* The for declaration without any block */
 forDeclaration
-    :   'for' '(' (statementExp (',' statementExp)*)? ';'
+    :   For '(' (statementExp (',' statementExp)*)? ';'
                     boolExp? ';'
                     (statementExp (',' statementExp)*)? ')' // includes for(;;) as infinite loop
-    |   'for' '(' localVarDeclarationStatement (',' assignmentExp)* ';'
+    |   For '(' localVarDeclarationStatement (',' assignmentExp)* ';'
                         boolExp? ';'
                         (statementExp (',' statementExp)*)? ')'
     ;
@@ -71,7 +71,7 @@ blockStatement
     ;
 
 returnStatement
-    :   'return' exp?
+    :   Return exp?
     ;
 
 /* Primitive type or some class type */
@@ -100,8 +100,8 @@ methodCallExp
     ;
 
 newExp
-    :   'new' Identifier '(' exp? ')'
-    |   'new' Identifier '(' (exp ',')+ exp ')'
+    :   New Identifier '(' exp? ')'
+    |   New Identifier '(' (exp ',')+ exp ')'
     ;
 
 assignmentExp
@@ -276,30 +276,23 @@ Primitive
     ;
 
 /* A boolean value true or false */
-Bool
-    :   'true'
-    |   'false'
-    ;
+Bool:'true'|'false';
 
 /* Keywords per java specification that are relevant to our task
     (https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.9)
     TODO switch and do-while missing
     */
-KeyWord
-    :   'static'
-    |   'for'
-    |   'while'
-    |   'if'
-    |   'else'
-    |   'return'
-    |   'this'
-    |   'new'
-    |   'break'
-    |   'continue'
-    |   Bool
-    |   AccessModifier
-    |   Primitive
-    ;
+Class:'class';
+Static:'static';
+For:'for';
+While:'while';
+If:'if';
+Else:'else';
+Return:'return';
+This:'this';
+New :'new';
+Break:'break';
+Continue:'continue';
 
 /* A number: can be an integer value (decimal is disallowed)
     Number has to go on top of Digit otherwise the parser see's an JavaLetterOrDigit instead
@@ -325,7 +318,9 @@ Char
 
 /* An identifer is a class name, method name or field that does not match a keyword
     (https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.8)
-    TODO Exclude keywords from pattern
+    Note that key words are automatically excluded by the rule precedence of antlr
+    e.g. static always evaluates to Static and not Identifier because the Static rule is declared before
+    the Identifier rule
     */
 Identifier
     :   IdentifierChars
