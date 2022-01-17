@@ -216,7 +216,15 @@ public class CodeGenerator {
 
         @Override
         public void visit(Ternary ternary) {
-            // TODO
+            ternary.first.visit(this);
+            Label _else = new Label();
+            Label end = new Label();
+            mv.visitJumpInsn(IFEQ, _else);
+            ternary.second.visit(this);
+            mv.visitJumpInsn(GOTO, end);
+            mv.visitLabel(_else);
+            ternary.third.visit(this);
+            mv.visitLabel(end);
         }
 
         void visit(RelationalOperator rel, int op) {
@@ -317,32 +325,63 @@ public class CodeGenerator {
             mv.visitInsn(NEW);
             mv.visitInsn(DUP);
             String descriptor = Method.getDescriptor(_new.args.stream().map(expr -> expr.getType()).collect(Collectors.toList()), null);
-            mv.visitMethodInsn(INVOKESPECIAL, _new.getType().name, "<init>", descriptor, false));
+            mv.visitMethodInsn(INVOKESPECIAL, _new.getType().name, "<init>", descriptor, false);
         }
 
         @Override
         public void visit(For _for) {
-
+            _for.init.visit(this);
+            Label start = new Label();
+            Label end = new Label();
+            mv.visitLabel(start);
+            _for.termination.visit(this);
+            mv.visitJumpInsn(IFEQ, end);
+            _for.body.visit(this);
+            _for.increment.visit(this);
+            mv.visitJumpInsn(GOTO, start);
+            mv.visitLabel(end);
         }
 
         @Override
         public void visit(If _if) {
-
+            _if.condition.visit(this);
+            Label _else = new Label();
+            Label end = new Label();
+            mv.visitJumpInsn(IFEQ, _else);
+            _if.body.visit(this);
+            mv.visitJumpInsn(GOTO, end);
+            mv.visitLabel(_else);
+            if (_if.elseBody != null) {
+                _if.elseBody.visit(this);
+            }
+            mv.visitLabel(end);
         }
 
         @Override
         public void visit(LocalVarDeclaration localVarDeclaration) {
-
+            addLocal(localVarDeclaration.name, localVarDeclaration.getType());
         }
 
         @Override
         public void visit(Return _return) {
-
+            if (_return.expr != null) {
+                _return.expr.visit(this);
+                mv.visitInsn(IRETURN);
+            } else {
+                mv.visitInsn(RETURN);
+            }
         }
 
         @Override
         public void visit(While _while) {
-
+            Label start = new Label();
+            Label end = new Label();
+            mv.visitLabel(start);
+            _while.condition.visit(this);
+            mv.visitJumpInsn(IFEQ, end);
+            _while.body.visit(this);
+            mv.visitJumpInsn(GOTO, start);
+            mv.visitLabel(end);
         }
 
         @Override
