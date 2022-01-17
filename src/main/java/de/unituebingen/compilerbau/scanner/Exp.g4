@@ -12,7 +12,7 @@ class
     ;
 
 method
-    :   AccessModifier Static? type Identifier '(' ')' blockStatement
+    :   AccessModifier Static? type Identifier '(' (type Identifier (',' type Identifier)*)? ')' blockStatement
     ;
 
 field
