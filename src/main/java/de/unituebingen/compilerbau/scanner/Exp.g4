@@ -111,7 +111,22 @@ newExp
     ;
 
 assignmentExp
-    :   (Identifier '=')+ exp
+    :   assigmentPart+ exp
+    ;
+
+assigmentPart
+    :   Identifier '='
+    |   Identifier '+='
+    |   Identifier '-='
+    |   Identifier '*='
+    |   Identifier '/='
+    |   Identifier '%='
+    |   Identifier '&='
+    |   Identifier '^='
+    |   Identifier '|='
+    |   Identifier '<<='
+    |   Identifier '>>='
+    |   Identifier '>>>='
     ;
 
 /* Pure expressions are all expressions that are not statements at the same time */
@@ -126,6 +141,7 @@ pureExp
     |   equalityExp
     |   bitwiseExp
     |   logicalExp
+    |   ternaryExp
     ;
 
 unaryExp
@@ -142,6 +158,8 @@ bitwiseExp
     :   numberBitwiseExp
     |   boolBitwiseExp
     ;
+
+ternaryExp: boolExp '?' pureExp ':' pureExp;
 
 /* All expressions that produce a boolean as a result, this does also include comparisons of numbers
     (https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html) */
