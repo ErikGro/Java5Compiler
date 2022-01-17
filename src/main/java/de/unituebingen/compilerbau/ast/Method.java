@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau.ast;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class Method {
@@ -19,13 +20,9 @@ public class Method {
         this.body = body;
     }
 
-    private String descriptor;
-    public String getDescriptor() {
-        if (descriptor != null) {
-            return descriptor;
-        }
-        descriptor = "(";
-        for (Type par : parameters.values()) {
+    public static String getDescriptor(Collection<Type> parameters, Type returnType) {
+        String descriptor = "(";
+        for (Type par : parameters) {
             descriptor += par.name;
         }
         descriptor += ")";
@@ -34,6 +31,15 @@ public class Method {
         } else {
             descriptor += returnType.name;
         }
+        return descriptor;
+    }
+
+    private String descriptor;
+    public String getDescriptor() {
+        if (descriptor != null) {
+            return descriptor;
+        }
+        descriptor = getDescriptor(parameters.values(), returnType);
         return descriptor;
     }
 }
