@@ -25,6 +25,7 @@ field
     use them in a for loop without the */
 statement
     :   ifStatement
+    |   switchStatement
     |   whileStatement
     |   dowhileStatement
     |   forStatement
@@ -46,6 +47,11 @@ ifStatement
     |   If '(' boolExp ')' ';'?
     ;
 
+switchStatement
+    :   Switch '(' numberCharOrIdentifier ')' '{'  (Case numberCharOrIdentifier ':' statement*)*
+                    (Default ':' statement*)*
+                    (Case numberCharOrIdentifier ':' statement*)* '}'
+    ;
 
 whileStatement
     :   While '(' boolExp ')' blockStatement
@@ -138,7 +144,7 @@ assigmentPart
 
 /* Pure expressions are all expressions that are not statements at the same time */
 pureExp
-    :   Number|Char|Bool|Identifier
+    :   Int|Char|Bool|Identifier
     |   '(' pureExp ')'
     |   postAndPrefixExp
     |   unaryExp
@@ -285,7 +291,7 @@ numberBitwiseExp
 /* All number expressions can be applied to a mixture of integers and char values therefore we
     need this pattern */
 numberCharOrIdentifier
-    :   Number
+    :   Int
     |   Char
     |   Identifier
     ;
@@ -319,6 +325,9 @@ For:'for';
 While:'while';
 Do:'do';
 If:'if';
+Switch:'switch';
+Case:'case';
+Default:'default';
 Else:'else';
 Return:'return';
 This:'this';
@@ -326,10 +335,9 @@ New :'new';
 Break:'break';
 Continue:'continue';
 
-/* A number: can be an integer value (decimal is disallowed)
-    Number has to go on top of Digit otherwise the parser see's an JavaLetterOrDigit instead
+/* Int has to go on top of Digit otherwise the parser see's an JavaLetterOrDigit instead
     of a number and everything goes to hell*/
-Number
+Int
     :    Digit+
     ;
 
