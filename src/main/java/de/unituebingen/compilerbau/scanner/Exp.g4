@@ -6,7 +6,7 @@ javaProgram
     ;
 
 class
-    :   'public' 'class' Identifier '{' field* method* '}'
+    :   AccessModifier 'class' Identifier '{' field* method* '}'
     ;
 
 method
@@ -309,10 +309,18 @@ Number
     ;
 
 /* A character value
-    TODO Escape chars (\t, \n,...) and unicode values (\u0000,...)
     */
 Char
     :   '\'' [ a-zA-Z0-9] '\''
+    |   '\'\\t\''
+    |   '\'\\\'\''
+    |   '\'\\"\''
+    |   '\'\\r\''
+    |   '\'\\\\\''
+    |   '\'\\n\''
+    |   '\'\\f\''
+    |   '\'\\b\''
+    |   '\'\\u' Hex Hex Hex Hex '\''
     ;
 
 /* An identifer is a class name, method name or field that does not match a keyword
@@ -328,11 +336,15 @@ IdentifierChars
     ;
 
 JavaLetterOrDigit
-    : JavaLetter|Digit
+    :   JavaLetter|Digit
     ;
 
 Digit
-    : [0-9]
+    :   [0-9]
+    ;
+
+Hex
+    :   [0-9abcdefABCDEF]
     ;
 
 /* TODO This should include all unicode characters per specification. Is this required for the task?
