@@ -27,12 +27,19 @@ copyFileToTestFolder () {
   placeholder="Template"
   placeholderFolder="MockFolder"
   className=${${fileName#Test}%*.java}
-  sed -i '' "s|${placeholder}|${className}|g" "${destinationPath}"
-  sed -i '' "s|${placeholderFolder}|${folder}|g" "${destinationPath}"
+
+  if [[ $OSTYPE == 'darwin'* ]];
+  then
+      sed -i '' "s|${placeholder}|${className}|g" "${destinationPath}"
+      sed -i '' "s|${placeholderFolder}|${folder}|g" "${destinationPath}"
+  else
+      sed -i "s|${placeholder}|${className}|g" "${destinationPath}"
+      sed -i "s|${placeholderFolder}|${folder}|g" "${destinationPath}"
+  fi
 
   # Insert package name to top of file
   packageLine="package de.unituebingen.compilerbau.${folder//[\/]/.};"
-  echo "${packageLine}\n" | cat - ${destinationPath} > temp && mv temp ${destinationPath}
+  echo "${packageLine}\n" | cat - "${destinationPath}" > temp && mv temp "${destinationPath}"
 }
 
-for x in ${resourcesFolder}/**/*.java; do copyFileToTestFolder "$x"; done
+for x in "${resourcesFolder}"/**/*.java; do copyFileToTestFolder "$x"; done
