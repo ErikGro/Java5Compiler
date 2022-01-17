@@ -3,6 +3,8 @@ grammar Exp;
 /* This will be the entry point of our parser. */
 javaProgram
     :   class
+    |   method
+    |   field
     |   statement
     |   exp
     ;
@@ -32,6 +34,8 @@ statement
     |   newExp ';'
     |   assignmentExp ';'
     |   postAndPrefixExp ';' // Can also use them as a statement... (these guys are everywhere!!)
+    |   Continue ';'
+    |   Break ';'
     ;
 
 /* Note that the precedence of the rules is important otherwise the blocks of the if will not be
