@@ -45,9 +45,11 @@ statement
 
 /* Note that the precedence of the rules is important otherwise the blocks of the if will not be
     recognized as the body!!! (same applies for the while and for loop)
-    TODO "if(exp) statement else statement" is not possible
     */
-ifStatement:   If '(' exp ')' (';'|(blockStatement ('else' (ifStatement|blockStatement))?))?;
+ifStatement
+    :   If '(' exp ')' (';'|(blockStatement (Else (ifStatement|blockStatement))?))?
+    |   If '(' exp ')' statement';' Else statement ';'
+    ;
 
 switchStatement
     :   Switch '(' exp ')' '{'  (Case exp ':' statement*)*
