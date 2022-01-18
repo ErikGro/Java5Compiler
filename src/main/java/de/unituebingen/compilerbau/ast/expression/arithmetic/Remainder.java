@@ -1,19 +1,12 @@
-package de.unituebingen.compilerbau.ast.expression.relationaloperators;
+package de.unituebingen.compilerbau.ast.expression.arithmetic;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 
 import java.util.Objects;
 
-/**
- * @author Matthias Walz
- * @version 1.0
- */
-public class Greater extends RelationalOperator
-{
-    public Greater(
-            Expression left, Expression right)
-    {
+public class Remainder extends ArithmeticOperator {
+    public Remainder(Expression left, Expression right) {
         super(left, right);
     }
 
@@ -26,7 +19,7 @@ public class Greater extends RelationalOperator
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Greater)) return false;
+        if (!(o instanceof Remainder)) return false;
         return super.equals(o);
     }
 }

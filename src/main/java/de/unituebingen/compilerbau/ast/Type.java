@@ -13,16 +13,30 @@ public class Type {
         this.name = name;
     }
 
+//    @Override
+//    public int hashCode() {
+//        return Objects.hashCode(this.name);
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if(obj != null && obj instanceof Type) {
+//            return ((Type)obj).name.equals(this.name);
+//        }
+//        return false;
+//    }
+
+
     @Override
-    public int hashCode() {
-        return Objects.hashCode(this.name);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Type)) return false;
+        Type type = (Type) o;
+        return Objects.equals(name, type.name);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj != null && obj instanceof Type) {
-            return ((Type)obj).name.equals(this.name);
-        }
-        return false;
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

@@ -2,7 +2,7 @@ package de.unituebingen.compilerbau.ast;
 
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
-import de.unituebingen.compilerbau.ast.expression.binary.*;
+import de.unituebingen.compilerbau.ast.expression.arithmetic.*;
 import de.unituebingen.compilerbau.ast.expression.bitwisebinary.*;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.And;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.Or;
@@ -26,7 +26,7 @@ public interface ASTVisitor {
     void visit(Add add);
     void visit(Divide divide);
     void visit(Multiply multiply);
-    void visit(Reminder reminder);
+    void visit(Remainder reminder);
     void visit(Subtract subtract);
 
     void visit(And and);

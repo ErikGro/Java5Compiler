@@ -1,11 +1,14 @@
 package de.unituebingen.compilerbau.clazz;
 
 import de.unituebingen.compilerbau.CompilerTest;
+import de.unituebingen.compilerbau.ast.AccessModifier;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.ast.Clazz;
 
 import java.io.IOException;
+import java.rmi.AccessException;
+import java.util.Collections;
 
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
@@ -25,7 +28,7 @@ public class TestEmptyClass extends CompilerTest {
         ScannerParser scannerParser = new ScannerParser();
         Clazz ast = scannerParser.parse(sourceFile);
 
-        Clazz expectedAST = null;
+        Clazz expectedAST = new Clazz(AccessModifier.PUBLIC, "MockEmptyClass", Collections.emptyList(), Collections.emptyList());
 
         assertEquals(ast, expectedAST);
     }

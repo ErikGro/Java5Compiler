@@ -20,4 +20,11 @@ public class UnsignedShiftRight extends BitwiseBinary
     {
         visitor.visit(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UnsignedShiftRight)) return false;
+        return super.equals(o);
+    }
 }

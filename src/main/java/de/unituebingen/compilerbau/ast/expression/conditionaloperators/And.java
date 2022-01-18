@@ -2,6 +2,7 @@ package de.unituebingen.compilerbau.ast.expression.conditionaloperators;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
+import de.unituebingen.compilerbau.ast.expression.arithmetic.Divide;
 
 /**
  * @author Matthias Walz
@@ -19,5 +20,12 @@ public class And extends ConditionalOperator
     public void visit(ASTVisitor visitor)
     {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof And)) return false;
+        return super.equals(o);
     }
 }

@@ -3,10 +3,9 @@ package de.unituebingen.compilerbau.codegen;
 import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
-import de.unituebingen.compilerbau.ast.expression.binary.*;
+import de.unituebingen.compilerbau.ast.expression.arithmetic.*;
 import de.unituebingen.compilerbau.ast.expression.bitwisebinary.*;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.And;
-import de.unituebingen.compilerbau.ast.expression.conditionaloperators.ConditionalOperator;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.Or;
 import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
@@ -127,7 +126,7 @@ public class CodeGenerator {
         }
 
         @Override
-        public void visit(Reminder reminder) {
+        public void visit(Remainder reminder) {
             reminder.left.visit(this);
             reminder.right.visit(this);
             mv.visitInsn(IREM);

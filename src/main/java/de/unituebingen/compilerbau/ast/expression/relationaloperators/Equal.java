@@ -2,6 +2,10 @@ package de.unituebingen.compilerbau.ast.expression.relationaloperators;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
+import de.unituebingen.compilerbau.ast.expression.Identifier;
+import de.unituebingen.compilerbau.ast.expression.unary.Negate;
+
+import java.util.Objects;
 
 /**
  * @author Matthias Walz
@@ -19,5 +23,12 @@ public class Equal extends RelationalOperator
     public void visit(ASTVisitor visitor)
     {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Equal)) return false;
+        return super.equals(o);
     }
 }
