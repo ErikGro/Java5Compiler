@@ -1,15 +1,15 @@
-grammar Exp;
+grammar JavaFiveGrammar;
 
 /* This will be the entry point of our parser. */
 javaProgram
-    :   class
+    :   clazz
     |   method
     |   field
     |   statement
     |   exp
     ;
 
-class
+clazz
     :   AccessModifier Class Identifier '{' field* method* '}'
     ;
 
@@ -21,72 +21,61 @@ field
     :   AccessModifier Static? localVarDeclarationStatement ';'
     ;
 
-/* All statements: Note that the definitions of the statements do not require a semicolon that is so we can
-    use them in a for loop without the */
+/* Keep in mind that statements are only whithin a block are enforced to have semicolon at the end because
+    we also want to use them in a for loop for example */
 statement
     :   ifStatement
     |   switchStatement
     |   whileStatement
     |   dowhileStatement
     |   forStatement
-    |   localVarDeclarationStatement ';'
     |   blockStatement
-    |   returnStatement ';'
-    |   methodCallExp ';'
-    |   newExp ';'
-    |   assignmentExp ';'
-    |   postAndPrefixExp ';' // Can also use them as a statement... (these guys are everywhere!!)
-    |   Continue ';'
-    |   Break ';'
+    |   localVarDeclarationStatement
+    |   returnStatement
+    |   methodCallExp
+    |   newExp
+    |   localVarDeclarationStatement
+    |   Identifier '++' // Can also use them as a statement... (these guys are everywhere!!)
+    |   Identifier '--'
+    |   '++' Identifier
+    |   '--' Identifier
+    |   Continue
+    |   Break
     ;
 
 /* Note that the precedence of the rules is important otherwise the blocks of the if will not be
-    recognized as the body!!! (same applies for the while and for loop)*/
-ifStatement
-    :   If '(' boolExp ')' blockStatement ('else' (ifStatement|blockStatement))?
-    |   If '(' boolExp ')' ';'?
-    ;
+    recognized as the body!!! (same applies for the while and for loop)
+    TODO "if(exp) statement else statement" is not possible
+    */
+ifStatement:   If '(' exp ')' (';'|(blockStatement ('else' (ifStatement|blockStatement))?))?;
 
 switchStatement
-    :   Switch '(' numberCharOrIdentifier ')' '{'  (Case numberCharOrIdentifier ':' statement*)*
+    :   Switch '(' exp ')' '{'  (Case exp ':' statement*)*
                     (Default ':' statement*)*
-                    (Case numberCharOrIdentifier ':' statement*)* '}'
+                    (Case exp ':' statement*)* '}'
     ;
 
-whileStatement
-    :   While '(' boolExp ')' blockStatement
-    |   While '(' boolExp ')' ';'?
-    ;
+whileStatement:     While '(' exp ')' (blockStatement|';'|statement ';')?;
 
-dowhileStatement
-    :   Do ';' While '(' boolExp ')' ';'
-    |   Do statement While '(' boolExp ')' ';'
-    |   Do blockStatement While '(' boolExp ')' ';'
-    ;
+dowhileStatement:   Do (statement? ';'|blockStatement) While '(' exp ')';
 
-/* for loop in all variations */
-forStatement
-    :   forDeclaration blockStatement
-    |   forDeclaration  ';'?
-    ;
+/*
+    TODO "for(new A(), new A();; new A(), new A())" is not possible
+    */
+forStatement:   For '(' statement? ';' exp? ';' statement? ')' (blockStatement|';'|statement';')?;
 
-/* The for declaration without any block */
-forDeclaration
-    :   For '(' (statementExp (',' statementExp)*)? ';'
-                    boolExp? ';'
-                    (statementExp (',' statementExp)*)? ')' // includes for(;;) as infinite loop
-    |   For '(' localVarDeclarationStatement (',' assignmentExp)* ';'
-                        boolExp? ';'
-                        (statementExp (',' statementExp)*)? ')'
-    ;
-
+/*
+    TODO int a = 0 = 0 is not possible, should this check the parser or semantic analysis ???? */
 localVarDeclarationStatement
-    :   type Identifier
-    |   type assignmentExp
+    :   type Identifier ('=' exp)? (',' Identifier ('=' exp)?)*
     ;
 
+/* Conditionals, loops (except do-while) and blocks are not enforced to have a semicolon at the end because
+    they have their own rules.
+    Do-while is an exception because it always needs a semicolon after the while.
+    */
 blockStatement
-    :   '{' statement* '}'
+    :   '{' (ifStatement|switchStatement|whileStatement|forStatement|blockStatement|statement ';')* '}'
     ;
 
 returnStatement
@@ -99,19 +88,79 @@ type
     |   Identifier
     ;
 
-/* All expressions and statement expressions */
+/* New alternative definition of expressions which is simpler since the prior version did some slight type
+    checking (see commented out definitions) */
 exp
+    :   (Int|Char|Bool|Identifier)
+    |   exp '++'
+    |   exp '--'
+    |   '++' exp
+    |   '--' exp
+    |   '+' exp
+    |   '-' exp
+    |   '~' exp
+    |   '!' exp
+    |   exp '*' exp
+    |   exp '/' exp
+    |   exp '%' exp
+    |   exp '+' exp
+    |   exp '-' exp
+    |   exp '<<' exp
+    |   exp '>>' exp
+    |   exp '>>>' exp
+    |   exp '<' exp
+    |   exp '<=' exp
+    |   exp '>=' exp
+    |   exp '>' exp
+    |   exp '==' exp
+    |   exp '!=' exp
+    |   exp '&' exp
+    |   exp '^' exp
+    |   exp '|' exp
+    |   exp '&&' exp
+    |   exp '||' exp
+    |   exp '?' exp ':' exp
+    |   exp '=' exp
+    |   exp '+=' exp
+    |   exp '-=' exp
+    |   exp '*=' exp
+    |   exp '/=' exp
+    |   exp '%=' exp
+    |   exp '&=' exp
+    |   exp '^=' exp
+    |   exp '|=' exp
+    |   exp '<<=' exp
+    |   exp '>>=' exp
+    |   exp '>>>=' exp
+    |   methodCallExp
+    |   newExp
+    ;
+
+methodCallExp
+    :   (This|Identifier) '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)? ')'
+    ;
+
+newExp
+    :   New Identifier '(' exp? ')'
+    |   New Identifier '(' (exp ',')+ exp ')'
+    ;
+
+/* All expressions and statement expressions */
+/*exp
     :   pureExp
     |   statementExp
     ;
 
 /* These are statement expressions but defined without the semicolon so we can use the as expressions e.g.
     as method arguments, etc. */
-statementExp
+/*statementExp
     :   methodCallExp
     |   newExp
     |   assignmentExp
-    |   postAndPrefixExp // need them for for-loops
+    |   Identifier '++' // need them for for-loops
+    |   Identifier '--'
+    |   '++' Identifier
+    |   '--' Identifier
     ;
 
 methodCallExp
@@ -143,33 +192,12 @@ assigmentPart
     ;
 
 /* Pure expressions are all expressions that are not statements at the same time */
-pureExp
+/*pureExp
     :   Int|Char|Bool|Identifier
     |   '(' pureExp ')'
-    |   postAndPrefixExp
-    |   unaryExp
-    |   arithmeticExp
-    |   shiftExp
-    |   relationalExp
-    |   equalityExp
-    |   bitwiseExp
-    |   logicalExp
+    |   numberExp
+    |   boolExp
     |   ternaryExp
-    ;
-
-unaryExp
-    :   unaryNumberExp
-    |   unaryBoolExp
-    ;
-
-equalityExp
-    :   numberEqualityExp
-    |   boolEqualityExp
-    ;
-
-bitwiseExp
-    :   numberBitwiseExp
-    |   boolBitwiseExp
     ;
 
 ternaryExp: boolExp '?' pureExp ':' pureExp;
@@ -177,123 +205,55 @@ ternaryExp: boolExp '?' pureExp ':' pureExp;
 /* All expressions that produce a boolean as a result, this does also include comparisons of numbers
     (https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html) */
 
-boolExp
-    :   boolIdentifierOrNumberBoolExp
-    |   unaryBoolExp
-    |   boolEqualityExp
-    |   boolBitwiseExp
-    |   logicalExp
-    ;
-
-unaryBoolExp
-    :   '!' boolIdentifierOrNumberBoolExp
-    ;
-
-boolEqualityExp
-    :   boolEqualityExp '==' boolExp
-    |   boolEqualityExp '!=' boolExp
-    |   boolIdentifierOrNumberBoolExp
-    ;
-
-boolBitwiseExp
-    :   boolBitwiseExp '&' boolExp
-    |   boolBitwiseExp '^' boolExp
-    |   boolBitwiseExp '|' boolExp
-    |   boolIdentifierOrNumberBoolExp
-    ;
-
-logicalExp
-    :   logicalExp '&&' boolExp
-    |   logicalExp '||' boolExp
-    |   boolIdentifierOrNumberBoolExp
-    ;
-
-/* The atomic values of a boolean expression are either booleans, identifiers or number expressions that
-    evaluate to a boolean */
-boolIdentifierOrNumberBoolExp
-    :   Bool
-    |   Identifier
-    |   numberBoolExp
+/*boolExp
+    :   (Bool|Identifier|numberBoolExp)
+    |   '!' (Bool|Identifier|numberBoolExp)
+    |   boolExp '==' boolExp
+    |   boolExp '!=' boolExp
+    |   boolExp '&' boolExp
+    |   boolExp '^' boolExp
+    |   boolExp '|' boolExp
+    |   boolExp '&&' boolExp
+    |   boolExp '||' boolExp
     ;
 
 /* All operators that compare numbers with each other and produce a boolean value
     Note that number boolean expressions are not allowed to evaluate recursively to prevent 1<1<1
     which would be a comparison between boolean and number */
 
-numberBoolExp
+/*numberBoolExp
     :   '(' numberBoolExp ')'
-    |   relationalExp
-    |   numberEqualityExp
-    ;
-
-relationalExp
-    :   numberExp '<' numberExp
+    |   numberExp '<' numberExp
     |   numberExp '<=' numberExp
     |   numberExp '>=' numberExp
     |   numberExp '>' numberExp
-    ;
-
-numberEqualityExp
-    :   numberExp '==' numberExp
+    |   numberExp '==' numberExp
     |   numberExp '!=' numberExp
     ;
 
-
-/* All expressions that produce a number or as a result
+/* All expressions that produce an int or char as a result
     (https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html) */
-
-numberExp
-    :   numberCharOrIdentifier
+/*numberExp
+    :   (Int|Char|Identifier)
     |   '(' numberExp ')'
-    |   postAndPrefixExp
-    |   unaryNumberExp
-    |   arithmeticExp
-    |   shiftExp
-    |   numberBitwiseExp
-    ;
-
-postAndPrefixExp
-    :   Identifier '++'
+    |   Identifier '++'
     |   Identifier '--'
     |   '++' Identifier
     |   '--' Identifier
-    ;
-
-unaryNumberExp
-    :   '~' numberExp
     |   '-' numberExp
     |   '+' numberExp
-    ;
-
-arithmeticExp
-    :   arithmeticExp '*' numberExp
-    |   arithmeticExp '/' numberExp
-    |   arithmeticExp '%' numberExp
-    |   arithmeticExp '+' numberExp
-    |   arithmeticExp '-' numberExp
-    |   numberCharOrIdentifier
-    ;
-
-shiftExp
-    :   shiftExp '<<' numberExp
-    |   shiftExp '>>' numberExp
-    |   shiftExp '>>>' numberExp
-    |   numberCharOrIdentifier
-    ;
-
-numberBitwiseExp
-    :   numberBitwiseExp '&' numberExp
-    |   numberBitwiseExp '^' numberExp
-    |   numberBitwiseExp '|' numberExp
-    |   numberCharOrIdentifier
-    ;
-
-/* All number expressions can be applied to a mixture of integers and char values therefore we
-    need this pattern */
-numberCharOrIdentifier
-    :   Int
-    |   Char
-    |   Identifier
+    |   '~' numberExp
+    |   numberExp '*' numberExp
+    |   numberExp '/' numberExp
+    |   numberExp '%' numberExp
+    |   numberExp '+' numberExp
+    |   numberExp '-' numberExp
+    |   numberExp '<<' numberExp
+    |   numberExp '>>' numberExp
+    |   numberExp '>>>' numberExp
+    |   numberExp '&' numberExp
+    |   numberExp '^' numberExp
+    |   numberExp '|' numberExp
     ;
 
 /**
