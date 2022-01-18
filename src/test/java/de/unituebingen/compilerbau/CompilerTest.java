@@ -12,8 +12,16 @@ import java.nio.file.Files;
 public abstract class CompilerTest {
     public final Compiler compiler = new Compiler();
 
-    public String sourceFile;
-    public byte[] expectedByteCode;
+    private String sourcecode;
+    private byte[] expectedByteCode;
+
+    public String getSourcecode() {
+        return sourcecode;
+    }
+
+    public byte[] getExpectedByteCode() {
+        return expectedByteCode;
+    }
 
     // File name to test from resource folder without suffix
     public abstract String getFileName();
@@ -37,7 +45,7 @@ public abstract class CompilerTest {
 
         try {
             InputStream isSource = new FileInputStream(source);
-            sourceFile = readFromInputStream(isSource);
+            sourcecode = readFromInputStream(isSource);
 
             expectedByteCode = Files.readAllBytes(byteCode.toPath());
         } catch (IOException e) {

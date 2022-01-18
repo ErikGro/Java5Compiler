@@ -7,7 +7,6 @@ import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.ast.Clazz;
 
 import java.io.IOException;
-import java.rmi.AccessException;
 import java.util.Collections;
 
 import de.unituebingen.compilerbau.exception.TypeCheckException;
@@ -26,9 +25,13 @@ public class TestEmptyClass extends CompilerTest {
     public void testAST() throws ASTException, IOException {
         // TODO: Implement test for AST generation
         ScannerParser scannerParser = new ScannerParser();
-        Clazz ast = scannerParser.parse(sourceFile);
+        Clazz ast = scannerParser.parse(this.getSourcecode());
 
-        Clazz expectedAST = new Clazz(AccessModifier.PUBLIC, "MockEmptyClass", Collections.emptyList(), Collections.emptyList());
+        Clazz expectedAST = new Clazz(
+                AccessModifier.PUBLIC,
+                "MockEmptyClass",
+                Collections.emptyList(),
+                Collections.emptyList());
 
         assertEquals(ast, expectedAST);
     }
@@ -48,7 +51,7 @@ public class TestEmptyClass extends CompilerTest {
 
     @Override
     public void testGeneratedBytecode() throws CompilerException, IOException {
-        byte[] byteCode = compiler.compile(getFileName() + ".java");
-        assertEquals(byteCode, expectedByteCode);
+        byte[] byteCode = compiler.compile(this.getFileName() + ".java");
+        assertEquals(byteCode, this.getExpectedByteCode());
     }
 }

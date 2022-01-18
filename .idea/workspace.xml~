@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f1c50f29-e5f1-4957-a73e-129fe5e978f4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compilerbau_ws2021.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/TestTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/createTestCases.sh" beforeDir="false" afterPath="$PROJECT_DIR$/createTestCases.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/TestClass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/TestEmptyClass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/field/TestPackagePrivateField.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/field/TestPrivateField.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/field/TestPublicField.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/field/TestStaticField.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/method/TestMethodAccess.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/method/TestMethodParameter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/method/TestNonVoidReturnMethod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/clazz/method/TestStaticMethod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/arithmetic/TestAdd.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/arithmetic/TestDivide.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/arithmetic/TestMultiply.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/arithmetic/TestRemainder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/arithmetic/TestSubtract.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/bitwise/TestBitAnd.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/bitwise/TestBitOr.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/bitwise/TestBitShiftLeft.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/bitwise/TestBitShiftRight.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/bitwise/TestBitXOR.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/conditional/TestAnd.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/conditional/TestOr.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/relational/TestEqual.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/relational/TestGreater.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/relational/TestGreaterOrEqual.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/relational/TestLess.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/relational/TestLessOrEqual.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/binary/relational/TestNotEqual.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/terniary/TestTerniary.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/unary/TestNegate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/expression/unary/TestNot.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statement/TestBlock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statement/TestFor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statement/TestIf.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statement/TestLocalVarDeclaration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statement/TestReturn.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statement/TestWhile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statementexpression/TestAssignment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statementexpression/TestMethodCall.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/unituebingen/compilerbau/statementexpression/TestNew.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="23fCrYlbUEbROLQjqkecFlC6OQU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f1c50f29-e5f1-4957-a73e-129fe5e978f4" name="Changes" comment="" />
+      <created>1642115954295</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1642115954295</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

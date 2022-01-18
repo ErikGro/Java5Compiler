@@ -23,7 +23,7 @@ public class TestOr extends CompilerTest {
     public void testAST() throws ASTException, IOException {
         // TODO: Implement test for AST generation
         ScannerParser scannerParser = new ScannerParser();
-        Clazz ast = scannerParser.parse(sourceFile);
+        Clazz ast = scannerParser.parse(this.getSourcecode());
 
         Clazz expectedAST = null;
 
@@ -45,7 +45,7 @@ public class TestOr extends CompilerTest {
 
     @Override
     public void testGeneratedBytecode() throws CompilerException, IOException {
-        byte[] byteCode = compiler.compile(getFileName() + ".java");
-        assertEquals(byteCode, expectedByteCode);
+        byte[] byteCode = compiler.compile(this.getFileName() + ".java");
+        assertEquals(byteCode, this.getExpectedByteCode());
     }
 }
