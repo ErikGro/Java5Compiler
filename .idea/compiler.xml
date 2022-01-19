@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Compilerbau_ws2021" />
         <module name="compilerbau_ws2021" />
+        <module name="Compiler" />
       </profile>
     </annotationProcessing>
   </component>

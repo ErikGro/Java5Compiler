@@ -6,10 +6,20 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/src/main/java/de/unituebingen/compilerbau/scanner/Exp.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\erik\repos\compilerbau_ws2021\src\main\java\de\unituebingen\compilerbau\scanner\generated" />
+          <option name="outputDir" value="src\main\java" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
-          <option name="pkg" value="de.unituebingen.compilerbau.scanner" />
+          <option name="pkg" value="de.unituebingen.compilerbau.scanner.generated" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/java/de/unituebingen/compilerbau/scanner/JavaFiveGrammar.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="de.unituebingen.compilerbau.scanner.generated" />
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
@@ -24,7 +34,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

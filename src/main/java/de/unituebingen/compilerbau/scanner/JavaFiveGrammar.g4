@@ -6,11 +6,11 @@ javaProgram
     |   method
     |   field
     |   statement
-    |   exp
+    |   expression
     ;
 
 clazz
-    :   AccessModifier Class Identifier '{' field* method* '}'
+    :   AccessModifier Class Identifier '{' (field|method)* '}'
     ;
 
 method
@@ -21,131 +21,79 @@ field
     :   AccessModifier Static? localVarDeclarationStatement ';'
     ;
 
-/* Keep in mind that statements are only whithin a block are enforced to have semicolon at the end because
-    we also want to use them in a for loop for example */
+///////////////////////////////////////////////////////////////////////////////////////
+//
+//  Statements
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
 statement
-    :   ifStatement
-    |   switchStatement
-    |   whileStatement
-    |   dowhileStatement
-    |   forStatement
+    :   ';'
     |   blockStatement
-    |   localVarDeclarationStatement
-    |   returnStatement
-    |   methodCallExp
-    |   newExp
-    |   localVarDeclarationStatement
-    |   Identifier '++' // Can also use them as a statement... (these guys are everywhere!!)
-    |   Identifier '--'
-    |   '++' Identifier
-    |   '--' Identifier
-    |   Continue
-    |   Break
+    |   If parExpression statement (Else statement)?
+    |   Switch parExpression '{' (Case|Default) ':' statement* '}'
+    |   While parExpression statement
+    |   Do statement While parExpression ';'
+    |   For '(' forControl ')' statement
+    |   localVarDeclarationStatement ';'
+    |   Return statement
+    |   expression ';' //statement expression
+    |   Continue ';'
+    |   Break ';'
     ;
 
-/* Note that the precedence of the rules is important otherwise the blocks of the if will not be
-    recognized as the body!!! (same applies for the while and for loop)
-    */
-ifStatement
-    :   If '(' exp ')' (';'|(blockStatement (Else (ifStatement|blockStatement))?))?
-    |   If '(' exp ')' statement';' Else statement ';'
-    ;
+forControl: forInit? ';' expression? ';' expressionList?;
 
-switchStatement
-    :   Switch '(' exp ')' '{'  (Case exp ':' statement*)*
-                    (Default ':' statement*)*
-                    (Case exp ':' statement*)* '}'
-    ;
+forInit: localVarDeclarationStatement | expressionList;
 
-whileStatement:     While '(' exp ')' (blockStatement|';'|statement ';')?;
+localVarDeclarationStatement:   type Identifier ('=' expression)?;
 
-dowhileStatement:   Do (statement? ';'|blockStatement) While '(' exp ')';
-
-/*
-    TODO "for(new A(), new A();; new A(), new A())" is not possible
-    */
-forStatement:   For '(' statement? ';' exp? ';' statement? ')' (blockStatement|';'|statement';')?;
-
-/*
-    TODO int a = 0 = 0 is not possible, should this check the parser or semantic analysis ???? */
-localVarDeclarationStatement
-    :   type Identifier ('=' exp)? (',' Identifier ('=' exp)?)*
-    ;
-
-/* Conditionals, loops (except do-while) and blocks are not enforced to have a semicolon at the end because
-    they have their own rules.
-    Do-while is an exception because it always needs a semicolon after the while.
-    */
 blockStatement
-    :   '{' (ifStatement|switchStatement|whileStatement|forStatement|blockStatement|statement ';')* '}'
+    :   '{' statement* '}'
     ;
 
-returnStatement
-    :   Return exp?
-    ;
-
-/* Primitive type or some class type */
 type
     :   Primitive
     |   Identifier
     ;
 
-/* New alternative definition of expressions which is simpler since the prior version did some slight type
-    checking (see commented out definitions) */
-exp
-    :   (Int|Char|Bool|Identifier)
-    |   exp '++'
-    |   exp '--'
-    |   '++' exp
-    |   '--' exp
-    |   '+' exp
-    |   '-' exp
-    |   '~' exp
-    |   '!' exp
-    |   exp '*' exp
-    |   exp '/' exp
-    |   exp '%' exp
-    |   exp '+' exp
-    |   exp '-' exp
-    |   exp '<<' exp
-    |   exp '>>' exp
-    |   exp '>>>' exp
-    |   exp '<' exp
-    |   exp '<=' exp
-    |   exp '>=' exp
-    |   exp '>' exp
-    |   exp '==' exp
-    |   exp '!=' exp
-    |   exp '&' exp
-    |   exp '^' exp
-    |   exp '|' exp
-    |   exp '&&' exp
-    |   exp '||' exp
-    |   exp '?' exp ':' exp
-    |   exp '=' exp
-    |   exp '+=' exp
-    |   exp '-=' exp
-    |   exp '*=' exp
-    |   exp '/=' exp
-    |   exp '%=' exp
-    |   exp '&=' exp
-    |   exp '^=' exp
-    |   exp '|=' exp
-    |   exp '<<=' exp
-    |   exp '>>=' exp
-    |   exp '>>>=' exp
-    |   methodCallExp
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// Expressions
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+expression
+    :   (Int|Char|Bool|Identifier|This)
+    |   parExpression
+    |   expression '.' (methodCall|Identifier)
+    |   methodCall
     |   newExp
+    |   expression ('++'|'--')
+    |   ('++'|'--'|'+'|'-'|'~'|'!') expression
+    |   expression ('*'|'/'|'%') expression
+    |   expression ('+'|'-') expression
+    |   expression ('<<'|'>>'|'>>>') expression
+    |   expression ('<'|'>'|'<='|'>=') expression
+    |   expression ('=='|'!=') expression
+    |   expression ('&'|'^'|'|') expression
+    |   expression ('&&'|'||') expression
+    |   expression '?' expression ':' expression
+    |   expression ('='|'+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=') expression
     ;
 
-methodCallExp
-    :   (This|Identifier) '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)? ')'
+methodCall
+    :   Identifier '(' expressionList? ')'
+    |   This '(' expressionList? ')'
     ;
 
-newExp
-    :   New Identifier '(' exp? ')'
-    |   New Identifier '(' (exp ',')+ exp ')'
+newExp:   New Identifier '(' expressionList? ')';
+
+expressionList
+    :   expression (',' expression)*
     ;
+
+parExpression: '(' expression ')';
 
 /* All expressions and statement expressions */
 /*exp
@@ -314,7 +262,7 @@ Char
     |   '\'\\n\''
     |   '\'\\f\''
     |   '\'\\b\''
-    |   '\'\\u' Hex Hex Hex Hex '\''
+    |   '\'\\u' Hex Hex Hex Hex '\'' // Unicode character
     ;
 
 /* An identifer is a class name, method name or field that does not match a keyword
