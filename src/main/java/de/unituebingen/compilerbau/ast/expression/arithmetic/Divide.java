@@ -23,4 +23,9 @@ public class Divide extends ArithmeticOperator {
         if (!(o instanceof Divide)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Divide", left, right, type);
+    }
 }

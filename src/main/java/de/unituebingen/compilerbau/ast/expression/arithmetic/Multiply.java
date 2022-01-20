@@ -23,4 +23,9 @@ public class Multiply extends ArithmeticOperator {
         if (!(o instanceof Multiply)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Multiply", left, right, type);
+    }
 }

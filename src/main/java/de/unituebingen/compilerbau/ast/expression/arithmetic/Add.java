@@ -20,9 +20,7 @@ public class Add extends ArithmeticOperator {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Add)) return false;
-        return super.equals(o);
+    public int hashCode() {
+        return Objects.hash("Add", left, right, type);
     }
 }

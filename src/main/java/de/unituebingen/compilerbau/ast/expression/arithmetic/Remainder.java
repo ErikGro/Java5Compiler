@@ -22,4 +22,9 @@ public class Remainder extends ArithmeticOperator {
         if (!(o instanceof Remainder)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Remainder", left, right, type);
+    }
 }

@@ -29,4 +29,9 @@ public class NotEqual extends RelationalOperator
         if (!(o instanceof NotEqual)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("NotEqual", left, right, type);
+    }
 }

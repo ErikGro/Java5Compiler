@@ -31,4 +31,9 @@ public class Equal extends RelationalOperator
         if (!(o instanceof Equal)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Equal", left, right, type);
+    }
 }

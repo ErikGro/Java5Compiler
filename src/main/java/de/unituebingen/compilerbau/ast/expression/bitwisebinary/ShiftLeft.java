@@ -3,6 +3,8 @@ package de.unituebingen.compilerbau.ast.expression.bitwisebinary;
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 
+import java.util.Objects;
+
 /**
  * @author Matthias Walz
  * @version 1.0
@@ -26,5 +28,10 @@ public class ShiftLeft extends BitwiseBinary
         if (this == o) return true;
         if (!(o instanceof ShiftLeft)) return false;
         return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("ShiftLeft", left, right, type);
     }
 }

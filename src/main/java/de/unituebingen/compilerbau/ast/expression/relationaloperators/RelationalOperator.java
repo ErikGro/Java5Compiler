@@ -3,6 +3,8 @@ package de.unituebingen.compilerbau.ast.expression.relationaloperators;
 import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.expression.Binary;
 
+import java.util.Objects;
+
 /**
  * @author Matthias Walz
  * @version 1.0
