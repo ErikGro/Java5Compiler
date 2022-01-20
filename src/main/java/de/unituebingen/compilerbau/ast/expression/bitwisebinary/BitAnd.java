@@ -2,6 +2,10 @@ package de.unituebingen.compilerbau.ast.expression.bitwisebinary;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
+import de.unituebingen.compilerbau.ast.expression.arithmetic.Add;
+import de.unituebingen.compilerbau.ast.expression.arithmetic.Subtract;
+
+import java.util.Objects;
 
 /**
  * @author Matthias Walz
@@ -19,5 +23,12 @@ public class BitAnd extends BitwiseBinary
     public void visit(ASTVisitor visitor)
     {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BitAnd)) return false;
+        return super.equals(o);
     }
 }

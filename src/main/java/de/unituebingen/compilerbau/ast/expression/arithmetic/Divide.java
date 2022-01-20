@@ -1,10 +1,12 @@
-package de.unituebingen.compilerbau.ast.expression.binary;
+package de.unituebingen.compilerbau.ast.expression.arithmetic;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.expression.Binary;
 
-public class Divide extends Binary {
+import java.util.Objects;
+
+public class Divide extends ArithmeticOperator {
     public Divide(Expression left, Expression right) {
         super(left, right);
     }
@@ -13,5 +15,12 @@ public class Divide extends Binary {
     public void visit(ASTVisitor visitor)
     {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Divide)) return false;
+        return super.equals(o);
     }
 }

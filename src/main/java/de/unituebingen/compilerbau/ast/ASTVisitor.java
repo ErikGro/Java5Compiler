@@ -1,10 +1,14 @@
 package de.unituebingen.compilerbau.ast;
 
+import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
-import de.unituebingen.compilerbau.ast.expression.binary.*;
+import de.unituebingen.compilerbau.ast.expression.arithmetic.*;
 import de.unituebingen.compilerbau.ast.expression.bitwisebinary.*;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.And;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.Or;
+import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
+import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
+import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
@@ -14,10 +18,15 @@ import de.unituebingen.compilerbau.ast.statementexpressions.New;
 import de.unituebingen.compilerbau.ast.statements.*;
 
 public interface ASTVisitor {
+    void visit(Identifier identifier);
+    void visit(IntLiteral intLiteral);
+    void visit(BooleanLiteral booleanLiteral);
+    void visit(CharLiteral charLiteral);
+
     void visit(Add add);
     void visit(Divide divide);
     void visit(Multiply multiply);
-    void visit(Reminder reminder);
+    void visit(Remainder reminder);
     void visit(Subtract subtract);
 
     void visit(And and);
@@ -51,4 +60,6 @@ public interface ASTVisitor {
     void visit(LocalVarDeclaration localVarDeclaration);
     void visit(Return _return);
     void visit(While _while);
+
+    void visit(Block block);
 }

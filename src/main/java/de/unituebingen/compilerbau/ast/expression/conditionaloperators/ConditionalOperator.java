@@ -14,4 +14,9 @@ public abstract class ConditionalOperator extends Binary
     {
         super(left, right);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }

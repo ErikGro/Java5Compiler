@@ -1,28 +1,31 @@
-package de.unituebingen.compilerbau.clazz;
+package de.unituebingen.compilerbau.expression.binary.relational;
 
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
+import de.unituebingen.compilerbau.ast.Clazz;
+
 import java.io.IOException;
+
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import static org.junit.Assert.assertEquals;
 
-public class ClassTest extends CompilerTest {
+public class TestLess extends CompilerTest {
     @Override
     public String getFileName() {
-        return "Clazz";
+        return "/expression/binary/relational/MockLess";
     }
 
     @Override
     public void testAST() throws ASTException, IOException {
         // TODO: Implement test for AST generation
         ScannerParser scannerParser = new ScannerParser();
-        String ast = scannerParser.parse(sourceFile);
+        Clazz ast = scannerParser.parse(this.getSourcecode());
 
-        String expectedAST = "";
+        Clazz expectedAST = null;
 
         assertEquals(ast, expectedAST);
     }
@@ -30,19 +33,19 @@ public class ClassTest extends CompilerTest {
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
         // TODO: Implement test for type checked AST
-        String ast = "ast";
+        Clazz ast = null;
 
         TypeChecker typeChecker = new TypeChecker();
-        String modifiedAST = typeChecker.check(ast);
+        Clazz modifiedAST = typeChecker.check(ast);
 
-        String expectedAST = "";
+        Clazz expectedAST = null;
 
         assertEquals(modifiedAST, expectedAST);
     }
 
     @Override
     public void testGeneratedBytecode() throws CompilerException, IOException {
-        String byteCode = compiler.compile(getFileName() + ".java");
-        assertEquals(byteCode, expectedByteCode);
+        byte[] byteCode = compiler.compile(this.getFileName() + ".java");
+        assertEquals(byteCode, this.getExpectedByteCode());
     }
 }

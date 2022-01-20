@@ -6,16 +6,22 @@ import de.unituebingen.compilerbau.exception.TypeCheckException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
 
 public abstract class CompilerTest {
     public final Compiler compiler = new Compiler();
 
-    public String sourceFile;
-    public String expectedByteCode;
+    private String sourcecode;
+    private byte[] expectedByteCode;
+
+    public String getSourcecode() {
+        return sourcecode;
+    }
+
+    public byte[] getExpectedByteCode() {
+        return expectedByteCode;
+    }
 
     // File name to test from resource folder without suffix
     public abstract String getFileName();
@@ -31,15 +37,17 @@ public abstract class CompilerTest {
 
     @Before
     public void loadTestFiles() {
-        String sourceFilePath = getFileName() + ".java";
-        String byteCodeFilePath = getFileName() + ".class";
+        String sourceFileName = getFileName() + ".java";
+        String byteCodeFileName = getFileName() + ".class";
 
-        InputStream isSource = getClass().getClassLoader().getResourceAsStream(sourceFilePath);
-        InputStream isByteCode = getClass().getClassLoader().getResourceAsStream(byteCodeFilePath);
+        File source = new File(this.getClass().getResource(sourceFileName).getFile());
+        File byteCode = new File(this.getClass().getResource(byteCodeFileName).getFile());
 
         try {
-            sourceFile = readFromInputStream(isSource);
-            expectedByteCode = readFromInputStream(isByteCode);
+            InputStream isSource = new FileInputStream(source);
+            sourcecode = readFromInputStream(isSource);
+
+            expectedByteCode = Files.readAllBytes(byteCode.toPath());
         } catch (IOException e) {
             System.err.println("Couldnt read file: " + getFileName());
             System.err.println("Input file need to be in the classpath");

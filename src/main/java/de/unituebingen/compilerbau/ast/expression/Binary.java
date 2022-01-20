@@ -3,9 +3,11 @@ package de.unituebingen.compilerbau.ast.expression;
 import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Type;
 
+import java.util.Objects;
+
 public abstract class Binary implements Expression {
-    public Expression left;
-    public Expression right;
+    public final Expression left;
+    public final Expression right;
     protected Type type;
 
     public Binary(Expression left, Expression right) {
@@ -20,5 +22,12 @@ public abstract class Binary implements Expression {
     @Override
     public Type getType() {
         return this.type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Binary)) return false;
+        Binary binary = (Binary) o;
+        return Objects.equals(left, binary.left) && Objects.equals(right, binary.right);
     }
 }

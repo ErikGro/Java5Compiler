@@ -4,15 +4,17 @@ import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Statement;
 
+import java.util.Objects;
+
 /**
  * @author Matthias Walz
  * @version 1.0
  */
 public class If extends Statement
 {
-    private Expression condition;
-    private Statement body;
-    private Statement elseBody;
+    public final Expression condition;
+    public final Statement body;
+    public final Statement elseBody;
 
     public If(Expression condition, Statement body, Statement elseBody)
     {
@@ -21,24 +23,24 @@ public class If extends Statement
         this.elseBody = elseBody;
     }
 
-    public Expression getCondition()
-    {
-        return condition;
-    }
-
-    public Statement getBody()
-    {
-        return body;
-    }
-
-    public Statement getElseBody()
-    {
-        return elseBody;
-    }
-
     @Override
     public void visit(ASTVisitor visitor)
     {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof If)) return false;
+        If anIf = (If) o;
+        return Objects.equals(condition, anIf.condition) &&
+                Objects.equals(body, anIf.body) &&
+                Objects.equals(elseBody, anIf.elseBody);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(condition, body, elseBody);
     }
 }

@@ -4,6 +4,7 @@ import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Matthias Walz
@@ -11,9 +12,9 @@ import java.util.List;
  */
 public class MethodCall extends StatementExpression
 {
-    private Expression expr;
-    private String name;
-    private List<Expression> args;
+    public final Expression expr;
+    public final String name;
+    public final List<Expression> args;
 
     public MethodCall(
             Expression expr, String name, List<Expression> args)
@@ -23,24 +24,24 @@ public class MethodCall extends StatementExpression
         this.args = args;
     }
 
-    public Expression getExpr()
-    {
-        return expr;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public List<Expression> getArgs()
-    {
-        return args;
-    }
-
     @Override
     public void visit(ASTVisitor visitor)
     {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MethodCall)) return false;
+        MethodCall that = (MethodCall) o;
+        return Objects.equals(expr, that.expr) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(args, that.args);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(expr, name, args);
     }
 }

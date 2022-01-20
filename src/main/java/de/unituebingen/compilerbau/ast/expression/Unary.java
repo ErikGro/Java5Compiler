@@ -4,7 +4,7 @@ import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Type;
 
 public abstract class Unary implements Expression {
-    public Expression expression;
+    public final Expression expression;
     protected Type type;
 
     public Unary(Expression expression) {

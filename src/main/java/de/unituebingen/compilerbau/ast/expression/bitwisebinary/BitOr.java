@@ -20,4 +20,11 @@ public class BitOr extends BitwiseBinary
     {
         visitor.visit(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BitOr)) return false;
+        return super.equals(o);
+    }
 }
