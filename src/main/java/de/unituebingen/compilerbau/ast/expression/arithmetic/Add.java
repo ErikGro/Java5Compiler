@@ -25,4 +25,9 @@ public class Add extends ArithmeticOperator {
         if (!(o instanceof Add)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Add", left, right, type);
+    }
 }

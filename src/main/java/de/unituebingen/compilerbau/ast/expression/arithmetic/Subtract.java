@@ -23,4 +23,9 @@ public class Subtract extends ArithmeticOperator {
         if (!(o instanceof Subtract)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Subtract", left, right, type);
+    }
 }

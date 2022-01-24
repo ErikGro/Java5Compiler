@@ -31,4 +31,9 @@ public class BitAnd extends BitwiseBinary
         if (!(o instanceof BitAnd)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("BitAnd", left, right, type);
+    }
 }

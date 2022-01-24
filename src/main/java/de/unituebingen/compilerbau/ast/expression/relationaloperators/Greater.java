@@ -29,4 +29,9 @@ public class Greater extends RelationalOperator
         if (!(o instanceof Greater)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Greater", left, right, type);
+    }
 }

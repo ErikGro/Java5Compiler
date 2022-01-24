@@ -29,4 +29,9 @@ public class Less extends RelationalOperator
         if (!(o instanceof Less)) return false;
         return super.equals(o);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash("Less", left, right, type);
+    }
 }
