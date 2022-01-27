@@ -224,42 +224,26 @@ public class ScannerParser
 
         public For visitFor(JavaFiveGrammarParser.ForStatementContext ctx)
         {
-            List<Statement> init = null;
+            Statement init = null;
             Expression termination = null;
-            List<Statement> increment = null;
+            Statement increment = null;
             // init, termination and increment are optional thats why we need to check
             // if they are present
-            if (ctx.getChild(2) instanceof JavaFiveGrammarParser.ForInitContext)
+            if (ctx.getChild(2) instanceof JavaFiveGrammarParser.LocalVarDeclarationStatementContext)
             {
-                init = visitForInit(ctx.forInit());
+                init = visitLocalVarDeclarationStatement(ctx.localVarDeclarationStatement());
             }
             if (ctx.getChild(4) instanceof JavaFiveGrammarParser.ExpressionContext)
             {
                 termination = visitExpression(ctx.expression());
             }
-            if (ctx.getChild(6) instanceof JavaFiveGrammarParser.ExpressionListContext)
+            if (ctx.getChild(6) instanceof JavaFiveGrammarParser.StatementExpressionContext)
             {
-                increment = verifyStatementExpressions(visitExpressionList(ctx.expressionList()));
+                increment = visitStatementExpression(ctx.statementExpression());
             }
             // body is mandatory
             Statement body = visitStatement(ctx.statement());
-
-            //return new For(init, termination, increment, body);
-            //TODO init and increment must be List<Statement>
-            throw new ASTException("for not supported yet");
-        }
-
-        public List<Statement> visitForInit(JavaFiveGrammarParser.ForInitContext ctx)
-        {
-            if (ctx.getChild(0) instanceof JavaFiveGrammarParser.ExpressionListContext)
-            {
-                return verifyStatementExpressions(visitExpressionList(ctx.expressionList()));
-            } else
-            {
-                List<Statement> list = new ArrayList<>();
-                list.add(visitLocalVarDeclarationStatement(ctx.localVarDeclarationStatement()));
-                return list;
-            }
+            return new For(init, termination, increment, body);
         }
 
         public LocalVarDeclaration visitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx)

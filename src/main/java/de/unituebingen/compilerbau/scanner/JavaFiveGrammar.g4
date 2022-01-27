@@ -42,9 +42,7 @@ whileStatement: While parExpression statement;
 
 doWhileStatement: Do statement While parExpression ';';
 
-forStatement: For '(' forInit ';' expression? ';' expressionList? ')' statement;
-
-forInit: localVarDeclarationStatement | expressionList;
+forStatement: For '(' localVarDeclarationStatement? ';' expression? ';' statementExpression? ')' statement;
 
 localVarDeclarationStatement:   type Identifier ('=' expression)?;
 
