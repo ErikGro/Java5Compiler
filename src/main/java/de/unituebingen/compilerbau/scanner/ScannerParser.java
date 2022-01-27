@@ -12,6 +12,8 @@ import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
+import de.unituebingen.compilerbau.ast.expression.unary.Decrement;
+import de.unituebingen.compilerbau.ast.expression.unary.Increment;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
 import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
@@ -66,6 +68,7 @@ public class ScannerParser
 
         public Clazz visitClazz(JavaFiveGrammarParser.ClazzContext ctx)
         {
+            // TODO Add null checks where needed
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
@@ -548,29 +551,11 @@ public class ScannerParser
 
         private Expression makePostOrPreIncrement(Expression expr, boolean add, boolean postfix)
         {
-
-            if (!(expr instanceof Identifier) || ((Identifier) expr).name.equals("this"))
+            if (!(expr instanceof Identifier || expr instanceof This))
             {
                 throw new ASTException("Variable expected but got " + expr);
             }
-            // TODO how to distinguish between ++a and a++?
-            return new Assignment(
-                    expr,
-                    add ? new Add(expr, new IntLiteral(1)) : new Subtract(expr, new IntLiteral(1))
-            );
-
-        }
-
-        private List<Statement> verifyStatementExpressions(List<Expression> expressionList)
-        {
-            for (Expression expr : expressionList)
-            {
-                if (!(expr instanceof StatementExpression))
-                {
-                    throw new ASTException("Statement expected but got " + expr);
-                }
-            }
-            return expressionList.stream().map(exp -> (Statement) exp).collect(Collectors.toList());
+            return add ? new Increment(expr, postfix) : new Decrement(expr, postfix);
         }
     }
 }

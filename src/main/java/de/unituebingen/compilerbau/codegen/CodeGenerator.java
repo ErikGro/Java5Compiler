@@ -12,6 +12,8 @@ import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
+import de.unituebingen.compilerbau.ast.expression.unary.Decrement;
+import de.unituebingen.compilerbau.ast.expression.unary.Increment;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
 import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
@@ -287,6 +289,18 @@ public class CodeGenerator {
             not.expression.visit(this);
             mv.visitInsn(ICONST_M1);
             mv.visitInsn(IXOR);
+        }
+
+        @Override
+        public void visit(Increment increment)
+        {
+
+        }
+
+        @Override
+        public void visit(Decrement decrement)
+        {
+
         }
 
         @Override

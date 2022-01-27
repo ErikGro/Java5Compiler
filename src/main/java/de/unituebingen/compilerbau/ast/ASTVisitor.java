@@ -11,6 +11,8 @@ import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
+import de.unituebingen.compilerbau.ast.expression.unary.Decrement;
+import de.unituebingen.compilerbau.ast.expression.unary.Increment;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
 import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
@@ -52,6 +54,8 @@ public interface ASTVisitor {
 
     void visit(Negate negate);
     void visit(Not not);
+    void visit(Increment increment);
+    void visit(Decrement decrement);
 
     void visit(Assignment assignment);
     void visit(MethodCall methodCall);
