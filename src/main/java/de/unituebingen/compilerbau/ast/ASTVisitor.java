@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau.ast;
 
+import de.unituebingen.compilerbau.ast.expression.DotOperator;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
 import de.unituebingen.compilerbau.ast.expression.arithmetic.*;
@@ -22,6 +23,7 @@ public interface ASTVisitor {
     void visit(IntLiteral intLiteral);
     void visit(BooleanLiteral booleanLiteral);
     void visit(CharLiteral charLiteral);
+    void visit(DotOperator dotOperator);
 
     void visit(Add add);
     void visit(Divide divide);

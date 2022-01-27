@@ -264,21 +264,16 @@ public class ScannerParser
 
         public LocalVarDeclaration visitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx)
         {
-            List<Statement> list = new ArrayList<>();
             Type type = visitType(ctx.type());
             Identifier identifier = new Identifier(ctx.Identifier().getText(), null);
-            LocalVarDeclaration decl = new LocalVarDeclaration(identifier.name);
-            decl.setType(type);
-            list.add(decl);
-            // declaration and assignment
-            // int a = 0;
+            Expression assignment = null;
             if (ctx.getChildCount() == 4)
             {
-                Expression expr = visitExpression(ctx.expression());
-                list.add(new Assignment(identifier, expr));
+                assignment = visitExpression(ctx.expression());
             }
-            //TODO maybe introduce an assignment field in LocalVarDeclaration???
-            throw new ASTException("Local variables are evil");
+            LocalVarDeclaration decl = new LocalVarDeclaration(identifier.name, assignment);
+            decl.setType(type);
+            return decl;
         }
 
         public Return visitReturn(JavaFiveGrammarParser.ReturnStatementContext ctx)
