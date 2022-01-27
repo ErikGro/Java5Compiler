@@ -1,52 +1,56 @@
 grammar JavaFiveGrammar;
 
 /* This will be the entry point of our parser. */
-javaProgram
-    :   clazz
-    |   method
-    |   field
-    |   statement
-    |   expression
-    ;
+javaProgram:    clazz;
 
-clazz
-    :   AccessModifier Class Identifier '{' (field|method)* '}'
-    ;
+clazz:   AccessModifier Class Identifier '{' fieldOrMethod* '}';
 
-method
-    :   AccessModifier Static? type Identifier '(' (type Identifier (',' type Identifier)*)? ')' blockStatement
-    ;
+fieldOrMethod: field|method;
 
-field
-    :   AccessModifier Static? localVarDeclarationStatement ';'
-    ;
+method:   AccessModifier Static? type Identifier '(' methodParameterList ')' blockStatement;
+
+methodParameterList: (type Identifier (',' type Identifier)*)?;
+
+field:   AccessModifier Static? localVarDeclarationStatement ';';
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //
-//  Statements
+//  Statements and Statement Expressions
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
 statement
     :   ';'
     |   blockStatement
-    |   If parExpression statement (Else statement)?
-    |   Switch parExpression '{' (Case|Default) ':' statement* '}'
-    |   While parExpression statement
-    |   Do statement While parExpression ';'
-    |   For '(' forControl ')' statement
+    |   ifStatement
+    |   switchStatement
+    |   whileStatement
+    |   doWhileStatement
+    |   forStatement
     |   localVarDeclarationStatement ';'
-    |   Return statement
-    |   expression ';' //statement expression
+    |   returnStatement
+    |   statementExpression
     |   Continue ';'
     |   Break ';'
     ;
 
-forControl: forInit? ';' expression? ';' expressionList?;
+ifStatement: If parExpression statement (Else statement)?;
+
+switchStatement: Switch parExpression '{' (Case|Default) ':' statement* '}' ;
+
+whileStatement: While parExpression statement;
+
+doWhileStatement: Do statement While parExpression ';';
+
+forStatement: For '(' forInit ';' expression? ';' expressionList? ')' statement;
 
 forInit: localVarDeclarationStatement | expressionList;
 
 localVarDeclarationStatement:   type Identifier ('=' expression)?;
+
+returnStatement: Return expression;
+
+statementExpression: expression ';';
 
 blockStatement
     :   '{' statement* '}'
@@ -66,8 +70,7 @@ type
 expression
     :   (Int|Char|Bool|Identifier|This)
     |   parExpression
-    |   expression '.' (methodCall|Identifier)
-    |   methodCall
+    |   methodCall // TODO make AST
     |   newExp
     |   expression ('++'|'--')
     |   ('++'|'--'|'+'|'-'|'~'|'!') expression
@@ -79,132 +82,26 @@ expression
     |   expression ('&'|'^'|'|') expression
     |   expression ('&&'|'||') expression
     |   expression '?' expression ':' expression
-    |   expression ('='|'+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=') expression
+    |   assignment
     ;
 
 methodCall
-    :   Identifier '(' expressionList? ')'
-    |   This '(' expressionList? ')'
+    :   Identifier ('.' (expression|Identifier))* '(' expressionList? ')'
+    |   This ('.' (expression|Identifier))* '(' expressionList? ')'
     ;
 
 newExp:   New Identifier '(' expressionList? ')';
+
+assignment
+    :   Identifier (('='|'+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=') Identifier)*
+                   ('='|'+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=') expression
+    ;
 
 expressionList
     :   expression (',' expression)*
     ;
 
 parExpression: '(' expression ')';
-
-/* All expressions and statement expressions */
-/*exp
-    :   pureExp
-    |   statementExp
-    ;
-
-/* These are statement expressions but defined without the semicolon so we can use the as expressions e.g.
-    as method arguments, etc. */
-/*statementExp
-    :   methodCallExp
-    |   newExp
-    |   assignmentExp
-    |   Identifier '++' // need them for for-loops
-    |   Identifier '--'
-    |   '++' Identifier
-    |   '--' Identifier
-    ;
-
-methodCallExp
-    :   (This|Identifier) '.' Identifier ('.' Identifier)* '(' (exp (',' exp)*)? ')'
-    ;
-
-newExp
-    :   New Identifier '(' exp? ')'
-    |   New Identifier '(' (exp ',')+ exp ')'
-    ;
-
-assignmentExp
-    :   assigmentPart+ exp
-    ;
-
-assigmentPart
-    :   Identifier '='
-    |   Identifier '+='
-    |   Identifier '-='
-    |   Identifier '*='
-    |   Identifier '/='
-    |   Identifier '%='
-    |   Identifier '&='
-    |   Identifier '^='
-    |   Identifier '|='
-    |   Identifier '<<='
-    |   Identifier '>>='
-    |   Identifier '>>>='
-    ;
-
-/* Pure expressions are all expressions that are not statements at the same time */
-/*pureExp
-    :   Int|Char|Bool|Identifier
-    |   '(' pureExp ')'
-    |   numberExp
-    |   boolExp
-    |   ternaryExp
-    ;
-
-ternaryExp: boolExp '?' pureExp ':' pureExp;
-
-/* All expressions that produce a boolean as a result, this does also include comparisons of numbers
-    (https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html) */
-
-/*boolExp
-    :   (Bool|Identifier|numberBoolExp)
-    |   '!' (Bool|Identifier|numberBoolExp)
-    |   boolExp '==' boolExp
-    |   boolExp '!=' boolExp
-    |   boolExp '&' boolExp
-    |   boolExp '^' boolExp
-    |   boolExp '|' boolExp
-    |   boolExp '&&' boolExp
-    |   boolExp '||' boolExp
-    ;
-
-/* All operators that compare numbers with each other and produce a boolean value
-    Note that number boolean expressions are not allowed to evaluate recursively to prevent 1<1<1
-    which would be a comparison between boolean and number */
-
-/*numberBoolExp
-    :   '(' numberBoolExp ')'
-    |   numberExp '<' numberExp
-    |   numberExp '<=' numberExp
-    |   numberExp '>=' numberExp
-    |   numberExp '>' numberExp
-    |   numberExp '==' numberExp
-    |   numberExp '!=' numberExp
-    ;
-
-/* All expressions that produce an int or char as a result
-    (https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html) */
-/*numberExp
-    :   (Int|Char|Identifier)
-    |   '(' numberExp ')'
-    |   Identifier '++'
-    |   Identifier '--'
-    |   '++' Identifier
-    |   '--' Identifier
-    |   '-' numberExp
-    |   '+' numberExp
-    |   '~' numberExp
-    |   numberExp '*' numberExp
-    |   numberExp '/' numberExp
-    |   numberExp '%' numberExp
-    |   numberExp '+' numberExp
-    |   numberExp '-' numberExp
-    |   numberExp '<<' numberExp
-    |   numberExp '>>' numberExp
-    |   numberExp '>>>' numberExp
-    |   numberExp '&' numberExp
-    |   numberExp '^' numberExp
-    |   numberExp '|' numberExp
-    ;
 
 /**
   * Terminal symbols.

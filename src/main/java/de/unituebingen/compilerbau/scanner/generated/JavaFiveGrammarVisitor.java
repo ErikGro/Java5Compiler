@@ -23,11 +23,23 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClazz(JavaFiveGrammarParser.ClazzContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#fieldOrMethod}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#method}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitMethod(JavaFiveGrammarParser.MethodContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#methodParameterList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#field}.
 	 * @param ctx the parse tree
@@ -41,11 +53,35 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatement(JavaFiveGrammarParser.StatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#forControl}.
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#ifStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitForControl(JavaFiveGrammarParser.ForControlContext ctx);
+	T visitIfStatement(JavaFiveGrammarParser.IfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#switchStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSwitchStatement(JavaFiveGrammarParser.SwitchStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#whileStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileStatement(JavaFiveGrammarParser.WhileStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#doWhileStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoWhileStatement(JavaFiveGrammarParser.DoWhileStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#forStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForStatement(JavaFiveGrammarParser.ForStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#forInit}.
 	 * @param ctx the parse tree
@@ -58,6 +94,18 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#returnStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStatement(JavaFiveGrammarParser.ReturnStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#statementExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#blockStatement}.
 	 * @param ctx the parse tree
@@ -88,6 +136,12 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNewExp(JavaFiveGrammarParser.NewExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignment(JavaFiveGrammarParser.AssignmentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#expressionList}.
 	 * @param ctx the parse tree

@@ -40,6 +40,18 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMethod(JavaFiveGrammarParser.MethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -47,6 +59,18 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMethod(JavaFiveGrammarParser.MethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -76,13 +100,61 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForControl(JavaFiveGrammarParser.ForControlContext ctx) { }
+	@Override public void enterIfStatement(JavaFiveGrammarParser.IfStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForControl(JavaFiveGrammarParser.ForControlContext ctx) { }
+	@Override public void exitIfStatement(JavaFiveGrammarParser.IfStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSwitchStatement(JavaFiveGrammarParser.SwitchStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSwitchStatement(JavaFiveGrammarParser.SwitchStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhileStatement(JavaFiveGrammarParser.WhileStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhileStatement(JavaFiveGrammarParser.WhileStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDoWhileStatement(JavaFiveGrammarParser.DoWhileStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDoWhileStatement(JavaFiveGrammarParser.DoWhileStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterForStatement(JavaFiveGrammarParser.ForStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForStatement(JavaFiveGrammarParser.ForStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -107,6 +179,30 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReturnStatement(JavaFiveGrammarParser.ReturnStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturnStatement(JavaFiveGrammarParser.ReturnStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -167,6 +263,18 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNewExp(JavaFiveGrammarParser.NewExpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignment(JavaFiveGrammarParser.AssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignment(JavaFiveGrammarParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

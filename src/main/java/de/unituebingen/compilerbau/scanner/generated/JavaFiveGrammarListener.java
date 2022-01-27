@@ -28,6 +28,16 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 */
 	void exitClazz(JavaFiveGrammarParser.ClazzContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#fieldOrMethod}.
+	 * @param ctx the parse tree
+	 */
+	void enterFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#fieldOrMethod}.
+	 * @param ctx the parse tree
+	 */
+	void exitFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#method}.
 	 * @param ctx the parse tree
 	 */
@@ -37,6 +47,16 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethod(JavaFiveGrammarParser.MethodContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#methodParameterList}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#methodParameterList}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#field}.
 	 * @param ctx the parse tree
@@ -58,15 +78,55 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 */
 	void exitStatement(JavaFiveGrammarParser.StatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#forControl}.
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#ifStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterForControl(JavaFiveGrammarParser.ForControlContext ctx);
+	void enterIfStatement(JavaFiveGrammarParser.IfStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#forControl}.
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#ifStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitForControl(JavaFiveGrammarParser.ForControlContext ctx);
+	void exitIfStatement(JavaFiveGrammarParser.IfStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#switchStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterSwitchStatement(JavaFiveGrammarParser.SwitchStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#switchStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitSwitchStatement(JavaFiveGrammarParser.SwitchStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#whileStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhileStatement(JavaFiveGrammarParser.WhileStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#whileStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhileStatement(JavaFiveGrammarParser.WhileStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#doWhileStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoWhileStatement(JavaFiveGrammarParser.DoWhileStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#doWhileStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoWhileStatement(JavaFiveGrammarParser.DoWhileStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#forStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterForStatement(JavaFiveGrammarParser.ForStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#forStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitForStatement(JavaFiveGrammarParser.ForStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#forInit}.
 	 * @param ctx the parse tree
@@ -87,6 +147,26 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnStatement(JavaFiveGrammarParser.ReturnStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnStatement(JavaFiveGrammarParser.ReturnStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#statementExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#statementExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#blockStatement}.
 	 * @param ctx the parse tree
@@ -137,6 +217,16 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNewExp(JavaFiveGrammarParser.NewExpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignment(JavaFiveGrammarParser.AssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignment(JavaFiveGrammarParser.AssignmentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#expressionList}.
 	 * @param ctx the parse tree
