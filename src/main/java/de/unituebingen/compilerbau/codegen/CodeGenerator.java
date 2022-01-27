@@ -1,6 +1,7 @@
 package de.unituebingen.compilerbau.codegen;
 
 import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.expression.DotOperator;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
 import de.unituebingen.compilerbau.ast.expression.arithmetic.*;
@@ -102,6 +103,12 @@ public class CodeGenerator {
         @Override
         public void visit(CharLiteral charLiteral) {
             mv.visitIntInsn(BIPUSH, charLiteral.value);
+        }
+
+        @Override
+        public void visit(DotOperator dotOperator)
+        {
+
         }
 
         @Override

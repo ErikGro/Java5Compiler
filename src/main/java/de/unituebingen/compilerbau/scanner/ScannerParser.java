@@ -49,7 +49,12 @@ public class ScannerParser
 
     public static void main(String[] args) throws IOException
     {
-        new ScannerParser().parse("int a = 0");
+        ScannerParser parser = new ScannerParser();
+        Clazz clazz = parser.parse("public class A{}");
+        System.out.println(clazz.access);
+        System.out.println(clazz.name);
+        System.out.println(clazz.fields);
+        System.out.println(clazz.methods);
     }
 
     class ParseTreeVisitor
