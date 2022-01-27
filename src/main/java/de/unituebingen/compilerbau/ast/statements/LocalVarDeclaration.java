@@ -1,6 +1,7 @@
 package de.unituebingen.compilerbau.ast.statements;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
+import de.unituebingen.compilerbau.ast.Expression;
 import de.unituebingen.compilerbau.ast.Statement;
 import de.unituebingen.compilerbau.ast.Type;
 
@@ -13,9 +14,11 @@ import java.util.Objects;
 public class LocalVarDeclaration extends Statement
 {
     public final String name;
+    public final Expression expression;
 
-    public LocalVarDeclaration(String name) {
+    public LocalVarDeclaration(String name, Expression expression) {
         this.name = name;
+        this.expression = expression;
     }
 
     @Override
@@ -27,13 +30,13 @@ public class LocalVarDeclaration extends Statement
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LocalVarDeclaration)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         LocalVarDeclaration that = (LocalVarDeclaration) o;
-        return Objects.equals(name, that.name);
+        return Objects.equals(name, that.name) && Objects.equals(expression, that.expression);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, expression);
     }
 }
