@@ -3,6 +3,7 @@ package de.unituebingen.compilerbau.scanner;
 import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
+import de.unituebingen.compilerbau.ast.expression.This;
 import de.unituebingen.compilerbau.ast.expression.arithmetic.*;
 import de.unituebingen.compilerbau.ast.expression.bitwisebinary.*;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.And;
@@ -129,7 +130,6 @@ public class ScannerParser
             ParseTree child = ctx.getChild(0);
             if (child.getText().equals(";"))
             {
-                //TODO new AST element "EmptyStatement" ????
                 return new Block(new ArrayList<>());
             }
             if (child instanceof JavaFiveGrammarParser.BlockStatementContext)
@@ -312,7 +312,7 @@ public class ScannerParser
                     node = ctx.This();
                     if (node != null)
                     {
-                        return new Identifier(node.getText(), null);
+                        return new This();
                     }
                     ParseTree element = ctx.getChild(0);
                     if (element instanceof JavaFiveGrammarParser.ParExpressionContext)
