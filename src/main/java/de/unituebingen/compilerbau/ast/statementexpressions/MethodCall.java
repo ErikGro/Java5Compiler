@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class MethodCall extends StatementExpression
 {
-    public final Expression expr;
+    public Expression expr;
     public final String name;
     public final List<Expression> args;
 
@@ -22,6 +22,11 @@ public class MethodCall extends StatementExpression
         this.expr = expr;
         this.name = name;
         this.args = args;
+    }
+
+    public void setExpr(Expression expr)
+    {
+        this.expr = expr;
     }
 
     @Override
