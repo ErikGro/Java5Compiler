@@ -1,6 +1,7 @@
 package de.unituebingen.compilerbau.scanner;
 
 import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.expression.DotOperator;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
 import de.unituebingen.compilerbau.ast.expression.This;
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ScannerParser
 {
@@ -45,14 +45,13 @@ public class ScannerParser
         JavaFiveGrammarLexer lexer = new JavaFiveGrammarLexer(input);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JavaFiveGrammarParser parser = new JavaFiveGrammarParser(tokenStream);
-
         return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram());
     }
 
     public static void main(String[] args) throws IOException
     {
         ScannerParser parser = new ScannerParser();
-        Clazz clazz = parser.parse("public class A{}");
+        Clazz clazz = parser.parse("class A{ public void m() { for(;;);}}");
         System.out.println(clazz.access);
         System.out.println(clazz.name);
         System.out.println(clazz.fields);
@@ -68,7 +67,10 @@ public class ScannerParser
 
         public Clazz visitClazz(JavaFiveGrammarParser.ClazzContext ctx)
         {
-            // TODO Add null checks where needed
+            ensurePresent(ctx.AccessModifier(), "'public' or 'private'");
+            ensurePresent(ctx.Class(), "'class'");
+            ensurePresent(ctx.Identifier(), "Identifier name");
+
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
@@ -96,6 +98,7 @@ public class ScannerParser
 
         public Method visitMethod(JavaFiveGrammarParser.MethodContext ctx)
         {
+            ensurePresent(ctx.AccessModifier(), "Access modifier");
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
@@ -232,6 +235,7 @@ public class ScannerParser
 
         public For visitFor(JavaFiveGrammarParser.ForStatementContext ctx)
         {
+            System.out.println(ctx.localVarDeclarationStatement());
             Statement init = null;
             Expression termination = null;
             Statement increment = null;
@@ -372,6 +376,18 @@ public class ScannerParser
                     op = ctx.getChild(1).getText();
                     switch (op)
                     {
+                        case ".":
+                            Expression left = visitExpression(ctx.expression(0));
+                            if (ctx.getChild(2) instanceof JavaFiveGrammarParser.MethodCallContext)
+                            {
+                                MethodCall call = visitMethodCall(ctx.methodCall());
+                                call.setExpr(left);
+                                return call;
+                            } else
+                            {
+                                String identifier = ctx.Identifier().getText();
+                                return new DotOperator(left, identifier);
+                            }
                         case "*":
                             return new Multiply(
                                     visitExpression(ctx.expression(0)),
@@ -483,23 +499,12 @@ public class ScannerParser
             return null;
         }
 
-        public Expression visitMethodCall(JavaFiveGrammarParser.MethodCallContext ctx)
+        public MethodCall visitMethodCall(JavaFiveGrammarParser.MethodCallContext ctx)
         {
-            String name = null;
-            TerminalNode terminal = ctx.Identifier(0);
-            if (terminal == null)
-            {
-                terminal = ctx.This();
-                if (terminal == null)
-                {
-                    throw new ASTException("Expected variable or this.");
-                }
-            }
-            name = terminal.getText();
-            // TODO how to make chain calls?? Is there an AST element missing?
-            return new MethodCall(null, name, visitExpressionList(ctx.expressionList()));
+            String name = ctx.Identifier().getText();
+            List<Expression> args = visitExpressionList(ctx.expressionList());
+            return new MethodCall(null, name, args);
         }
-
 
         public Expression visitNewExp(JavaFiveGrammarParser.NewExpContext ctx)
         {
@@ -547,6 +552,14 @@ public class ScannerParser
                                                                                              ASTException
         {
             return visitExpression(ctx.expression());
+        }
+
+        private void ensurePresent(ParseTree element, String elementName)
+        {
+            if (element == null || element.getText().contains("missing"))
+            {
+                throw new ASTException(elementName + " expected!");
+            }
         }
 
         private Expression makePostOrPreIncrement(Expression expr, boolean add, boolean postfix)
