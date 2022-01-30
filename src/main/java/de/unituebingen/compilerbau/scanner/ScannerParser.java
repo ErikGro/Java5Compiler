@@ -51,7 +51,7 @@ public class ScannerParser
     public static void main(String[] args) throws IOException
     {
         ScannerParser parser = new ScannerParser();
-        Clazz clazz = parser.parse("public class A{ private void method() { a = 1; } }");
+        Clazz clazz = parser.parse("class A{}");
     }
 
     static class ParseTreeVisitor
@@ -522,26 +522,66 @@ public class ScannerParser
         {
             List<TerminalNode> identifierList = ctx.Identifier();
             ensurePresent(ctx.AssignmentOp(), identifierList.size(), "assignment");
-            Assignment part = null;
+            Assignment assignment = null;
 
-            for (int i = identifierList.size() - 1; i >= 1; i--)
+            for (int i = identifierList.size() - 1; i >= 0; i--)
             {
                 Identifier identifier = new Identifier(identifierList.get(i).getText(), null);
+                String assignmentOp = ctx.AssignmentOp(i).getText();
                 if (i == identifierList.size() - 1)
                 {
                     // init part with most right expression
                     // e.g a = .... = z = 1
-                    part = new Assignment(identifier, visitExpression(ctx.expression()));
+
+                    assignment = new Assignment(identifier,
+                            handleAssignment(assignmentOp,
+                                    identifier,
+                                    visitExpression(ctx.expression())
+                            )
+                    );
                 } else
                 {
                     // case: a = ... d = e = ... = 1
-                    part = new Assignment(identifier, part);
+                    Expression bla = handleAssignment(assignmentOp, identifier, assignment.left);
+                    assignment.setLeft(bla);
+                    assignment = new Assignment(identifier, assignment);
                 }
             }
 
-            return new Assignment(new Identifier(identifierList.get(0).getText(), null), part);
+            return assignment;
         }
 
+        private Expression handleAssignment(String op, Expression first, Expression expr)
+        {
+            switch (op)
+            {
+                case "=":
+                    return expr;
+                case "+=":
+                    return new Add(first, expr);
+                case "-=":
+                    return new Subtract(first, expr);
+                case "*=":
+                    return new Multiply(first, expr);
+                case "/=":
+                    return new Divide(first, expr);
+                case "%=":
+                    return new Remainder(first, expr);
+                case "&=":
+                    return new BitAnd(first, expr);
+                case "^=":
+                    return new BitXOR(first, expr);
+                case "|=":
+                    return new BitOr(first, expr);
+                case "<<=":
+                    return new ShiftLeft(first, expr);
+                case ">>=":
+                    return new ShiftRight(first, expr);
+                case ">>>=":
+                    return new UnsignedShiftRight(first, expr);
+            }
+            return expr;
+        }
 
         public List<Expression> visitExpressionList(JavaFiveGrammarParser.ExpressionListContext ctx) throws
                                                                                                      ASTException
