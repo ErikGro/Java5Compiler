@@ -11,13 +11,18 @@ import java.util.Objects;
  */
 public class Assignment extends StatementExpression
 {
-    public final Expression left;
+    public Expression left;
     public final Expression right;
 
     public Assignment(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;
+    }
+
+    public void setLeft(Expression left)
+    {
+        this.left = left;
     }
 
     @Override
