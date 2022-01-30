@@ -51,14 +51,10 @@ public class ScannerParser
     public static void main(String[] args) throws IOException
     {
         ScannerParser parser = new ScannerParser();
-        Clazz clazz = parser.parse("class A{ public void m() { for(;;);}}");
-        System.out.println(clazz.access);
-        System.out.println(clazz.name);
-        System.out.println(clazz.fields);
-        System.out.println(clazz.methods);
+        Clazz clazz = parser.parse("public class A{ private void method() { a = 1; } }");
     }
 
-    class ParseTreeVisitor
+    static class ParseTreeVisitor
     {
         public Clazz visitJavaProgram(JavaFiveGrammarParser.JavaProgramContext ctx)
         {
@@ -69,7 +65,9 @@ public class ScannerParser
         {
             ensurePresent(ctx.AccessModifier(), "'public' or 'private'");
             ensurePresent(ctx.Class(), "'class'");
-            ensurePresent(ctx.Identifier(), "Identifier name");
+            ensurePresent(ctx.Identifier(), "Identifier");
+            ensurePresent(ctx.LCurlyBracket(), "'{'");
+            ensurePresent(ctx.RCurlyBracket(), "'}'");
 
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
@@ -99,6 +97,10 @@ public class ScannerParser
         public Method visitMethod(JavaFiveGrammarParser.MethodContext ctx)
         {
             ensurePresent(ctx.AccessModifier(), "Access modifier");
+            ensurePresent(ctx.Identifier(), "Identifier");
+            ensurePresent(ctx.LRoundBracket(), "'('");
+            ensurePresent(ctx.LRoundBracket(), "')'");
+
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
@@ -126,6 +128,9 @@ public class ScannerParser
 
         public Field visitField(JavaFiveGrammarParser.FieldContext ctx)
         {
+            ensurePresent(ctx.AccessModifier(), "Access modifier");
+            ensurePresent(ctx.Semicolon(), "';'");
+
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
@@ -188,12 +193,14 @@ public class ScannerParser
                 throw new ASTException("Break not supported");
             }
 
-            throw new ASTException("Unknown statement: " + ctx.getText());
+            throw new ASTException("Unknown statement: " + ctx);
         }
 
 
         public Block visitBlockStatement(JavaFiveGrammarParser.BlockStatementContext ctx)
         {
+            ensurePresent(ctx.LCurlyBracket(), "'{'");
+            ensurePresent(ctx.RCurlyBracket(), "'}'");
             List<Statement> statements = new ArrayList<>(ctx.statement().size());
             for (JavaFiveGrammarParser.StatementContext statementCtx : ctx.statement())
             {
@@ -205,12 +212,15 @@ public class ScannerParser
 
         public If visitIf(JavaFiveGrammarParser.IfStatementContext ctx)
         {
+            ensurePresent(ctx.If(), "'If'");
+
             Expression condition = visitParExpression(ctx.parExpression());
             Statement ifBody = visitStatement(ctx.statement(0));
             Statement elseBody = null;
             // else clause present
             if (ctx.getChildCount() == 5)
             {
+                ensurePresent(ctx.Else(), "'else'");
                 elseBody = visitStatement(ctx.statement(1));
             }
             return new If(condition, ifBody, elseBody);
@@ -223,6 +233,7 @@ public class ScannerParser
 
         public While visitWhile(JavaFiveGrammarParser.WhileStatementContext ctx)
         {
+            ensurePresent(ctx.While(), "'while'");
             Expression condition = visitParExpression(ctx.parExpression());
             Statement body = visitStatement(ctx.statement());
             return new While(condition, body);
@@ -235,7 +246,11 @@ public class ScannerParser
 
         public For visitFor(JavaFiveGrammarParser.ForStatementContext ctx)
         {
-            System.out.println(ctx.localVarDeclarationStatement());
+            ensurePresent(ctx.For(), "'for'");
+            ensurePresent(ctx.LRoundBracket(), "'('");
+            ensurePresent(ctx.Semicolon(), 2, "';'");
+            ensurePresent(ctx.RRoundBracket(), "')'");
+
             Statement init = null;
             Expression termination = null;
             Statement increment = null;
@@ -260,6 +275,10 @@ public class ScannerParser
 
         public LocalVarDeclaration visitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx)
         {
+            ensurePresent(ctx.Identifier(), "Identifier");
+            ensurePresent(ctx.SimpleAssignmentOp(), "'='");
+            ensurePresent(ctx.Semicolon(), "';'");
+
             Type type = visitType(ctx.type());
             Identifier identifier = new Identifier(ctx.Identifier().getText(), null);
             Expression assignment = null;
@@ -274,11 +293,14 @@ public class ScannerParser
 
         public Return visitReturn(JavaFiveGrammarParser.ReturnStatementContext ctx)
         {
+            ensurePresent(ctx.Return(), "'return'");
+            ensurePresent(ctx.Semicolon(), "';'");
             return new Return(visitExpression(ctx.expression()));
         }
 
         public Statement visitStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx)
         {
+            ensurePresent(ctx.Semicolon(), "';'");
             Expression expr = visitExpression(ctx.expression());
             if (expr instanceof StatementExpression)
             {
@@ -389,118 +411,99 @@ public class ScannerParser
                                 return new DotOperator(left, identifier);
                             }
                         case "*":
-                            return new Multiply(
-                                    visitExpression(ctx.expression(0)),
+                            return new Multiply(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "/":
-                            return new Divide(
-                                    visitExpression(ctx.expression(0)),
+                            return new Divide(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "%":
-                            return new Remainder(
-                                    visitExpression(ctx.expression(0)),
+                            return new Remainder(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "+":
-                            return new Add(
-                                    visitExpression(ctx.expression(0)),
+                            return new Add(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "-":
-                            return new Subtract(
-                                    visitExpression(ctx.expression(0)),
+                            return new Subtract(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "<<":
-                            return new ShiftLeft(
-                                    visitExpression(ctx.expression(0)),
+                            return new ShiftLeft(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case ">>":
-                            return new ShiftRight(
-                                    visitExpression(ctx.expression(0)),
+                            return new ShiftRight(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case ">>>":
-                            return new UnsignedShiftRight(
-                                    visitExpression(ctx.expression(0)),
+                            return new UnsignedShiftRight(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "<":
-                            return new Less(
-                                    visitExpression(ctx.expression(0)),
+                            return new Less(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case ">":
-                            return new Greater(
-                                    visitExpression(ctx.expression(0)),
+                            return new Greater(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "<=":
-                            return new LessOrEqual(
-                                    visitExpression(ctx.expression(0)),
+                            return new LessOrEqual(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case ">=":
-                            return new GreaterOrEqual(
-                                    visitExpression(ctx.expression(0)),
+                            return new GreaterOrEqual(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "==":
-                            return new Equal(
-                                    visitExpression(ctx.expression(0)),
+                            return new Equal(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "!=":
-                            return new NotEqual(
-                                    visitExpression(ctx.expression(0)),
+                            return new NotEqual(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "&":
-                            return new BitAnd(
-                                    visitExpression(ctx.expression(0)),
+                            return new BitAnd(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "^":
-                            return new BitXOR(
-                                    visitExpression(ctx.expression(0)),
+                            return new BitXOR(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "|":
-                            return new BitOr(
-                                    visitExpression(ctx.expression(0)),
+                            return new BitOr(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "&&":
-                            return new And(
-                                    visitExpression(ctx.expression(0)),
+                            return new And(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                         case "||":
-                            return new Or(
-                                    visitExpression(ctx.expression(0)),
+                            return new Or(visitExpression(ctx.expression(0)),
                                     visitExpression(ctx.expression(1))
                             );
                     }
                     break;
                 // Ternary expression
                 case 5:
-                    return new Ternary(
-                            visitExpression(ctx.expression(0)),
+                    return new Ternary(visitExpression(ctx.expression(0)),
                             visitExpression(ctx.expression(1)),
                             visitExpression(ctx.expression(2))
                     );
-                default:
-                    throw new ASTException("Not an expression: " + ctx.getText());
             }
-
-            return null;
+            throw new ASTException("Not an expression: " + ctx.getText());
         }
 
         public MethodCall visitMethodCall(JavaFiveGrammarParser.MethodCallContext ctx)
         {
+            ensurePresent(ctx.Identifier(), "Identifier");
+            ensurePresent(ctx.LRoundBracket(), "'('");
+            ensurePresent(ctx.RRoundBracket(), "')'");
+
             String name = ctx.Identifier().getText();
             List<Expression> args = visitExpressionList(ctx.expressionList());
             return new MethodCall(null, name, args);
@@ -508,18 +511,22 @@ public class ScannerParser
 
         public Expression visitNewExp(JavaFiveGrammarParser.NewExpContext ctx)
         {
+            ensurePresent(ctx.New(), "'new'");
+            ensurePresent(ctx.Identifier(), "Identifier");
+            ensurePresent(ctx.LRoundBracket(), "'('");
+            ensurePresent(ctx.RRoundBracket(), "')'");
             return new New(visitExpressionList(ctx.expressionList()));
         }
 
         public Expression visitAssignment(JavaFiveGrammarParser.AssignmentContext ctx)
         {
             List<TerminalNode> identifierList = ctx.Identifier();
-            Expression part = null;
+            ensurePresent(ctx.AssignmentOp(), identifierList.size(), "assignment");
+            Assignment part = null;
 
             for (int i = identifierList.size() - 1; i >= 1; i--)
             {
                 Identifier identifier = new Identifier(identifierList.get(i).getText(), null);
-
                 if (i == identifierList.size() - 1)
                 {
                     // init part with most right expression
@@ -539,6 +546,7 @@ public class ScannerParser
         public List<Expression> visitExpressionList(JavaFiveGrammarParser.ExpressionListContext ctx) throws
                                                                                                      ASTException
         {
+            ensurePresent(ctx.Comma(), ctx.expression().size() - 1, "comma");
             List<Expression> expressionList = new ArrayList<>();
             for (JavaFiveGrammarParser.ExpressionContext expr : ctx.expression())
             {
@@ -551,12 +559,22 @@ public class ScannerParser
         public Expression visitParExpression(JavaFiveGrammarParser.ParExpressionContext ctx) throws
                                                                                              ASTException
         {
+            ensurePresent(ctx.LRoundBracket(), "'('");
+            ensurePresent(ctx.RRoundBracket(), "')'");
             return visitExpression(ctx.expression());
         }
 
         private void ensurePresent(ParseTree element, String elementName)
         {
             if (element == null || element.getText().contains("missing"))
+            {
+                throw new ASTException(elementName + " expected!");
+            }
+        }
+
+        private void ensurePresent(List<?> elements, int size, String elementName)
+        {
+            if (elements.size() != size)
             {
                 throw new ASTException(elementName + " expected!");
             }

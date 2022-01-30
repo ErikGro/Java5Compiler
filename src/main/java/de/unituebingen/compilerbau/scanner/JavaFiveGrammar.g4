@@ -3,15 +3,15 @@ grammar JavaFiveGrammar;
 /* This will be the entry point of our parser. */
 javaProgram:    clazz;
 
-clazz:   AccessModifier Class Identifier '{' fieldOrMethod* '}';
+clazz:   AccessModifier Class Identifier LCurlyBracket fieldOrMethod* RCurlyBracket;
 
 fieldOrMethod: field|method;
 
-method:   AccessModifier Static? type Identifier '(' methodParameterList ')' blockStatement;
+method:   AccessModifier Static? type Identifier LRoundBracket methodParameterList RRoundBracket blockStatement;
 
-methodParameterList: (type Identifier (',' type Identifier)*)?;
+methodParameterList: (type Identifier (Comma type Identifier)*)?;
 
-field:   AccessModifier Static? localVarDeclarationStatement ';';
+field:   AccessModifier Static? localVarDeclarationStatement Semicolon;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -20,38 +20,38 @@ field:   AccessModifier Static? localVarDeclarationStatement ';';
 ///////////////////////////////////////////////////////////////////////////////////////
 
 statement
-    :   ';'
+    :   Semicolon
     |   blockStatement
     |   ifStatement
     |   switchStatement
     |   whileStatement
     |   doWhileStatement
     |   forStatement
-    |   localVarDeclarationStatement ';'
+    |   localVarDeclarationStatement
     |   returnStatement
     |   statementExpression
-    |   Continue ';'
-    |   Break ';'
+    |   Continue Semicolon
+    |   Break Semicolon
     ;
 
 ifStatement: If parExpression statement (Else statement)?;
 
-switchStatement: Switch parExpression '{' (Case|Default) ':' statement* '}' ;
+switchStatement: Switch parExpression LCurlyBracket ((Case|Default) Colon statement)* RCurlyBracket ;
 
 whileStatement: While parExpression statement;
 
-doWhileStatement: Do statement While parExpression ';';
+doWhileStatement: Do statement While parExpression Semicolon;
 
-forStatement: For '(' localVarDeclarationStatement? ';' expression? ';' statementExpression? ')' statement;
+forStatement: For LRoundBracket localVarDeclarationStatement? Semicolon expression? Semicolon statementExpression? RRoundBracket statement;
 
-localVarDeclarationStatement:   type Identifier ('=' expression)?;
+localVarDeclarationStatement:   type Identifier (SimpleAssignmentOp expression)? Semicolon;
 
-returnStatement: Return expression;
+returnStatement: Return expression Semicolon;
 
-statementExpression: expression ';';
+statementExpression: expression Semicolon;
 
 blockStatement
-    :   '{' statement* '}'
+    :   LCurlyBracket statement* RCurlyBracket
     ;
 
 type
@@ -68,42 +68,67 @@ type
 expression
     :   (Int|Char|Bool|Identifier|This)
     |   parExpression
-    |   methodCall // TODO make AST
+    |   methodCall
+    |   expression Selector methodCall // antlr cries because of mutually left recursive when (expression '.')? ...
+    |   expression Selector Identifier // object access
     |   newExp
-    |   expression ('++'|'--')
-    |   ('++'|'--'|'+'|'-'|'~'|'!') expression
-    |   expression ('*'|'/'|'%') expression
-    |   expression ('+'|'-') expression
-    |   expression ('<<'|'>>'|'>>>') expression
-    |   expression ('<'|'>'|'<='|'>=') expression
-    |   expression ('=='|'!=') expression
-    |   expression ('&'|'^'|'|') expression
-    |   expression ('&&'|'||') expression
-    |   expression '?' expression ':' expression
+    |   expression IncDecOp
+    |   (IncDecOp|AddOp|UnaryOp) expression
+    |   expression MultOp expression
+    |   expression AddOp expression
+    |   expression ShiftOp expression
+    |   expression RelationalOp expression
+    |   expression EqualityOp expression
+    |   expression BitwiseOp expression
+    |   expression ConditionalOp expression
+    |   expression QuestionMark expression Colon expression
     |   assignment
     ;
 
-methodCall
-    :   Identifier ('.' (expression|Identifier))* '(' expressionList? ')'
-    |   This ('.' (expression|Identifier))* '(' expressionList? ')'
-    ;
+methodCall:  Identifier LRoundBracket expressionList? RRoundBracket;
 
-newExp:   New Identifier '(' expressionList? ')';
+newExp:   New Identifier LRoundBracket expressionList? RRoundBracket;
 
 assignment
-    :   Identifier (('='|'+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=') Identifier)*
-                   ('='|'+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=') expression
+    :   Identifier (AssignmentOp Identifier)*
+                   AssignmentOp expression
     ;
+
 
 expressionList
-    :   expression (',' expression)*
+    :   expression (Comma expression)*
     ;
 
-parExpression: '(' expression ')';
+parExpression: LRoundBracket expression RRoundBracket;
 
 /**
   * Terminal symbols.
   */
+IncDecOp:               '++'|'--';
+UnaryOp:                '~'|'!';
+MultOp:                 '*'|'/'|'%';
+AddOp:                  '+'|'-';
+ShiftOp:                '<<'|'>>'|'>>>';
+RelationalOp:           '<'|'>'|'<='|'>=';
+EqualityOp:             '=='|'!=';
+BitwiseOp:              '&'|'^'|'|';
+ConditionalOp:          '&&'|'||';
+QuestionMark:           '?';
+AssignmentOp: SimpleAssignmentOp|AdvancedAssignmentOp;
+AdvancedAssignmentOp:   '+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=';
+SimpleAssignmentOp:     '=';
+Selector:               '.';
+
+
+LCurlyBracket: '{';
+RCurlyBracket: '}';
+
+LRoundBracket: '(';
+RRoundBracket: ')';
+
+Comma: ',';
+Semicolon: ';';
+Colon: ':';
 
 AccessModifier
     :   'public'
@@ -186,8 +211,6 @@ Hex
     :   [0-9abcdefABCDEF]
     ;
 
-/* TODO This should include all unicode characters per specification. Is this required for the task?
-*/
 JavaLetter
     :   [a-zA-Z_$]
     ;
