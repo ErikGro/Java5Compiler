@@ -7,11 +7,15 @@ clazz:   AccessModifier Class Identifier LCurlyBracket fieldOrMethod* RCurlyBrac
 
 fieldOrMethod: field|method;
 
-method:   AccessModifier Static? type Identifier LRoundBracket methodParameterList RRoundBracket blockStatement;
+method:   methodModifier type Identifier LRoundBracket methodParameterList RRoundBracket blockStatement;
+
+methodModifier: AccessModifier Static?;
 
 methodParameterList: (type Identifier (Comma type Identifier)*)?;
 
-field:   AccessModifier Static? localVarDeclarationStatement Semicolon;
+field:   fieldModifier localVarDeclarationStatement;
+
+fieldModifier: AccessModifier Static?;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -90,8 +94,8 @@ methodCall:  Identifier LRoundBracket expressionList? RRoundBracket;
 newExp:   New Identifier LRoundBracket expressionList? RRoundBracket;
 
 assignment
-    :   Identifier (AssignmentOp Identifier)*
-                   AssignmentOp expression
+    :   Identifier ((SimpleAssignmentOp|AdvancedAssignmentOp) Identifier)*
+                   (SimpleAssignmentOp|AdvancedAssignmentOp) expression
     ;
 
 
@@ -114,7 +118,6 @@ EqualityOp:             '=='|'!=';
 BitwiseOp:              '&'|'^'|'|';
 ConditionalOp:          '&&'|'||';
 QuestionMark:           '?';
-AssignmentOp: SimpleAssignmentOp|AdvancedAssignmentOp;
 AdvancedAssignmentOp:   '+='|'-='|'*='|'/='|'%='|'&='|'^='|'|='|'<<='|'>>='|'>>>=';
 SimpleAssignmentOp:     '=';
 Selector:               '.';

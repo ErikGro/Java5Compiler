@@ -25,17 +25,14 @@ import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.scanner.generated.JavaFiveGrammarLexer;
 import de.unituebingen.compilerbau.scanner.generated.JavaFiveGrammarParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ScannerParser
 {
@@ -45,13 +42,18 @@ public class ScannerParser
         JavaFiveGrammarLexer lexer = new JavaFiveGrammarLexer(input);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JavaFiveGrammarParser parser = new JavaFiveGrammarParser(tokenStream);
+
+        ASTErrorListener a = new ASTErrorListener();
+        lexer.addErrorListener(a);
+        parser.addErrorListener(a);
+
         return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram());
     }
 
     public static void main(String[] args) throws IOException
     {
         ScannerParser parser = new ScannerParser();
-        Clazz clazz = parser.parse("class A{}");
+        Clazz clazz = parser.parse("public class A{ private int a = 3;}");
     }
 
     static class ParseTreeVisitor
@@ -63,12 +65,6 @@ public class ScannerParser
 
         public Clazz visitClazz(JavaFiveGrammarParser.ClazzContext ctx)
         {
-            ensurePresent(ctx.AccessModifier(), "'public' or 'private'");
-            ensurePresent(ctx.Class(), "'class'");
-            ensurePresent(ctx.Identifier(), "Identifier");
-            ensurePresent(ctx.LCurlyBracket(), "'{'");
-            ensurePresent(ctx.RCurlyBracket(), "'}'");
-
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
@@ -84,7 +80,7 @@ public class ScannerParser
                 {
                     Field field = visitField((JavaFiveGrammarParser.FieldContext) child);
                     fields.add(field);
-                } else
+                } else if (child instanceof  JavaFiveGrammarParser.MethodContext)
                 {
                     Method method = visitMethod((JavaFiveGrammarParser.MethodContext) child);
                     methods.add(method);
@@ -96,11 +92,6 @@ public class ScannerParser
 
         public Method visitMethod(JavaFiveGrammarParser.MethodContext ctx)
         {
-            ensurePresent(ctx.AccessModifier(), "Access modifier");
-            ensurePresent(ctx.Identifier(), "Identifier");
-            ensurePresent(ctx.LRoundBracket(), "'('");
-            ensurePresent(ctx.LRoundBracket(), "')'");
-
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
@@ -128,17 +119,13 @@ public class ScannerParser
 
         public Field visitField(JavaFiveGrammarParser.FieldContext ctx)
         {
-            ensurePresent(ctx.AccessModifier(), "Access modifier");
-            ensurePresent(ctx.Semicolon(), "';'");
-
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
             boolean isStatic = ctx.Static() != null;
             LocalVarDeclaration decl =
                     visitLocalVarDeclarationStatement(ctx.localVarDeclarationStatement());
-            // TODO how to deal with declarations and assignments??
-            return new Field(null, modifier, isStatic, decl.name, null);
+            return new Field(null, modifier, isStatic, decl.name, decl.expression, null);
         }
 
         public Statement visitStatement(JavaFiveGrammarParser.StatementContext ctx)
@@ -199,8 +186,6 @@ public class ScannerParser
 
         public Block visitBlockStatement(JavaFiveGrammarParser.BlockStatementContext ctx)
         {
-            ensurePresent(ctx.LCurlyBracket(), "'{'");
-            ensurePresent(ctx.RCurlyBracket(), "'}'");
             List<Statement> statements = new ArrayList<>(ctx.statement().size());
             for (JavaFiveGrammarParser.StatementContext statementCtx : ctx.statement())
             {
@@ -212,15 +197,12 @@ public class ScannerParser
 
         public If visitIf(JavaFiveGrammarParser.IfStatementContext ctx)
         {
-            ensurePresent(ctx.If(), "'If'");
-
             Expression condition = visitParExpression(ctx.parExpression());
             Statement ifBody = visitStatement(ctx.statement(0));
             Statement elseBody = null;
             // else clause present
             if (ctx.getChildCount() == 5)
             {
-                ensurePresent(ctx.Else(), "'else'");
                 elseBody = visitStatement(ctx.statement(1));
             }
             return new If(condition, ifBody, elseBody);
@@ -233,7 +215,6 @@ public class ScannerParser
 
         public While visitWhile(JavaFiveGrammarParser.WhileStatementContext ctx)
         {
-            ensurePresent(ctx.While(), "'while'");
             Expression condition = visitParExpression(ctx.parExpression());
             Statement body = visitStatement(ctx.statement());
             return new While(condition, body);
@@ -246,11 +227,6 @@ public class ScannerParser
 
         public For visitFor(JavaFiveGrammarParser.ForStatementContext ctx)
         {
-            ensurePresent(ctx.For(), "'for'");
-            ensurePresent(ctx.LRoundBracket(), "'('");
-            ensurePresent(ctx.Semicolon(), 2, "';'");
-            ensurePresent(ctx.RRoundBracket(), "')'");
-
             Statement init = null;
             Expression termination = null;
             Statement increment = null;
@@ -275,14 +251,10 @@ public class ScannerParser
 
         public LocalVarDeclaration visitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx)
         {
-            ensurePresent(ctx.Identifier(), "Identifier");
-            ensurePresent(ctx.SimpleAssignmentOp(), "'='");
-            ensurePresent(ctx.Semicolon(), "';'");
-
             Type type = visitType(ctx.type());
             Identifier identifier = new Identifier(ctx.Identifier().getText(), null);
             Expression assignment = null;
-            if (ctx.getChildCount() == 4)
+            if (ctx.getChildCount() == 5)
             {
                 assignment = visitExpression(ctx.expression());
             }
@@ -293,14 +265,11 @@ public class ScannerParser
 
         public Return visitReturn(JavaFiveGrammarParser.ReturnStatementContext ctx)
         {
-            ensurePresent(ctx.Return(), "'return'");
-            ensurePresent(ctx.Semicolon(), "';'");
             return new Return(visitExpression(ctx.expression()));
         }
 
         public Statement visitStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx)
         {
-            ensurePresent(ctx.Semicolon(), "';'");
             Expression expr = visitExpression(ctx.expression());
             if (expr instanceof StatementExpression)
             {
@@ -500,10 +469,6 @@ public class ScannerParser
 
         public MethodCall visitMethodCall(JavaFiveGrammarParser.MethodCallContext ctx)
         {
-            ensurePresent(ctx.Identifier(), "Identifier");
-            ensurePresent(ctx.LRoundBracket(), "'('");
-            ensurePresent(ctx.RRoundBracket(), "')'");
-
             String name = ctx.Identifier().getText();
             List<Expression> args = visitExpressionList(ctx.expressionList());
             return new MethodCall(null, name, args);
@@ -511,23 +476,22 @@ public class ScannerParser
 
         public Expression visitNewExp(JavaFiveGrammarParser.NewExpContext ctx)
         {
-            ensurePresent(ctx.New(), "'new'");
-            ensurePresent(ctx.Identifier(), "Identifier");
-            ensurePresent(ctx.LRoundBracket(), "'('");
-            ensurePresent(ctx.RRoundBracket(), "')'");
             return new New(visitExpressionList(ctx.expressionList()));
         }
 
         public Expression visitAssignment(JavaFiveGrammarParser.AssignmentContext ctx)
         {
+            List<TerminalNode> assignments = new ArrayList<>();
+            assignments.addAll(ctx.SimpleAssignmentOp());
+            assignments.addAll(ctx.AdvancedAssignmentOp());
             List<TerminalNode> identifierList = ctx.Identifier();
-            ensurePresent(ctx.AssignmentOp(), identifierList.size(), "assignment");
             Assignment assignment = null;
 
             for (int i = identifierList.size() - 1; i >= 0; i--)
             {
                 Identifier identifier = new Identifier(identifierList.get(i).getText(), null);
-                String assignmentOp = ctx.AssignmentOp(i).getText();
+                String assignmentOp = assignments.get(i).getText();
+
                 if (i == identifierList.size() - 1)
                 {
                     // init part with most right expression
@@ -586,7 +550,6 @@ public class ScannerParser
         public List<Expression> visitExpressionList(JavaFiveGrammarParser.ExpressionListContext ctx) throws
                                                                                                      ASTException
         {
-            ensurePresent(ctx.Comma(), ctx.expression().size() - 1, "comma");
             List<Expression> expressionList = new ArrayList<>();
             for (JavaFiveGrammarParser.ExpressionContext expr : ctx.expression())
             {
@@ -599,25 +562,7 @@ public class ScannerParser
         public Expression visitParExpression(JavaFiveGrammarParser.ParExpressionContext ctx) throws
                                                                                              ASTException
         {
-            ensurePresent(ctx.LRoundBracket(), "'('");
-            ensurePresent(ctx.RRoundBracket(), "')'");
             return visitExpression(ctx.expression());
-        }
-
-        private void ensurePresent(ParseTree element, String elementName)
-        {
-            if (element == null || element.getText().contains("missing"))
-            {
-                throw new ASTException(elementName + " expected!");
-            }
-        }
-
-        private void ensurePresent(List<?> elements, int size, String elementName)
-        {
-            if (elements.size() != size)
-            {
-                throw new ASTException(elementName + " expected!");
-            }
         }
 
         private Expression makePostOrPreIncrement(Expression expr, boolean add, boolean postfix)
@@ -627,6 +572,49 @@ public class ScannerParser
                 throw new ASTException("Variable expected but got " + expr);
             }
             return add ? new Increment(expr, postfix) : new Decrement(expr, postfix);
+        }
+    }
+
+    static class ASTErrorListener implements ANTLRErrorListener
+    {
+
+        @Override
+        public void syntaxError(
+                Recognizer<?, ?> recognizer,
+                Object o,
+                int line,
+                int column,
+                String s,
+                RecognitionException e)
+        {
+            throw new ASTException(s + " in line " + line + ":" + column);
+        }
+
+        @Override
+        public void reportAmbiguity(
+                Parser parser,
+                DFA dfa,
+                int i,
+                int i1,
+                boolean b,
+                BitSet bitSet,
+                ATNConfigSet atnConfigSet)
+        {
+            System.out.println("Ambiguity");
+        }
+
+        @Override
+        public void reportAttemptingFullContext(
+                Parser parser, DFA dfa, int i, int i1, BitSet bitSet, ATNConfigSet atnConfigSet)
+        {
+            System.out.println("Attempting Full Context");
+        }
+
+        @Override
+        public void reportContextSensitivity(
+                Parser parser, DFA dfa, int i, int i1, int i2, ATNConfigSet atnConfigSet)
+        {
+            System.out.println("Context Sensitivity");
         }
     }
 }
