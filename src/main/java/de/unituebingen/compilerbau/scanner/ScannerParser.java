@@ -54,7 +54,13 @@ public class ScannerParser
     public static void main(String[] args) throws IOException
     {
         ScannerParser parser = new ScannerParser();
-        Clazz clazz = parser.parse("public class A{ private int a = 3;}");
+        Clazz clazz = parser.parse("public class A { "
+                + "private int a;"
+                + "public void aMethod() {"
+                + "if (true) { System.out.what.is().going().on.println(true); } else { obj.equals(nothing); }"
+                + "}"
+                + "}");
+        System.out.println(clazz);
     }
 
     static class ParseTreeVisitor
@@ -567,6 +573,12 @@ public class ScannerParser
                                                                                                      ASTException
         {
             List<Expression> expressionList = new ArrayList<>();
+            // no arguments
+            if (ctx == null)
+            {
+                return expressionList;
+            }
+
             for (JavaFiveGrammarParser.ExpressionContext expr : ctx.expression())
             {
                 expressionList.add(visitExpression(expr));
