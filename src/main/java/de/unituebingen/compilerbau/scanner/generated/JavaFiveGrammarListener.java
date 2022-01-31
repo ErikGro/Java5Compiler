@@ -28,15 +28,25 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 */
 	void exitClazz(JavaFiveGrammarParser.ClazzContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#fieldOrMethod}.
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#clazzMember}.
 	 * @param ctx the parse tree
 	 */
-	void enterFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx);
+	void enterClazzMember(JavaFiveGrammarParser.ClazzMemberContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#fieldOrMethod}.
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#clazzMember}.
 	 * @param ctx the parse tree
 	 */
-	void exitFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx);
+	void exitClazzMember(JavaFiveGrammarParser.ClazzMemberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructor(JavaFiveGrammarParser.ConstructorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructor(JavaFiveGrammarParser.ConstructorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#method}.
 	 * @param ctx the parse tree
@@ -48,15 +58,15 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 */
 	void exitMethod(JavaFiveGrammarParser.MethodContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#methodParameterList}.
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#parameterList}.
 	 * @param ctx the parse tree
 	 */
-	void enterMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx);
+	void enterParameterList(JavaFiveGrammarParser.ParameterListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#methodParameterList}.
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#parameterList}.
 	 * @param ctx the parse tree
 	 */
-	void exitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx);
+	void exitParameterList(JavaFiveGrammarParser.ParameterListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#field}.
 	 * @param ctx the parse tree

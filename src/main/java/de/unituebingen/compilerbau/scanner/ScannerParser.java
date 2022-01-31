@@ -50,6 +50,7 @@ public class ScannerParser
         return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram());
     }
 
+
     public static void main(String[] args) throws IOException
     {
         ScannerParser parser = new ScannerParser();
@@ -72,22 +73,37 @@ public class ScannerParser
             List<Field> fields = new ArrayList<>();
             List<Method> methods = new ArrayList<>();
 
-            for (int i = 0; i < ctx.fieldOrMethod().size(); i++)
+            for (JavaFiveGrammarParser.ClazzMemberContext clzMemCtx : ctx.clazzMember())
             {
-                JavaFiveGrammarParser.FieldOrMethodContext fieldOrMethod = ctx.fieldOrMethod(i);
-                ParseTree child = fieldOrMethod.getChild(0);
+                ParseTree child = clzMemCtx.getChild(0);
                 if (child instanceof JavaFiveGrammarParser.FieldContext)
                 {
                     Field field = visitField((JavaFiveGrammarParser.FieldContext) child);
                     fields.add(field);
-                } else if (child instanceof  JavaFiveGrammarParser.MethodContext)
+                } else if (child instanceof JavaFiveGrammarParser.MethodContext)
                 {
                     Method method = visitMethod((JavaFiveGrammarParser.MethodContext) child);
+                    methods.add(method);
+                } else if (child instanceof JavaFiveGrammarParser.ConstructorContext)
+                {
+                    Method method =
+                            visitConstructor((JavaFiveGrammarParser.ConstructorContext) child);
                     methods.add(method);
                 }
             }
 
             return new Clazz(modifier, name, fields, methods);
+        }
+
+        public Method visitConstructor(JavaFiveGrammarParser.ConstructorContext ctx)
+        {
+            AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
+                    ? AccessModifier.PUBLIC
+                    : AccessModifier.PRIVATE;
+            String name = ctx.Identifier().getText();
+            Map<String, Type> parameters = visitMethodParameterList(ctx.parameterList());
+            Block body = visitBlockStatement(ctx.blockStatement());
+            return new Method(modifier, false, name, new Type("void"), parameters, body);
         }
 
         public Method visitMethod(JavaFiveGrammarParser.MethodContext ctx)
@@ -98,12 +114,12 @@ public class ScannerParser
             boolean isStatic = ctx.Static() != null;
             Type returnType = visitType(ctx.type());
             String name = ctx.Identifier().getText();
-            Map<String, Type> parameters = visitMethodParameterList(ctx.methodParameterList());
+            Map<String, Type> parameters = visitMethodParameterList(ctx.parameterList());
             Block body = visitBlockStatement(ctx.blockStatement());
             return new Method(modifier, isStatic, name, returnType, parameters, body);
         }
 
-        public Map<String, Type> visitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx)
+        public Map<String, Type> visitMethodParameterList(JavaFiveGrammarParser.ParameterListContext ctx)
         {
             Map<String, Type> parameters = new HashMap<>();
 

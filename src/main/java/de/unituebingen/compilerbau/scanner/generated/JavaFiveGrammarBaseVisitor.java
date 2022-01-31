@@ -31,7 +31,14 @@ public class JavaFiveGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx) { return visitChildren(ctx); }
+	@Override public T visitClazzMember(JavaFiveGrammarParser.ClazzMemberContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitConstructor(JavaFiveGrammarParser.ConstructorContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -45,7 +52,7 @@ public class JavaFiveGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParameterList(JavaFiveGrammarParser.ParameterListContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

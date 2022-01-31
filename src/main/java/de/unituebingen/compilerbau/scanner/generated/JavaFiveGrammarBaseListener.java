@@ -40,13 +40,25 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx) { }
+	@Override public void enterClazzMember(JavaFiveGrammarParser.ClazzMemberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx) { }
+	@Override public void exitClazzMember(JavaFiveGrammarParser.ClazzMemberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstructor(JavaFiveGrammarParser.ConstructorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructor(JavaFiveGrammarParser.ConstructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -64,13 +76,13 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx) { }
+	@Override public void enterParameterList(JavaFiveGrammarParser.ParameterListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx) { }
+	@Override public void exitParameterList(JavaFiveGrammarParser.ParameterListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

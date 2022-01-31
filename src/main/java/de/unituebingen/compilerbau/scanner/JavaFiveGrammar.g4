@@ -3,19 +3,18 @@ grammar JavaFiveGrammar;
 /* This will be the entry point of our parser. */
 javaProgram:    clazz;
 
-clazz:   AccessModifier Class Identifier LCurlyBracket fieldOrMethod* RCurlyBracket;
+clazz:   AccessModifier Class Identifier LCurlyBracket clazzMember* RCurlyBracket;
 
-fieldOrMethod: field|method;
+clazzMember: field|method|constructor;
 
-method:   methodModifier type Identifier LRoundBracket methodParameterList RRoundBracket blockStatement;
+constructor: AccessModifier Identifier LRoundBracket parameterList RRoundBracket blockStatement;
 
-methodModifier: AccessModifier Static?;
+method:   AccessModifier Static? type Identifier LRoundBracket parameterList RRoundBracket blockStatement;
 
-methodParameterList: (type Identifier (Comma type Identifier)*)?;
+parameterList: (type Identifier (Comma type Identifier)*)?;
 
-field:   fieldModifier localVarDeclarationStatement;
+field:   AccessModifier Static? localVarDeclarationStatement;
 
-fieldModifier: AccessModifier Static?;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //

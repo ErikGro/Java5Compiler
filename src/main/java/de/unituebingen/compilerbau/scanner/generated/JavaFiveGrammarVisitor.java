@@ -23,11 +23,17 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClazz(JavaFiveGrammarParser.ClazzContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#fieldOrMethod}.
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#clazzMember}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFieldOrMethod(JavaFiveGrammarParser.FieldOrMethodContext ctx);
+	T visitClazzMember(JavaFiveGrammarParser.ClazzMemberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#constructor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstructor(JavaFiveGrammarParser.ConstructorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#method}.
 	 * @param ctx the parse tree
@@ -35,11 +41,11 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMethod(JavaFiveGrammarParser.MethodContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#methodParameterList}.
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#parameterList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMethodParameterList(JavaFiveGrammarParser.MethodParameterListContext ctx);
+	T visitParameterList(JavaFiveGrammarParser.ParameterListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#field}.
 	 * @param ctx the parse tree
