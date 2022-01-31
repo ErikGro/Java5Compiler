@@ -1,20 +1,20 @@
-package de.unituebingen.compilerbau.ast.expression.unary;
+package de.unituebingen.compilerbau.ast.statementexpressions;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
-import de.unituebingen.compilerbau.ast.expression.Unary;
 
 /**
  * @author Matthias Walz
  * @version 1.0
  */
-public class Increment extends Unary
+public class Increment extends StatementExpression
 {
+    public final Expression expression;
     public final boolean isPostIncrement;
 
     public Increment(Expression expression, boolean isPostIncrement)
     {
-        super(expression);
+        this.expression = expression;
         this.isPostIncrement = isPostIncrement;
     }
 

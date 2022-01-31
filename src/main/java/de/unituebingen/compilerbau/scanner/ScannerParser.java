@@ -13,8 +13,8 @@ import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
-import de.unituebingen.compilerbau.ast.expression.unary.Decrement;
-import de.unituebingen.compilerbau.ast.expression.unary.Increment;
+import de.unituebingen.compilerbau.ast.statementexpressions.Decrement;
+import de.unituebingen.compilerbau.ast.statementexpressions.Increment;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
 import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
@@ -48,19 +48,6 @@ public class ScannerParser
         parser.addErrorListener(a);
 
         return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram());
-    }
-
-
-    public static void main(String[] args) throws IOException
-    {
-        ScannerParser parser = new ScannerParser();
-        Clazz clazz = parser.parse("public class A { "
-                + "private int a;"
-                + "public void aMethod() {"
-                + "if (true) { System.out.what.is().going().on.println(true); } else { obj.equals(nothing); }"
-                + "}"
-                + "}");
-        System.out.println(clazz);
     }
 
     static class ParseTreeVisitor
@@ -297,7 +284,7 @@ public class ScannerParser
             {
                 return (Statement) expr;
             }
-            throw new ASTException("Statement expected but got " + expr);
+            throw new ASTException("Statement expected");
         }
 
         public Type visitType(JavaFiveGrammarParser.TypeContext ctx)
@@ -628,21 +615,21 @@ public class ScannerParser
                 BitSet bitSet,
                 ATNConfigSet atnConfigSet)
         {
-            System.out.println("Ambiguity");
+
         }
 
         @Override
         public void reportAttemptingFullContext(
                 Parser parser, DFA dfa, int i, int i1, BitSet bitSet, ATNConfigSet atnConfigSet)
         {
-            System.out.println("Attempting Full Context");
+
         }
 
         @Override
         public void reportContextSensitivity(
                 Parser parser, DFA dfa, int i, int i1, int i2, ATNConfigSet atnConfigSet)
         {
-            System.out.println("Context Sensitivity");
+
         }
     }
 }

@@ -1,20 +1,20 @@
-package de.unituebingen.compilerbau.ast.expression.unary;
+package de.unituebingen.compilerbau.ast.statementexpressions;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
-import de.unituebingen.compilerbau.ast.expression.Unary;
 
 /**
  * @author Matthias Walz
  * @version 1.0
  */
-public class Decrement extends Unary
+public class Decrement extends StatementExpression
 {
+    public final Expression expression;
     public final boolean isPostDecrement;
 
     public Decrement(Expression expression, boolean isPostDecrement)
     {
-        super(expression);
+        this.expression = expression;
         this.isPostDecrement = isPostDecrement;
     }
 
