@@ -31,4 +31,14 @@ public class Clazz {
     public int hashCode() {
         return Objects.hash(access, name, fields, methods);
     }
+
+    @Override
+    public String toString() {
+        return "Clazz{" +
+                "access=" + access +
+                ", name='" + name + '\'' +
+                ", fields=" + fields +
+                ", methods=" + methods +
+                '}';
+    }
 }

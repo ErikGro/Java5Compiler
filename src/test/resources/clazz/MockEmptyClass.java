@@ -1,3 +1,7 @@
-public class MockEmptyClass {
+package clazz;
 
+public class MockEmptyClass {
+    public int test() {
+        return 42;
+    }
 }
