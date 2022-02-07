@@ -26,7 +26,8 @@ public class App {
 
         try {
             Map<String, byte[]> resultMap = compiler.compile(sourceFilePath);
-            App.saveByteCodeToFiles(resultMap);
+            String targetDirectory = new File(sourceFilePath).getParent();
+            App.saveByteCodeToFiles(resultMap, targetDirectory);
         } catch (CompilerException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
@@ -65,9 +66,9 @@ public class App {
     }
 
 
-    private static void saveByteCodeToFiles(Map<String, byte[]> resultMap) {
+    private static void saveByteCodeToFiles(Map<String, byte[]> resultMap, String targetDirectory) {
         for (Map.Entry<String, byte[]> entry : resultMap.entrySet()) {
-            File classFile = new File(entry.getKey());
+            File classFile = new File(targetDirectory + "/" + entry.getKey());
 
             try {
                 classFile.createNewFile();
