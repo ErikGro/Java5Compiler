@@ -9,10 +9,7 @@ import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,8 +36,7 @@ public class Compiler {
      * }
      */
     public Map<String, byte[]> compile(String filePath) throws CompilerException, IOException {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
-        String input = readFromInputStream(inputStream);
+        String input = readFromInputStream(new FileInputStream(filePath));
 
         // Generate AST from input file
         // TODO: Output should be Map<String, Clazz> where keys are .class file names

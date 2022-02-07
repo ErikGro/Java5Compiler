@@ -10,7 +10,7 @@ import java.util.Map;
 public class App {
     public static void main( String[] args ) {
         if (args.length == 1 && args[0].equals("--help")) {
-            System.out.println("Usage: java -jar java5Compiler <source file>");
+            System.out.println("Usage: java -jar tuecompiler <source file>");
             return;
         }
 
