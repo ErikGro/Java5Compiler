@@ -1,5 +1,8 @@
 # Compilerbau_WS2021
 
+In order to compile the compiler run:
+`mvn clean install assembly:single -Dmaven.test.skip`
+
 ## Script - createTestCases.sh
 For running `createTestCases.sh` zsh is required.\
 In order to run zsh scripts under windows, installing [wsl](https://docs.microsoft.com/windows/wsl/install) is suggested.
