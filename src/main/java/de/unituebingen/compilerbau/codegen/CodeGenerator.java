@@ -330,11 +330,12 @@ public class CodeGenerator {
                     else mv.visitVarInsn(ASTORE, local.index);
                 } else if (var instanceof Field) {
                     Field field = (Field) var;
-                    if (!field.isStatic) {
+                    if (!field.isStatic)
                         mv.visitVarInsn(ALOAD, 0);
-                    }
                     assignment.right.visit(this);
-                    mv.visitInsn(DUP_X1);
+                    if (!field.isStatic)
+                        mv.visitInsn(DUP_X1);
+                    else mv.visitInsn(DUP);
                     mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
                 } else {
                     throw new CodeGenException("Illegal operation");
@@ -345,11 +346,12 @@ public class CodeGenerator {
                 left.left.visit(this);
                 Scope scope = scopeMap.get(left.getType().name);
                 Field field = (Field) scope.get(fieldName);
-                if (field.isStatic) {
+                if (field.isStatic)
                     mv.visitInsn(POP);
-                }
                 assignment.right.visit(this);
-                mv.visitInsn(DUP_X1);
+                if (!field.isStatic)
+                    mv.visitInsn(DUP_X1);
+                else mv.visitInsn(DUP);
                 mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
             } else {
                 throw new CodeGenException("Left of an assignment must be an identifier or field access");
@@ -381,6 +383,7 @@ public class CodeGenerator {
 
         @Override
         public void visit(For _for) {
+            scope = new Scope(scope);
             _for.init.visit(this);
             Label start = new Label();
             Label end = new Label();
@@ -391,6 +394,7 @@ public class CodeGenerator {
             _for.increment.visit(this);
             mv.visitJumpInsn(GOTO, start);
             mv.visitLabel(end);
+            scope = scope.parent;
         }
 
         @Override
@@ -411,6 +415,14 @@ public class CodeGenerator {
         @Override
         public void visit(LocalVarDeclaration localVarDeclaration) {
             addLocal(localVarDeclaration.name, localVarDeclaration.getType());
+            if (localVarDeclaration.expression != null) {
+                localVarDeclaration.expression.visit(this);
+
+                Local local = (Local) scope.get(localVarDeclaration.name);
+                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                    mv.visitVarInsn(ISTORE, local.index);
+                else mv.visitVarInsn(ASTORE, local.index);
+            }
         }
 
         @Override
