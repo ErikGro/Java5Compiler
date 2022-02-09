@@ -32,6 +32,9 @@ import java.util.stream.Collectors;
 
 public class CodeGenerator {
 
+    // TODO Populate this
+    Map<String, Scope> scopeMap;
+
     class Scope {
         Scope parent;
         Map<String, LocalOrFieldVar> vars = new HashMap<>();
@@ -75,8 +78,9 @@ public class CodeGenerator {
             LocalOrFieldVar var = scope.get(identifier.name);
             if (var instanceof Local) {
                 Local local = (Local) var;
-                // TODO Other types need different load instructions
-                mv.visitVarInsn(ILOAD, local.index);
+                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                    mv.visitVarInsn(ILOAD, local.index);
+                else mv.visitVarInsn(ALOAD, local.index);
             } else if (var instanceof Field) {
                 Field field = (Field) var;
                 if (!field.isStatic) {
@@ -108,9 +112,12 @@ public class CodeGenerator {
         }
 
         @Override
-        public void visit(DotOperator dotOperator)
-        {
-
+        public void visit(DotOperator dotOperator) {
+            dotOperator.left.visit(this);
+            Scope scope = scopeMap.get(dotOperator.left.getType().name);
+            Field field = (Field) scope.get(dotOperator.right);
+            if (field.isStatic) mv.visitInsn(POP);
+            mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
         }
 
         @Override
@@ -292,36 +299,60 @@ public class CodeGenerator {
         }
 
         @Override
-        public void visit(Increment increment)
-        {
+        public void visit(Increment increment) {
+            if (increment.isPostIncrement) {
 
+            } else {
+
+            }
         }
 
         @Override
-        public void visit(Decrement decrement)
-        {
+        public void visit(Decrement decrement) {
+            if (decrement.isPostDecrement) {
 
+            } else {
+
+            }
         }
 
         @Override
         public void visit(Assignment assignment) {
-            if (!(assignment.left instanceof Identifier)) {
-                throw new CodeGenException("Left of an assignment must be an identifier");
-            }
-            assignment.right.visit(this);
-            Identifier left = (Identifier) assignment.left;
-            LocalOrFieldVar var = scope.get(left.name);
-            if (var instanceof Local) {
-                Local local = (Local) var;
-                mv.visitVarInsn(ISTORE, local.index);
-            } else if (var instanceof Field) {
-                Field field = (Field) var;
-                if (!field.isStatic) {
-                    mv.visitVarInsn(ALOAD, 0);
+            if (assignment.left instanceof Identifier) {
+                Identifier left = (Identifier) assignment.left;
+                LocalOrFieldVar var = scope.get(left.name);
+                if (var instanceof Local) {
+                    assignment.right.visit(this);
+                    mv.visitInsn(DUP);
+                    Local local = (Local) var;
+                    if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                        mv.visitVarInsn(ISTORE, local.index);
+                    else mv.visitVarInsn(ASTORE, local.index);
+                } else if (var instanceof Field) {
+                    Field field = (Field) var;
+                    if (!field.isStatic) {
+                        mv.visitVarInsn(ALOAD, 0);
+                    }
+                    assignment.right.visit(this);
+                    mv.visitInsn(DUP_X1);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                } else {
+                    throw new CodeGenException("Illegal operation");
                 }
+            } else if (assignment.left instanceof DotOperator) {
+                DotOperator left = (DotOperator) assignment.left;
+                String fieldName = left.right;
+                left.left.visit(this);
+                Scope scope = scopeMap.get(left.getType().name);
+                Field field = (Field) scope.get(fieldName);
+                if (field.isStatic) {
+                    mv.visitInsn(POP);
+                }
+                assignment.right.visit(this);
+                mv.visitInsn(DUP_X1);
                 mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
             } else {
-                throw new CodeGenException("Illegal operation");
+                throw new CodeGenException("Left of an assignment must be an identifier or field access");
             }
         }
 
@@ -409,6 +440,14 @@ public class CodeGenerator {
             scope = new Scope(scope);
             for (Statement s : block.body) {
                 s.visit(this);
+                // Pop extra values on the stack
+                if (s instanceof MethodCall) {
+                    if (s.getType() != null) {
+                        mv.visitInsn(POP);
+                    }
+                } else if (s instanceof Increment || s instanceof Decrement || s instanceof Assignment) {
+                    mv.visitInsn(POP);
+                }
             }
             scope = scope.parent;
         }
