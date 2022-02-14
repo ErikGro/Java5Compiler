@@ -1,7 +1,7 @@
 grammar JavaFiveGrammar;
 
 /* This will be the entry point of our parser. */
-javaProgram:    clazz;
+javaProgram:    clazz+;
 
 clazz:   AccessModifier Class Identifier LCurlyBracket clazzMember* RCurlyBracket;
 

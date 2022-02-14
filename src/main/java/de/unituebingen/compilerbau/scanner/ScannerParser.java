@@ -13,14 +13,9 @@ import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
-import de.unituebingen.compilerbau.ast.statementexpressions.Decrement;
-import de.unituebingen.compilerbau.ast.statementexpressions.Increment;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
-import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
-import de.unituebingen.compilerbau.ast.statementexpressions.MethodCall;
-import de.unituebingen.compilerbau.ast.statementexpressions.New;
-import de.unituebingen.compilerbau.ast.statementexpressions.StatementExpression;
+import de.unituebingen.compilerbau.ast.statementexpressions.*;
 import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.scanner.generated.JavaFiveGrammarLexer;
@@ -31,30 +26,38 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.io.IOException;
 import java.util.*;
 
 public class ScannerParser
 {
-    public Clazz parse(String sourceCode) throws IOException, ASTException
+    public Clazz parse(String sourceCode) throws ASTException
     {
         CharStream input = CharStreams.fromString(sourceCode);
         JavaFiveGrammarLexer lexer = new JavaFiveGrammarLexer(input);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JavaFiveGrammarParser parser = new JavaFiveGrammarParser(tokenStream);
 
-        ASTErrorListener a = new ASTErrorListener();
-        lexer.addErrorListener(a);
-        parser.addErrorListener(a);
+        ASTErrorListener errorListener = new ASTErrorListener();
+        lexer.addErrorListener(errorListener);
+        parser.addErrorListener(errorListener);
 
-        return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram());
+        return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram())
+                .values()
+                .iterator()
+                .next();
     }
 
     static class ParseTreeVisitor
     {
-        public Clazz visitJavaProgram(JavaFiveGrammarParser.JavaProgramContext ctx)
+        public Map<String, Clazz> visitJavaProgram(JavaFiveGrammarParser.JavaProgramContext ctx)
         {
-            return visitClazz(ctx.clazz());
+            Map<String, Clazz> clazzes = new HashMap<>();
+            for (JavaFiveGrammarParser.ClazzContext clsCtx : ctx.clazz())
+            {
+                Clazz cls = visitClazz(clsCtx);
+                clazzes.put(cls.name, cls);
+            }
+            return clazzes;
         }
 
         public Clazz visitClazz(JavaFiveGrammarParser.ClazzContext ctx)
@@ -80,7 +83,9 @@ public class ScannerParser
                 } else if (child instanceof JavaFiveGrammarParser.ConstructorContext)
                 {
                     Method method =
-                            visitConstructor((JavaFiveGrammarParser.ConstructorContext) child);
+                            visitConstructor((JavaFiveGrammarParser.ConstructorContext) child,
+                            name
+                    );
                     methods.add(method);
                 }
             }
@@ -88,14 +93,20 @@ public class ScannerParser
             return new Clazz(modifier, name, fields, methods);
         }
 
-        public Method visitConstructor(JavaFiveGrammarParser.ConstructorContext ctx)
+        public Method visitConstructor(
+                JavaFiveGrammarParser.ConstructorContext ctx, String clazzName)
         {
             AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
                     ? AccessModifier.PUBLIC
                     : AccessModifier.PRIVATE;
             String name = ctx.Identifier().getText();
+            if (!clazzName.equals(name))
+            {
+                throw new ASTException("Class name expected");
+            }
             Map<String, Type> parameters = visitMethodParameterList(ctx.parameterList());
             Block body = visitBlockStatement(ctx.blockStatement());
+
             return new Method(modifier, false, name, new Type("void"), parameters, body);
         }
 
@@ -480,6 +491,8 @@ public class ScannerParser
         {
             String name = ctx.Identifier().getText();
             List<Expression> args = visitExpressionList(ctx.expressionList());
+            // expr will be set after the method call is created when there is a dot
+            // e.g a.m();
             return new MethodCall(null, name, args);
         }
 
