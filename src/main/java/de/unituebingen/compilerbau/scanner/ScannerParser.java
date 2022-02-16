@@ -41,10 +41,7 @@ public class ScannerParser
         lexer.addErrorListener(errorListener);
         parser.addErrorListener(errorListener);
 
-        return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram())
-                .values()
-                .iterator()
-                .next();
+        return new ParseTreeVisitor().visitJavaProgram(parser.javaProgram());
     }
 
     static class ParseTreeVisitor
