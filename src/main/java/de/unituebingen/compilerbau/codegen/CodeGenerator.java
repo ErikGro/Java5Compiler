@@ -465,7 +465,7 @@ public class CodeGenerator {
         }
     }
 
-    public byte[] generateBytecode(Clazz input) throws CodeGenException {
+    public byte[] generateBytecode(Map<String, Clazz> input) throws CodeGenException {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         cw.visit(V1_4, ACC_PUBLIC | ACC_SUPER, input.name, null, "java/lang/Object", null);
 

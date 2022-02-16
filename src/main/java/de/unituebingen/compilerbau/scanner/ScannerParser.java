@@ -30,7 +30,7 @@ import java.util.*;
 
 public class ScannerParser
 {
-    public Clazz parse(String sourceCode) throws ASTException
+    public Map<String, Clazz> parse(String sourceCode) throws ASTException
     {
         CharStream input = CharStreams.fromString(sourceCode);
         JavaFiveGrammarLexer lexer = new JavaFiveGrammarLexer(input);
