@@ -21,6 +21,7 @@ import de.unituebingen.compilerbau.ast.statementexpressions.MethodCall;
 import de.unituebingen.compilerbau.ast.statementexpressions.New;
 import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.CodeGenException;
+import org.antlr.v4.tool.DOTGenerator;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -75,16 +76,15 @@ public class CodeGenerator {
             LocalOrFieldVar var = scope.get(identifier.name);
             if (var instanceof Local) {
                 Local local = (Local) var;
-                // TODO Other types need different load instructions
-                mv.visitVarInsn(ILOAD, local.index);
+                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                    mv.visitVarInsn(ILOAD, local.index);
+                else mv.visitVarInsn(ALOAD, local.index);
             } else if (var instanceof Field) {
                 Field field = (Field) var;
                 if (!field.isStatic) {
                     mv.visitVarInsn(ALOAD, 0);
                 }
                 mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
-            } else {
-                throw new CodeGenException("Illegal operation");
             }
         }
 
@@ -108,9 +108,11 @@ public class CodeGenerator {
         }
 
         @Override
-        public void visit(DotOperator dotOperator)
-        {
-
+        public void visit(DotOperator dotOperator) {
+            if (!dotOperator.isStatic())
+                dotOperator.left.visit(this);
+            else mv.visitInsn(POP);
+            mv.visitFieldInsn(dotOperator.isStatic() ? GETSTATIC : GETFIELD, dotOperator.getType().name, dotOperator.right, dotOperator.left.getType().name);
         }
 
         @Override
@@ -292,47 +294,169 @@ public class CodeGenerator {
         }
 
         @Override
-        public void visit(Increment increment)
-        {
-
+        public void visit(Increment increment) {
+            if (increment.expression instanceof Identifier) {
+                Identifier ident = (Identifier) increment.expression;
+                LocalOrFieldVar var = scope.get(ident.name);
+                if (var instanceof Local) {
+                    Local local = (Local) var;
+                    if (increment.isPostIncrement) {
+                        mv.visitVarInsn(ILOAD, local.index);
+                        mv.visitIincInsn(local.index, 1);
+                    } else {
+                        mv.visitIincInsn(local.index, 1);
+                        mv.visitVarInsn(ILOAD, local.index);
+                    }
+                } else if (var instanceof Field) {
+                    Field field = (Field) var;
+                    if (!field.isStatic) {
+                        mv.visitVarInsn(ALOAD, 0);
+                        mv.visitInsn(DUP);
+                    }
+                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                    if (increment.isPostIncrement) {
+                        if (!field.isStatic) mv.visitInsn(DUP_X1);
+                        else mv.visitInsn(DUP);
+                        mv.visitInsn(ICONST_1);
+                        mv.visitInsn(IADD);
+                    } else {
+                        mv.visitInsn(ICONST_1);
+                        mv.visitInsn(IADD);
+                        if (!field.isStatic) mv.visitInsn(DUP_X1);
+                        else mv.visitInsn(DUP);
+                    }
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                } else {
+                    throw new CodeGenException("Illegal operation");
+                }
+            } else if (increment.expression instanceof DotOperator) {
+                DotOperator left = (DotOperator) increment.expression;
+                left.left.visit(this);
+                if (!left.isStatic())
+                    mv.visitInsn(DUP);
+                mv.visitFieldInsn(left.isStatic() ? GETSTATIC : GETFIELD, left.left.getType().name, left.right, left.getType().name);
+                if (increment.isPostIncrement) {
+                    if (!left.isStatic()) mv.visitInsn(DUP_X1);
+                    else mv.visitInsn(DUP);
+                    mv.visitInsn(ICONST_1);
+                    mv.visitInsn(IADD);
+                } else {
+                    mv.visitInsn(ICONST_1);
+                    mv.visitInsn(IADD);
+                    if (!left.isStatic()) mv.visitInsn(DUP_X1);
+                    else mv.visitInsn(DUP);
+                }
+                mv.visitFieldInsn(left.isStatic() ? PUTSTATIC : PUTFIELD, left.left.getType().name, left.right, left.getType().name);
+            } else {
+                throw new CodeGenException("Can only increment variables");
+            }
         }
 
         @Override
-        public void visit(Decrement decrement)
-        {
-
+        public void visit(Decrement decrement) {
+            if (decrement.expression instanceof Identifier) {
+                Identifier ident = (Identifier) decrement.expression;
+                LocalOrFieldVar var = scope.get(ident.name);
+                if (var instanceof Local) {
+                    Local local = (Local) var;
+                    if (decrement.isPostDecrement) {
+                        mv.visitVarInsn(ILOAD, local.index);
+                        mv.visitIincInsn(local.index, -1);
+                    } else {
+                        mv.visitIincInsn(local.index, -1);
+                        mv.visitVarInsn(ILOAD, local.index);
+                    }
+                } else if (var instanceof Field) {
+                    Field field = (Field) var;
+                    if (!field.isStatic) {
+                        mv.visitVarInsn(ALOAD, 0);
+                        mv.visitInsn(DUP);
+                    }
+                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                    if (decrement.isPostDecrement) {
+                        if (!field.isStatic) mv.visitInsn(DUP_X1);
+                        else mv.visitInsn(DUP);
+                        mv.visitInsn(ICONST_1);
+                        mv.visitInsn(ISUB);
+                    } else {
+                        mv.visitInsn(ICONST_1);
+                        mv.visitInsn(ISUB);
+                        if (!field.isStatic) mv.visitInsn(DUP_X1);
+                        else mv.visitInsn(DUP);
+                    }
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                } else {
+                    throw new CodeGenException("Illegal operation");
+                }
+            } else if (decrement.expression instanceof DotOperator) {
+                DotOperator left = (DotOperator) decrement.expression;
+                left.left.visit(this);
+                if (!left.isStatic())
+                    mv.visitInsn(DUP);
+                mv.visitFieldInsn(left.isStatic() ? GETSTATIC : GETFIELD, left.left.getType().name, left.right, left.getType().name);
+                if (decrement.isPostDecrement) {
+                    if (!left.isStatic()) mv.visitInsn(DUP_X1);
+                    else mv.visitInsn(DUP);
+                    mv.visitInsn(ICONST_1);
+                    mv.visitInsn(ISUB);
+                } else {
+                    mv.visitInsn(ICONST_1);
+                    mv.visitInsn(ISUB);
+                    if (!left.isStatic()) mv.visitInsn(DUP_X1);
+                    else mv.visitInsn(DUP);
+                }
+                mv.visitFieldInsn(left.isStatic() ? PUTSTATIC : PUTFIELD, left.left.getType().name, left.right, left.getType().name);
+            } else {
+                throw new CodeGenException("Can only increment variables");
+            }
         }
 
         @Override
         public void visit(Assignment assignment) {
-            if (!(assignment.left instanceof Identifier)) {
-                throw new CodeGenException("Left of an assignment must be an identifier");
-            }
-            assignment.right.visit(this);
-            Identifier left = (Identifier) assignment.left;
-            LocalOrFieldVar var = scope.get(left.name);
-            if (var instanceof Local) {
-                Local local = (Local) var;
-                mv.visitVarInsn(ISTORE, local.index);
-            } else if (var instanceof Field) {
-                Field field = (Field) var;
-                if (!field.isStatic) {
-                    mv.visitVarInsn(ALOAD, 0);
+            if (assignment.left instanceof Identifier) {
+                Identifier left = (Identifier) assignment.left;
+                LocalOrFieldVar var = scope.get(left.name);
+                if (var instanceof Local) {
+                    assignment.right.visit(this);
+                    mv.visitInsn(DUP);
+                    Local local = (Local) var;
+                    if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                        mv.visitVarInsn(ISTORE, local.index);
+                    else mv.visitVarInsn(ASTORE, local.index);
+                } else if (var instanceof Field) {
+                    Field field = (Field) var;
+                    if (!field.isStatic)
+                        mv.visitVarInsn(ALOAD, 0);
+                    assignment.right.visit(this);
+                    if (!field.isStatic)
+                        mv.visitInsn(DUP_X1);
+                    else mv.visitInsn(DUP);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                } else {
+                    throw new CodeGenException("Illegal operation");
                 }
-                mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+            } else if (assignment.left instanceof DotOperator) {
+                DotOperator left = (DotOperator) assignment.left;
+                left.left.visit(this);
+                //if (left.isStatic()) mv.visitInsn(POP);
+
+                assignment.right.visit(this);
+                if (!left.isStatic())
+                    mv.visitInsn(DUP_X1);
+                else mv.visitInsn(DUP);
+                mv.visitFieldInsn(left.isStatic() ? PUTSTATIC : PUTFIELD, left.left.getType().name, left.right, left.getType().name);
             } else {
-                throw new CodeGenException("Illegal operation");
+                throw new CodeGenException("Left of an assignment must be an identifier or field access");
             }
         }
 
         @Override
         public void visit(MethodCall methodCall) {
-            Method method = clazz.methods.stream().filter(m -> m.name == methodCall.name).findFirst().get();
-            if (!method.isStatic && methodCall.expr == null) {
-                mv.visitVarInsn(ALOAD, 0);
-            }
-            if (methodCall.expr != null) {
-                methodCall.expr.visit(this);
+            Method method = methodCall.getMethod();
+            if (!method.isStatic) {
+                if (methodCall.expr == null)
+                    mv.visitVarInsn(ALOAD, 0);
+                else methodCall.expr.visit(this);
             }
             for (Expression expr : methodCall.args) {
                 expr.visit(this);
@@ -350,6 +474,7 @@ public class CodeGenerator {
 
         @Override
         public void visit(For _for) {
+            scope = new Scope(scope);
             _for.init.visit(this);
             Label start = new Label();
             Label end = new Label();
@@ -360,6 +485,7 @@ public class CodeGenerator {
             _for.increment.visit(this);
             mv.visitJumpInsn(GOTO, start);
             mv.visitLabel(end);
+            scope = scope.parent;
         }
 
         @Override
@@ -380,6 +506,14 @@ public class CodeGenerator {
         @Override
         public void visit(LocalVarDeclaration localVarDeclaration) {
             addLocal(localVarDeclaration.name, localVarDeclaration.getType());
+            if (localVarDeclaration.expression != null) {
+                localVarDeclaration.expression.visit(this);
+
+                Local local = (Local) scope.get(localVarDeclaration.name);
+                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                    mv.visitVarInsn(ISTORE, local.index);
+                else mv.visitVarInsn(ASTORE, local.index);
+            }
         }
 
         @Override
@@ -407,14 +541,31 @@ public class CodeGenerator {
         @Override
         public void visit(Block block) {
             scope = new Scope(scope);
+            int currentIndex = localVarIndex;
             for (Statement s : block.body) {
                 s.visit(this);
+                // Pop extra values on the stack
+                if (s instanceof MethodCall) {
+                    if (s.getType() != null) {
+                        mv.visitInsn(POP);
+                    }
+                } else if (s instanceof Increment || s instanceof Decrement || s instanceof Assignment) {
+                    mv.visitInsn(POP);
+                }
             }
+            localVarIndex = currentIndex;
             scope = scope.parent;
         }
     }
 
-    public byte[] generateBytecode(Clazz input) throws CodeGenException {
+    public Map<String, byte[]> generateBytecode(Map<String, Clazz> input) throws CodeGenException {
+        Map<String, byte[]> resultMap = new HashMap<>();
+        for (Map.Entry<String, Clazz> entry : input.entrySet()) {
+            resultMap.put(entry.getKey(), generateBytecode(entry.getValue()));
+        }
+    }
+
+    private byte[] generateBytecode(Clazz input) throws CodeGenException {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         cw.visit(V1_4, ACC_PUBLIC | ACC_SUPER, input.name, null, "java/lang/Object", null);
 

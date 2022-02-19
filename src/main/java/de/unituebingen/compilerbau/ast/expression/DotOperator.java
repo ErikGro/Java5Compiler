@@ -2,6 +2,7 @@ package de.unituebingen.compilerbau.ast.expression;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
+import de.unituebingen.compilerbau.ast.Field;
 import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.ast.statementexpressions.MethodCall;
 
@@ -12,11 +13,21 @@ public class DotOperator implements Expression
     public final Expression left;
     public final String right;
     protected Type type;
+    protected Field field;
+    protected boolean isStatic;
 
     public DotOperator(Expression left, String right)
     {
         this.left = left;
         this.right = right;
+    }
+
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public void setStatic(boolean aStatic) {
+        isStatic = aStatic;
     }
 
     @Override

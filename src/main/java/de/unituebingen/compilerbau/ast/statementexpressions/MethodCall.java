@@ -2,6 +2,7 @@ package de.unituebingen.compilerbau.ast.statementexpressions;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Expression;
+import de.unituebingen.compilerbau.ast.Method;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +16,7 @@ public class MethodCall extends StatementExpression
     public Expression expr;
     public final String name;
     public final List<Expression> args;
+    protected Method method;
 
     public MethodCall(
             Expression expr, String name, List<Expression> args)
@@ -22,6 +24,14 @@ public class MethodCall extends StatementExpression
         this.expr = expr;
         this.name = name;
         this.args = args;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
+    public Method getMethod() {
+        return this.method;
     }
 
     public void setExpr(Expression expr)
@@ -38,15 +48,13 @@ public class MethodCall extends StatementExpression
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MethodCall)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         MethodCall that = (MethodCall) o;
-        return Objects.equals(expr, that.expr) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(args, that.args);
+        return Objects.equals(expr, that.expr) && Objects.equals(name, that.name) && Objects.equals(args, that.args) && Objects.equals(method, that.method);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(expr, name, args);
+        return Objects.hash(expr, name, args, method);
     }
 }
