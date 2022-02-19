@@ -89,7 +89,17 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(DotOperator dotOperator) throws TypeCheckException {
-        // TODO:
+        dotOperator.left.visit(this);
+        // TODO: Does this class exist?
+        Clazz clazz = this.clazzes.get(dotOperator.left.getType().name);
+        // TODO: Does this field exist in that class?
+        for (Field field: clazz.fields) {
+            if (field.getName().equals(dotOperator.right)) {
+                // TODO: Is it public?
+                dotOperator.setType(field.getType());
+                break;
+            }
+        }
     }
 
     @Override
@@ -144,22 +154,27 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(ShiftLeft shiftLeft) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, shiftLeft);
     }
 
     @Override
     public void visit(ShiftRight shiftRight) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, shiftRight);
     }
 
     @Override
     public void visit(UnsignedShiftRight unsignedShiftRight) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, unsignedShiftRight);
     }
 
     @Override
     public void visit(Ternary ternary) throws TypeCheckException {
-        // TODO:
+        expect(Type.BOOLEAN, ternary.first);
+        ternary.second.visit(this);
+        ternary.third.visit(this);
+        if (ternary.second.getType() != ternary.third.getType())
+            throw new TypeCheckException("Both branches of an inline if must be of the same type");
+        ternary.setType(ternary.second.getType());
     }
 
     @Override
