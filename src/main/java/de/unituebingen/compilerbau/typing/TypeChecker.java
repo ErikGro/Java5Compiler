@@ -41,7 +41,7 @@ public class TypeChecker implements ASTVisitor {
         return true;
     }
 
-    private void checkClazz(Clazz clazz) throws TypeCheckException, CloneNotSupportedException {
+    private void checkClazz(Clazz clazz) throws TypeCheckException {
         for (Field field: clazz.fields)
             env.addToScope(new Identifier(field.getName(), field.getType()));
 
@@ -243,7 +243,12 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Assignment assignment) throws TypeCheckException {
-        // TODO:
+        // TODO: LHS must be a field/variable!
+        assignment.left.visit(this);
+        assignment.right.visit(this);
+        if (assignment.left.getType() != assignment.right.getType())
+            throw new TypeCheckException("lhs and rhs of an assignment must be of the same type");
+        assignment.setType(assignment.left.getType());
     }
 
     @Override
@@ -258,12 +263,32 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(For _for) throws TypeCheckException {
-        // TODO:
+        env.openScope();
+        expect(Type.BOOLEAN, _for.termination);
+        _for.body.visit(this);
+        _for.setType(_for.body.getType());
+        env.closeScope();
     }
 
     @Override
     public void visit(If _if) throws TypeCheckException {
-        // TODO:
+        env.openScope();
+        expect(Type.BOOLEAN, _if.condition);
+
+        env.openScope();
+        _if.body.visit(this);
+        _if.setType(_if.body.getType());
+        env.closeScope();
+
+        if (_if.elseBody != null) {
+            env.openScope();
+            _if.elseBody.visit(this);
+            if (_if.body.getType() != _if.elseBody.getType())
+                throw new TypeCheckException("Inconsistent return types");
+
+            env.closeScope();
+        }
+        env.closeScope();
     }
 
     @Override
@@ -273,12 +298,17 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Return _return) throws TypeCheckException {
-        // TODO:
+        _return.expr.visit(this);
+        _return.setType(_return.expr.getType());
     }
 
     @Override
     public void visit(While _while) throws TypeCheckException {
-        // TODO:
+        env.openScope();
+        expect(Type.BOOLEAN, _while.condition);
+        _while.body.visit(this);
+        _while.setType(_while.body.getType());
+        env.closeScope();
     }
 
     @Override

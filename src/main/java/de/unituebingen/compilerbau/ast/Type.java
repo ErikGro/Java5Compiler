@@ -6,6 +6,7 @@ public class Type {
     public static final Type CHAR = new Type("C");
     public static final Type INT = new Type("I");
     public static final Type BOOLEAN = new Type("Z");
+    public static final Type VOID = new Type("V");
 
     public String name;
 

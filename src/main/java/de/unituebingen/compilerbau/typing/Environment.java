@@ -15,8 +15,12 @@ public class Environment implements Cloneable {
         return super.clone();
     }
 
-    public void openScope() throws CloneNotSupportedException {
-        this.prev = (Environment) this.clone();
+    public void openScope() {
+        try {
+            this.prev = (Environment) this.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         this.scope = new Vector<>();
     }
 
