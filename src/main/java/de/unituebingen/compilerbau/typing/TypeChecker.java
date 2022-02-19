@@ -1,9 +1,6 @@
 package de.unituebingen.compilerbau.typing;
 
-import de.unituebingen.compilerbau.ast.ASTVisitor;
-import de.unituebingen.compilerbau.ast.Clazz;
-import de.unituebingen.compilerbau.ast.Expression;
-import de.unituebingen.compilerbau.ast.Type;
+import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.Binary;
 import de.unituebingen.compilerbau.ast.expression.DotOperator;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
@@ -26,14 +23,35 @@ import java.util.Map;
 
 public class TypeChecker implements ASTVisitor {
     private final Environment env = new Environment();
+    private Map<String, Clazz> clazzes = null;
+    private String current = null;
 
     /**
      *
      * @param input Abstract Syntax tree
      * @return true, if the input has no type errors
      */
-    public Clazz check(Map<String, Clazz> input) throws TypeCheckException {
-        throw new TypeCheckException("Not implemented");
+    public boolean check(Map<String, Clazz> input) throws TypeCheckException, CloneNotSupportedException {
+        this.clazzes = input;
+        for (String name: input.keySet()) {
+            this.current = name;
+            this.checkClazz(input.get(name));
+        }
+
+        return true;
+    }
+
+    private void checkClazz(Clazz clazz) throws TypeCheckException, CloneNotSupportedException {
+        for (Field field: clazz.fields)
+            env.addToScope(new Identifier(field.getName(), field.getType()));
+
+        for (Method meth: clazz.methods) {
+            env.openScope();
+            for (Identifier param: meth.parameters)
+                env.addToScope(param);
+            meth.body.visit(this);
+            env.closeScope();
+        }
     }
 
     private void expect(Type t, Expression exp) throws TypeCheckException {
