@@ -40,11 +40,7 @@ public class Compiler
         typeChecker.check(clazzes);
 
         // Generate bytecode from AST
-        byte[] bytecode = codeGenerator.generateBytecode(clazzes);
-
-        Map<String, byte[]> resultMap = new HashMap<>();
-        resultMap.put(filePath, bytecode);
-
+        Map<String, byte[]> resultMap = codeGenerator.generateBytecode(clazzes);
         return resultMap;
     }
 
