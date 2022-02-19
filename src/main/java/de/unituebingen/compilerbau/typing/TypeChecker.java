@@ -2,6 +2,9 @@ package de.unituebingen.compilerbau.typing;
 
 import de.unituebingen.compilerbau.ast.ASTVisitor;
 import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Expression;
+import de.unituebingen.compilerbau.ast.Type;
+import de.unituebingen.compilerbau.ast.expression.Binary;
 import de.unituebingen.compilerbau.ast.expression.DotOperator;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
@@ -22,6 +25,8 @@ import de.unituebingen.compilerbau.exception.TypeCheckException;
 import java.util.Map;
 
 public class TypeChecker implements ASTVisitor {
+    private final Environment env = new Environment();
+
     /**
      *
      * @param input Abstract Syntax tree
@@ -31,24 +36,37 @@ public class TypeChecker implements ASTVisitor {
         throw new TypeCheckException("Not implemented");
     }
 
+    private void expect(Type t, Expression exp) throws TypeCheckException {
+        exp.visit(this);
+        if (exp.getType() != t)
+            throw new TypeCheckException("Expected type " + t.name + ", got " + exp.getType().name);
+    }
+
+    private void checkBinary(Type argT, Type retT, Binary bin) {
+        expect(argT, bin.left);
+        expect(argT, bin.right);
+        bin.setType(retT);
+    }
+
     @Override
     public void visit(Identifier identifier) throws TypeCheckException {
-        // TODO:
+        // TODO: Check if name is declared!
+        identifier.setType(this.env.lookup(identifier.name));
     }
 
     @Override
     public void visit(IntLiteral intLiteral) throws TypeCheckException {
-        // TODO:
+        // Nothing to do here...
     }
 
     @Override
     public void visit(BooleanLiteral booleanLiteral) throws TypeCheckException {
-        // TODO:
+        // Nothing to do here...
     }
 
     @Override
     public void visit(CharLiteral charLiteral) throws TypeCheckException {
-        // TODO:
+        // Nothing to do here...
     }
 
     @Override
@@ -58,52 +76,52 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Add add) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, add);
     }
 
     @Override
     public void visit(Divide divide) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, divide);
     }
 
     @Override
     public void visit(Multiply multiply) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, multiply);
     }
 
     @Override
     public void visit(Remainder reminder) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, reminder);
     }
 
     @Override
     public void visit(Subtract subtract) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.INT, subtract);
     }
 
     @Override
     public void visit(And and) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.BOOLEAN, Type.BOOLEAN, and);
     }
 
     @Override
     public void visit(Or or) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.BOOLEAN, Type.BOOLEAN, or);
     }
 
     @Override
     public void visit(BitAnd bitand) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.BOOLEAN, bitand);
     }
 
     @Override
     public void visit(BitOr bitor) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.BOOLEAN, bitor);
     }
 
     @Override
     public void visit(BitXOR bitxor) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.BOOLEAN, bitxor);
     }
 
     @Override
@@ -128,52 +146,66 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Equal equal) throws TypeCheckException {
-        // TODO:
+        equal.left.visit(this);
+        equal.right.visit(this);
+        if (equal.left.getType() != equal.right.getType())
+            throw new TypeCheckException("lhs and rhs of equality must be of the same type");
+        equal.setType(Type.BOOLEAN);
     }
 
     @Override
     public void visit(Greater greater) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.BOOLEAN, greater);
     }
 
     @Override
     public void visit(GreaterOrEqual greaterOrEqual) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.BOOLEAN, greaterOrEqual);
     }
 
     @Override
     public void visit(Less less) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.BOOLEAN, less);
     }
 
     @Override
     public void visit(LessOrEqual lessOrEqual) throws TypeCheckException {
-        // TODO:
+        checkBinary(Type.INT, Type.BOOLEAN, lessOrEqual);
     }
 
     @Override
     public void visit(NotEqual notEqual) throws TypeCheckException {
-        // TODO:
+        notEqual.left.visit(this);
+        notEqual.right.visit(this);
+        if (notEqual.left.getType() != notEqual.right.getType())
+            throw new TypeCheckException("lhs and rhs of inequality must be of the same type");
+        notEqual.setType(Type.BOOLEAN);
     }
 
     @Override
     public void visit(Negate negate) throws TypeCheckException {
-        // TODO:
+        expect(Type.INT, negate.expression);
+        negate.setType(Type.INT);
     }
 
     @Override
     public void visit(Not not) throws TypeCheckException {
-        // TODO:
+        expect(Type.BOOLEAN, not.expression);
+        not.setType(Type.BOOLEAN);
     }
 
     @Override
     public void visit(Increment increment) throws TypeCheckException {
-        // TODO:
+        // TODO: Only identifiers may be incremented!
+        expect(Type.INT, increment.expression);
+        increment.setType(Type.INT);
     }
 
     @Override
     public void visit(Decrement decrement) throws TypeCheckException {
-        // TODO:
+        // TODO: Only identifiers may be decremented!
+        expect(Type.INT, decrement.expression);
+        decrement.setType(Type.INT);
     }
 
     @Override
