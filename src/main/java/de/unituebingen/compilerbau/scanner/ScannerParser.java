@@ -58,9 +58,7 @@ public class ScannerParser
 
         public Clazz visitClazz(JavaFiveGrammarParser.ClazzContext ctx)
         {
-            AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
-                    ? AccessModifier.PUBLIC
-                    : AccessModifier.PRIVATE;
+            AccessModifier modifier = parseAccessModifier(ctx.AccessModifier());
             String name = ctx.Identifier().getText();
             List<Field> fields = new ArrayList<>();
             List<Method> methods = new ArrayList<>();
@@ -92,9 +90,7 @@ public class ScannerParser
         public Method visitConstructor(
                 JavaFiveGrammarParser.ConstructorContext ctx, String clazzName)
         {
-            AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
-                    ? AccessModifier.PUBLIC
-                    : AccessModifier.PRIVATE;
+            AccessModifier modifier = parseAccessModifier(ctx.AccessModifier());
             String name = ctx.Identifier().getText();
             if (!clazzName.equals(name))
             {
@@ -108,9 +104,7 @@ public class ScannerParser
 
         public Method visitMethod(JavaFiveGrammarParser.MethodContext ctx)
         {
-            AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
-                    ? AccessModifier.PUBLIC
-                    : AccessModifier.PRIVATE;
+            AccessModifier modifier = parseAccessModifier(ctx.AccessModifier());
             boolean isStatic = ctx.Static() != null;
             Type returnType = visitType(ctx.type());
             String name = ctx.Identifier().getText();
@@ -135,13 +129,26 @@ public class ScannerParser
 
         public Field visitField(JavaFiveGrammarParser.FieldContext ctx)
         {
-            AccessModifier modifier = ctx.AccessModifier().getText().equals("public")
-                    ? AccessModifier.PUBLIC
-                    : AccessModifier.PRIVATE;
+
+            AccessModifier modifier = parseAccessModifier(ctx.AccessModifier());
             boolean isStatic = ctx.Static() != null;
             LocalVarDeclaration decl =
                     visitLocalVarDeclarationStatement(ctx.localVarDeclarationStatement());
             return new Field(null, modifier, isStatic, decl.name, decl.expression, null);
+        }
+
+        public AccessModifier parseAccessModifier(TerminalNode accessModifier)
+        {
+            if (accessModifier == null)
+            {
+                return null;
+            }
+            switch (accessModifier.getText())
+            {
+                case "public": return AccessModifier.PUBLIC;
+                case "private": return AccessModifier.PRIVATE;
+            }
+            throw new ASTException("Unknown access modifier: " + accessModifier.getText());
         }
 
         public Statement visitStatement(JavaFiveGrammarParser.StatementContext ctx)

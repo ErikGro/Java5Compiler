@@ -3,17 +3,17 @@ grammar JavaFiveGrammar;
 /* This will be the entry point of our parser. */
 javaProgram:    clazz+;
 
-clazz:   AccessModifier Class Identifier LCurlyBracket clazzMember* RCurlyBracket;
+clazz:   AccessModifier? Class Identifier LCurlyBracket clazzMember* RCurlyBracket;
 
 clazzMember: field|method|constructor;
 
-constructor: AccessModifier Identifier LRoundBracket parameterList RRoundBracket blockStatement;
+constructor: AccessModifier? Identifier LRoundBracket parameterList RRoundBracket blockStatement;
 
-method:   AccessModifier Static? type Identifier LRoundBracket parameterList RRoundBracket blockStatement;
+method:   AccessModifier? Static? type Identifier LRoundBracket parameterList RRoundBracket blockStatement;
 
 parameterList: (type Identifier (Comma type Identifier)*)?;
 
-field:   AccessModifier Static? localVarDeclarationStatement;
+field:   AccessModifier? Static? localVarDeclarationStatement;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
