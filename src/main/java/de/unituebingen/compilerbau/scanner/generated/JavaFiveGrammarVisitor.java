@@ -89,6 +89,18 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitForStatement(JavaFiveGrammarParser.ForStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#forInit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForInit(JavaFiveGrammarParser.ForInitContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#forIncrement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForIncrement(JavaFiveGrammarParser.ForIncrementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#localVarDeclarationStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

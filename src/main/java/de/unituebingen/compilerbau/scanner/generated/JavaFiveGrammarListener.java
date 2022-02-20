@@ -138,6 +138,26 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 */
 	void exitForStatement(JavaFiveGrammarParser.ForStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#forInit}.
+	 * @param ctx the parse tree
+	 */
+	void enterForInit(JavaFiveGrammarParser.ForInitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#forInit}.
+	 * @param ctx the parse tree
+	 */
+	void exitForInit(JavaFiveGrammarParser.ForInitContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#forIncrement}.
+	 * @param ctx the parse tree
+	 */
+	void enterForIncrement(JavaFiveGrammarParser.ForIncrementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#forIncrement}.
+	 * @param ctx the parse tree
+	 */
+	void exitForIncrement(JavaFiveGrammarParser.ForIncrementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#localVarDeclarationStatement}.
 	 * @param ctx the parse tree
 	 */

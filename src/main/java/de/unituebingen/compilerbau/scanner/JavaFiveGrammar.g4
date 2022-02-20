@@ -45,7 +45,11 @@ whileStatement: While parExpression statement;
 
 doWhileStatement: Do statement While parExpression Semicolon;
 
-forStatement: For LRoundBracket localVarDeclarationStatement? Semicolon expression? Semicolon statementExpression? RRoundBracket statement;
+forStatement: For LRoundBracket forInit? Semicolon expression? Semicolon forIncrement? RRoundBracket statement;
+
+forInit: type Identifier SimpleAssignmentOp expression;
+
+forIncrement: expression;
 
 localVarDeclarationStatement:   type Identifier (SimpleAssignmentOp expression)? Semicolon;
 

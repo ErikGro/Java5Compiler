@@ -36,7 +36,6 @@ public class ScannerParser
         JavaFiveGrammarLexer lexer = new JavaFiveGrammarLexer(input);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JavaFiveGrammarParser parser = new JavaFiveGrammarParser(tokenStream);
-
         ASTErrorListener errorListener = new ASTErrorListener();
         lexer.addErrorListener(errorListener);
         parser.addErrorListener(errorListener);
@@ -101,7 +100,7 @@ public class ScannerParser
             {
                 throw new ASTException("Class name expected");
             }
-            Map<String, Type> parameters = visitMethodParameterList(ctx.parameterList());
+            Vector<Identifier> parameters = visitMethodParameterList(ctx.parameterList());
             Block body = visitBlockStatement(ctx.blockStatement());
 
             return new Method(modifier, false, name, new Type("void"), parameters, body);
@@ -115,20 +114,20 @@ public class ScannerParser
             boolean isStatic = ctx.Static() != null;
             Type returnType = visitType(ctx.type());
             String name = ctx.Identifier().getText();
-            Map<String, Type> parameters = visitMethodParameterList(ctx.parameterList());
+            Vector<Identifier> parameters = visitMethodParameterList(ctx.parameterList());
             Block body = visitBlockStatement(ctx.blockStatement());
             return new Method(modifier, isStatic, name, returnType, parameters, body);
         }
 
-        public Map<String, Type> visitMethodParameterList(JavaFiveGrammarParser.ParameterListContext ctx)
+        public Vector<Identifier> visitMethodParameterList(JavaFiveGrammarParser.ParameterListContext ctx)
         {
-            Map<String, Type> parameters = new HashMap<>();
+            Vector<Identifier> parameters = new Vector<>();
 
             for (int i = 0; i < ctx.type().size(); i++)
             {
                 Type type = visitType(ctx.type(i));
                 String name = ctx.Identifier(i).getText();
-                parameters.put(name, type);
+                parameters.add(new Identifier(name, type));
             }
 
             return parameters;
@@ -251,7 +250,7 @@ public class ScannerParser
             // if they are present
             if (ctx.getChild(2) instanceof JavaFiveGrammarParser.LocalVarDeclarationStatementContext)
             {
-                init = visitLocalVarDeclarationStatement(ctx.localVarDeclarationStatement());
+                init = visitForInit(ctx.forInit());
             }
             if (ctx.getChild(4) instanceof JavaFiveGrammarParser.ExpressionContext)
             {
@@ -259,11 +258,31 @@ public class ScannerParser
             }
             if (ctx.getChild(6) instanceof JavaFiveGrammarParser.StatementExpressionContext)
             {
-                increment = visitStatementExpression(ctx.statementExpression());
+                increment = visitForIncrement(ctx.forIncrement());
             }
             // body is mandatory
             Statement body = visitStatement(ctx.statement());
             return new For(init, termination, increment, body);
+        }
+
+        public Statement visitForInit(JavaFiveGrammarParser.ForInitContext ctx)
+        {
+            Type type = visitType(ctx.type());
+            String name = ctx.Identifier().getText();
+            Expression expr = visitExpression(ctx.expression());
+            LocalVarDeclaration decl = new LocalVarDeclaration(name, expr);
+            decl.setType(type);
+            return decl;
+        }
+
+        public Statement visitForIncrement(JavaFiveGrammarParser.ForIncrementContext ctx)
+        {
+            Expression expr = visitExpression(ctx.expression());
+            if (expr instanceof StatementExpression)
+            {
+                return (Statement) expr;
+            }
+            throw new ASTException("Statement expected");
         }
 
         public LocalVarDeclaration visitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx)
