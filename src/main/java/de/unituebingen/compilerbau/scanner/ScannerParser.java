@@ -296,7 +296,7 @@ public class ScannerParser
         public LocalVarDeclaration visitLocalVarDeclarationStatement(JavaFiveGrammarParser.LocalVarDeclarationStatementContext ctx)
         {
             Type type = visitType(ctx.type());
-            Identifier identifier = new Identifier(ctx.Identifier().getText(), null);
+            Identifier identifier = new Identifier(ctx.Identifier().getText(), type);
             Expression assignment = null;
             if (ctx.getChildCount() == 5)
             {
