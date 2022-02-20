@@ -1,19 +1,19 @@
 public class MockMethodCall {
-    void test() {
+    public void test() {
         method();
         method1Param(42);
         method2Param(42, 42);
     }
 
-    void method() {
+    public void method() {
 
     }
 
-    void method1Param(int a) {
+    public void method1Param(int a) {
 
     }
 
-    void method2Param(int a, int b) {
+    public void method2Param(int a, int b) {
 
     }
 }

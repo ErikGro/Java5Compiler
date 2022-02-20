@@ -33,6 +33,15 @@ public class Block extends Statement {
     }
 
     @Override
+    public String toString() {
+        String statements = "";
+        for (Statement s : body) {
+            statements += s.toString() + "\n";
+        }
+        return statements;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(body);
     }

@@ -1,5 +1,5 @@
 public class MockLocalVarDeclaration {
-    void test() {
+    public void test() {
         int test;
     }
 }

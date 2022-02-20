@@ -1,5 +1,5 @@
 public class MockDivide {
-    void test() {
+    public void test() {
         int a = 10 / 5;
     }
 }

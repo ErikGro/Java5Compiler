@@ -1,8 +1,8 @@
 public class MockNew {
-    Hans hans = new Hans();
+    public Hans hans = new Hans();
 
-    void test() {
-        Hans hans = new Hans();
+    public void test() {
+        Hans h = new Hans();
     }
 }
 

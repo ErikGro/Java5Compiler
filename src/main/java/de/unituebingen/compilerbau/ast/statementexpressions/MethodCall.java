@@ -57,4 +57,14 @@ public class MethodCall extends StatementExpression
     public int hashCode() {
         return Objects.hash(expr, name, args, method);
     }
+
+    @Override
+    public String toString() {
+        return "MethodCall{" +
+                "expr=" + expr +
+                ", name='" + name + '\'' +
+                ", args=" + args +
+                ", method=" + method +
+                '}';
+    }
 }

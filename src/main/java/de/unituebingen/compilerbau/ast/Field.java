@@ -53,6 +53,18 @@ public class Field implements LocalOrFieldVar
     }
 
     @Override
+    public String toString() {
+        return "Field{" +
+                "owner=" + owner +
+                ", access=" + access +
+                ", isStatic=" + isStatic +
+                ", name='" + name + '\'' +
+                ", expression=" + expression +
+                ", type=" + type +
+                '}';
+    }
+
+    @Override
     public int hashCode()
     {
         return Objects.hash(owner, access, isStatic, name, type);

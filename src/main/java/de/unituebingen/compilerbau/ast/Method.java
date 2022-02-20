@@ -60,6 +60,19 @@ public class Method {
     }
 
     @Override
+    public String toString() {
+        return "Method{" +
+                "access=" + access +
+                ", isStatic=" + isStatic +
+                ", name='" + name + '\'' +
+                ", returnType=" + returnType +
+                ", parameters=" + parameters +
+                ", body=" + body +
+                ", descriptor='" + descriptor + '\'' +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(access, isStatic, name, returnType, parameters, body, descriptor);
     }

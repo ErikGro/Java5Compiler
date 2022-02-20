@@ -34,11 +34,21 @@ public class Clazz {
 
     @Override
     public String toString() {
+        String fieldsString = "";
+        for (Field f : fields) {
+            fieldsString += f.toString() + "\n";
+        }
+
+        String methodsString = "";
+        for (Method m : methods) {
+            methodsString += m.toString() + "\n";
+        }
+
         return "Clazz{" +
-                "access=" + access +
-                ", name='" + name + '\'' +
-                ", fields=" + fields +
-                ", methods=" + methods +
+                "\naccess=" + access +
+                ",\nname='" + name + '\'' +
+                ",\nfields=" + fieldsString +
+                ",\nmethods=" + methodsString +
                 '}';
     }
 }

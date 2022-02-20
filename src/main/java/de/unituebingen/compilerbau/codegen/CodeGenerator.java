@@ -563,6 +563,7 @@ public class CodeGenerator {
         for (Map.Entry<String, Clazz> entry : input.entrySet()) {
             resultMap.put(entry.getKey(), generateBytecode(entry.getValue()));
         }
+        return resultMap;
     }
 
     private byte[] generateBytecode(Clazz input) throws CodeGenException {

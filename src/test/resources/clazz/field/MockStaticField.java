@@ -1,3 +1,3 @@
 public class MockStaticField {
-    static int a;
+    private static int a;
 }

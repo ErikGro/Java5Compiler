@@ -1,6 +1,6 @@
 public class MockAdd {
-    void test() {
+    public void test() {
         int a = 42 + 43;
-        String b = "a" + "b";
+        char c = 'a' + 'b';
     }
 }

@@ -1,5 +1,5 @@
 public class MockIf {
-    void test() {
+    public void test() {
         if (42 > 0) {
 
         }

@@ -1,5 +1,5 @@
 public class MockAssignment {
-    void test() {
+    public void test() {
         int a;
         a = 42;
 

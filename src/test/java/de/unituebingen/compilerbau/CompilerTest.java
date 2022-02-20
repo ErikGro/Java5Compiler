@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 public abstract class CompilerTest {
     /* Below functions to be implemented by subclasses */
 
-    public abstract String getClassPackage();
+    public abstract String getMockFilePath();
 
     @Test
     public abstract void testAST() throws ASTException, IOException;
@@ -28,9 +28,7 @@ public abstract class CompilerTest {
     @Test
     public abstract void testGeneratedBytecode() throws CompilerException, IOException;
 
-    /* Below functions for intializing test case */
-
-    public final Compiler compiler = new Compiler();
+    /* Below functions for initializing test case */
 
     Class clazz = null;
 
@@ -40,31 +38,27 @@ public abstract class CompilerTest {
         return sourcecode;
     }
 
-    private String getSourceFilePath() {
-        return "/" + getClassPackage().replace('.', '/') + ".java";
-    }
-
     @Before
     public void loadTestFiles() {
-        File source = new File(this.getClass().getResource(getSourceFilePath()).getFile());
+        File source = new File(this.getClass().getResource(getMockFilePath()).getFile());
 
         try {
             InputStream isSource = new FileInputStream(source);
             sourcecode = readFromInputStream(isSource);
         } catch (IOException e) {
-            System.err.println("Couldn't read file: " + getSourceFilePath());
+            System.err.println("Couldn't read file: " + getMockFilePath());
             System.err.println("Input file needs to be in classpath");
             e.printStackTrace();
             return;
         }
     }
 
-    @Before
-    public void instantiateExpectedClassInstance() throws Exception {
-        URL target = Paths.get("target", "test-classes").toUri().toURL();
-        URLClassLoader loader = new URLClassLoader(new URL[]{target});
-        this.clazz = loader.loadClass("clazz.MockEmptyClass");
-    }
+//    @Before
+//    public void instantiateExpectedClassInstance() throws Exception {
+//        URL target = Paths.get("target", "test-classes").toUri().toURL();
+//        URLClassLoader loader = new URLClassLoader(new URL[]{target});
+//        this.clazz = loader.loadClass("clazz.MockEmptyClass");
+//    }
 
     private String readFromInputStream(InputStream inputStream) throws IOException {
         StringBuilder resultStringBuilder = new StringBuilder();

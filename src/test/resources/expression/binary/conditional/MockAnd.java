@@ -1,8 +1,8 @@
 public class MockAnd {
-    void test() {
-        boolean a = (true && true);
-        boolean b = (true && false);
-        boolean c = (true && true && true && true && true && true && true && true && true);
-        boolean d = (true && true && true && true && true && true && true && false && true);
+    public void test() {
+        boolean a = true && true;
+        boolean b = true && false;
+        boolean c = true && true && true;
+        boolean d = true && true && false && true;
     }
 }

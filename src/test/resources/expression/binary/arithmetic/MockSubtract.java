@@ -1,5 +1,5 @@
 public class MockSubtract {
-    void test() {
+    public void test() {
         int a = 42 - 43;
     }
 }

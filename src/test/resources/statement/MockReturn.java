@@ -1,5 +1,5 @@
 public class MockReturn {
-    int test() {
+    public int test() {
         return 42;
     }
 }
