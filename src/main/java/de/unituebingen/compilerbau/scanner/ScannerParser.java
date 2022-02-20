@@ -134,7 +134,7 @@ public class ScannerParser
             boolean isStatic = ctx.Static() != null;
             LocalVarDeclaration decl =
                     visitLocalVarDeclarationStatement(ctx.localVarDeclarationStatement());
-            return new Field(null, modifier, isStatic, decl.name, decl.expression, null);
+            return new Field(null, modifier, isStatic, decl.name, decl.expression, decl.getType());
         }
 
         public AccessModifier parseAccessModifier(TerminalNode accessModifier)
@@ -145,8 +145,10 @@ public class ScannerParser
             }
             switch (accessModifier.getText())
             {
-                case "public": return AccessModifier.PUBLIC;
-                case "private": return AccessModifier.PRIVATE;
+                case "public":
+                    return AccessModifier.PUBLIC;
+                case "private":
+                    return AccessModifier.PRIVATE;
             }
             throw new ASTException("Unknown access modifier: " + accessModifier.getText());
         }
