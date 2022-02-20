@@ -1,18 +1,21 @@
 package de.unituebingen.compilerbau.ast;
 
+import de.unituebingen.compilerbau.ast.expression.Identifier;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Vector;
 
 public class Method {
     public final AccessModifier access;
     public final boolean isStatic;
     public final String name;
     public final Type returnType;
-    public final Map<String, Type> parameters;
+    public final Vector<Identifier> parameters;
     public final Statement body;
 
-    public Method(AccessModifier access, boolean isStatic, String name, Type returnType, Map<String, Type> parameters, Statement body) {
+    public Method(AccessModifier access, boolean isStatic, String name, Type returnType, Vector<Identifier> parameters, Statement body) {
         this.access = access;
         this.isStatic = isStatic;
         this.name = name;
@@ -21,10 +24,10 @@ public class Method {
         this.body = body;
     }
 
-    public static String getDescriptor(Collection<Type> parameters, Type returnType) {
+    public static String getDescriptor(Vector<Identifier> parameters, Type returnType) {
         String descriptor = "(";
-        for (Type par : parameters) {
-            descriptor += par.name;
+        for (Identifier par : parameters) {
+            descriptor += par.getType().name;
         }
         descriptor += ")";
         if (returnType == null) {
@@ -41,7 +44,7 @@ public class Method {
         if (descriptor != null) {
             return descriptor;
         }
-        descriptor = getDescriptor(parameters.values(), returnType);
+        descriptor = getDescriptor(parameters, returnType);
         return descriptor;
     }
 
