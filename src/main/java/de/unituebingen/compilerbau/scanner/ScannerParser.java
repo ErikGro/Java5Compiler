@@ -129,7 +129,6 @@ public class ScannerParser
 
         public Field visitField(JavaFiveGrammarParser.FieldContext ctx)
         {
-
             AccessModifier modifier = parseAccessModifier(ctx.AccessModifier());
             boolean isStatic = ctx.Static() != null;
             LocalVarDeclaration decl =
@@ -325,9 +324,26 @@ public class ScannerParser
 
         public Type visitType(JavaFiveGrammarParser.TypeContext ctx)
         {
-            return new Type(ctx.Primitive() == null
-                    ? ctx.Identifier().getText()
-                    : ctx.Primitive().getText());
+            if (ctx.Primitive() != null)
+            {
+                switch (ctx.Primitive().getText())
+                {
+                    case "int":
+                        return Type.INT;
+                    case "char":
+                        return Type.CHAR;
+                    case "boolean":
+                        return Type.BOOLEAN;
+                    case "void":
+                        return Type.VOID;
+                }
+                // cannot happen right?? just in case...
+                throw new ASTException("Primitive type expected! Actual: " + ctx.Primitive()
+                        .getText());
+            } else
+            {
+                return new Type(ctx.Identifier().getText());
+            }
         }
 
         public Expression visitExpression(JavaFiveGrammarParser.ExpressionContext ctx)
