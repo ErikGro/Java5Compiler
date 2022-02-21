@@ -33,17 +33,17 @@ public class TestMethodCall extends CompilerTest {
         Statement methodCall2 = new MethodCall(null, "method1Param", Arrays.asList(new IntLiteral(42)));
         Statement methodCall3 = new MethodCall(null, "method2Param", Arrays.asList(new IntLiteral(42), new IntLiteral(42)));
         Block body = new Block(Arrays.asList(methodCall1, methodCall2, methodCall3));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
 
-        Method methodEmpty = new Method(PUBLIC, false, "method", new Type("void"), Collections.emptyMap(), new Block(Collections.emptyList()));
+        Method methodEmpty = new Method(PUBLIC, false, "method", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
 
-        Map<String, Type> params1 = new HashMap<>();
-        params1.put("a", new Type("int"));
+        Vector<Identifier> params1 = new Vector<>();
+        params1.add(new Identifier("a", new Type("int")));
         Method method1Param = new Method(PUBLIC, false, "method1Param", new Type("void"), params1, new Block(Collections.emptyList()));
 
-        Map<String, Type> params2 = new HashMap<>();
-        params2.put("a", new Type("int"));
-        params2.put("b", new Type("int"));
+        Vector<Identifier> params2 = new Vector<>();
+        params2.add(new Identifier("a", new Type("int")));
+        params2.add(new Identifier("b", new Type("int")));
         Method method2Param = new Method(PUBLIC, false, "method2Param", new Type("void"), params2, new Block(Collections.emptyList()));
 
         List<Method> methods = Arrays.asList(testMethod, methodEmpty, method1Param, method2Param);

@@ -35,7 +35,7 @@ public class TestGreater extends CompilerTest {
         Statement statementB = new LocalVarDeclaration("b", new Greater(new IntLiteral(42), new IntLiteral(42)));
         Statement statementC = new LocalVarDeclaration("c", new Greater(new IntLiteral(42), new IntLiteral(41)));
         Block body = new Block(Arrays.asList(statementA, statementB, statementC));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

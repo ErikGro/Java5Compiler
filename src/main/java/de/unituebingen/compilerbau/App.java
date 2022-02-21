@@ -33,6 +33,8 @@ public class App {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
         }
     }
 

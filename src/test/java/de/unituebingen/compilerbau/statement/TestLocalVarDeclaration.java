@@ -37,7 +37,7 @@ public class TestLocalVarDeclaration extends CompilerTest {
         Statement s = new LocalVarDeclaration("test", null);
 
         Block body = new Block(Arrays.asList(s));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

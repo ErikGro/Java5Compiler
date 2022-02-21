@@ -34,7 +34,7 @@ public class TestWhile extends CompilerTest {
         Statement whileLoop = new While(new BooleanLiteral(true), new Block(Collections.emptyList()));
 
         Block body = new Block(Arrays.asList(whileLoop));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

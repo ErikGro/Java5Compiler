@@ -38,7 +38,7 @@ public class TestNot extends CompilerTest {
         Statement statementB = new LocalVarDeclaration("b", new Not(new Not(new BooleanLiteral(true))));
         Statement statementC = new LocalVarDeclaration("c", new Not(new Greater(new IntLiteral(42), new IntLiteral(43))));
         Block body = new Block(Arrays.asList(statementA, statementB, statementC));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

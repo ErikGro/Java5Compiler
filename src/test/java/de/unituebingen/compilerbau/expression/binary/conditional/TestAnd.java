@@ -37,7 +37,7 @@ public class TestAnd extends CompilerTest {
         Statement statementC = new LocalVarDeclaration("c", new And(new And(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(true)));
         Statement statementD = new LocalVarDeclaration("d", new And(new And(new And(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(false)), new BooleanLiteral(true)));
         Block body = new Block(Arrays.asList(statementA, statementB, statementC, statementD));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

@@ -66,8 +66,8 @@ public class CodeGenerator {
             this.mv = mv;
         }
 
-        void addLocal(String name, Type type) {
-            scope.add(new Local(localVarIndex, name, type));
+        void addLocal(Identifier identifier) {
+            scope.add(new Local(localVarIndex, identifier.name, identifier.getType()));
             localVarIndex += 1;
         }
 
@@ -506,7 +506,7 @@ public class CodeGenerator {
 
         @Override
         public void visit(LocalVarDeclaration localVarDeclaration) {
-            addLocal(localVarDeclaration.name, localVarDeclaration.getType());
+            addLocal(new Identifier(localVarDeclaration.name, localVarDeclaration.getType()));
             if (localVarDeclaration.expression != null) {
                 localVarDeclaration.expression.visit(this);
 
@@ -579,7 +579,7 @@ public class CodeGenerator {
 
             Visitor visitor = new Visitor(input, new Scope(classScope), mv);
             if (!method.isStatic) {
-                visitor.addLocal("this", new Type(input.name));
+                visitor.addLocal(new Identifier("this", new Type(input.name)));
             }
             method.parameters.forEach(visitor::addLocal);
 

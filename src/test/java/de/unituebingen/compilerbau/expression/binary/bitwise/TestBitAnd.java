@@ -35,7 +35,7 @@ public class TestBitAnd extends CompilerTest {
         Statement bitAndA = new LocalVarDeclaration("a", new BitAnd(new IntLiteral(1), new IntLiteral(2)));
         Statement bitAndB = new LocalVarDeclaration("b", new BitAnd(new IntLiteral(42), new IntLiteral(295)));
         Block body = new Block(Arrays.asList(bitAndA, bitAndB));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

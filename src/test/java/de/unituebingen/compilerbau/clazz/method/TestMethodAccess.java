@@ -27,10 +27,10 @@ public class TestMethodAccess extends CompilerTest {
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
         Clazz mockClass = resultMap.get("MockMethodAccess");
 
-        Method privateMethod = new Method(PUBLIC, false, "privateMethod", new Type("void"), Collections.emptyMap(), new Block(Collections.emptyList()));
-        Method publicMethod = new Method(PUBLIC, false, "publicMethod", new Type("void"), Collections.emptyMap(), new Block(Collections.emptyList()));
+        Method privateMethod = new Method(PUBLIC, false, "privateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
+        Method publicMethod = new Method(PUBLIC, false, "publicMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
         // TODO: Add package private Access
-        Method packagePrivateMethod = new Method(PUBLIC, false, "packagePrivateMethod", new Type("void"), Collections.emptyMap(), new Block(Collections.emptyList()));
+        Method packagePrivateMethod = new Method(PUBLIC, false, "packagePrivateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
 
         List<Method> methods = new ArrayList<>();
         methods.add(privateMethod);

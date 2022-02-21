@@ -46,7 +46,7 @@ public class TestIf extends CompilerTest {
         Statement if3 = new If(new Equal(new IntLiteral(42), new IntLiteral(42)), emptyBody, elseIf);
 
         Block body = new Block(Arrays.asList(if1, if2, if3));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

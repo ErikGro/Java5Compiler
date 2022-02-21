@@ -38,7 +38,7 @@ public class TestNew extends CompilerTest {
         List<Method> methods = new ArrayList<>();
         Statement initHans = new LocalVarDeclaration("h", new New(Collections.emptyList()));
         Block body = new Block(Arrays.asList(initHans));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         methods.add(testMethod);
 
         final Clazz expectedASTMockNew = new Clazz(

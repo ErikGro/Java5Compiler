@@ -30,7 +30,7 @@ public class TestNonVoidReturnMethod extends CompilerTest {
         Clazz mockClass = resultMap.get("MockNonVoidReturnMethod");
 
         // TODO: Be consistent in terms of predefined primitive types and custom types
-        Method nonVoidReturnMethod = new Method(PUBLIC, false, "intMethod", new Type("int"), Collections.emptyMap(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
+        Method nonVoidReturnMethod = new Method(PUBLIC, false, "intMethod", new Type("int"), Collections.emptyList(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
 
         List<Method> methods = new ArrayList<>();
         methods.add(nonVoidReturnMethod);

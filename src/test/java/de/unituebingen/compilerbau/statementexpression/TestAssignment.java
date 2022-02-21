@@ -38,7 +38,7 @@ public class TestAssignment extends CompilerTest {
         Statement b = new LocalVarDeclaration("b", new IntLiteral(43));
 
         Block body = new Block(Arrays.asList(initA, assignment, b));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

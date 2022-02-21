@@ -33,7 +33,7 @@ public class TestReturn extends CompilerTest {
         Statement s = new Return(new IntLiteral(42));
 
         Block body = new Block(Arrays.asList(s));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("int"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("int"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

@@ -33,7 +33,7 @@ public class TestMultiply extends CompilerTest {
 
         Statement multiplyIntsStatement = new LocalVarDeclaration("a", new Multiply(new IntLiteral(42), new IntLiteral(43)));
         Block body = new Block(Arrays.asList(multiplyIntsStatement));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

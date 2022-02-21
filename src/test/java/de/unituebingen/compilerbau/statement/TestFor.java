@@ -40,7 +40,7 @@ public class TestFor extends CompilerTest {
         Statement forLoop = new For(init, termination, increment, new Block(Collections.emptyList()));
 
         Block body = new Block(Arrays.asList(forLoop));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

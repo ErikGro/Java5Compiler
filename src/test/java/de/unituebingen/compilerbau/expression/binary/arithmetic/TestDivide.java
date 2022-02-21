@@ -34,7 +34,7 @@ public class TestDivide extends CompilerTest {
 
         Statement addIntStatement = new LocalVarDeclaration("a", new Divide(new IntLiteral(10), new IntLiteral(5)));
         Block body = new Block(Arrays.asList(addIntStatement));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

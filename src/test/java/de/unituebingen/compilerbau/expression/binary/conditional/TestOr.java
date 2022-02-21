@@ -36,7 +36,7 @@ public class TestOr extends CompilerTest {
         Statement statementC = new LocalVarDeclaration("c", new Or(new Or(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(true)));
         Statement statementD = new LocalVarDeclaration("d", new Or(new Or(new Or(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(false)), new BooleanLiteral(true)));
         Block body = new Block(Arrays.asList(statementA, statementB, statementC, statementD));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

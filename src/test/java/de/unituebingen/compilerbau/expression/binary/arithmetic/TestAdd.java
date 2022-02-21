@@ -32,7 +32,7 @@ public class TestAdd extends CompilerTest {
         Statement addIntStatement = new LocalVarDeclaration("a", new Add(new IntLiteral(42), new IntLiteral(43)));
         Statement addCharStatement = new LocalVarDeclaration("c", new Add(new CharLiteral('a'), new CharLiteral('b')));
         Block body = new Block(Arrays.asList(addIntStatement, addCharStatement));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

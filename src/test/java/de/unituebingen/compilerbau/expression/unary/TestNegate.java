@@ -36,7 +36,7 @@ public class TestNegate extends CompilerTest {
         Statement statementA = new LocalVarDeclaration("a", new IntLiteral(42));
         Statement statementB = new LocalVarDeclaration("b", new Negate(new Identifier("a", null)));
         Block body = new Block(Arrays.asList(statementA, statementB));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

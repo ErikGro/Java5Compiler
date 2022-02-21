@@ -5,6 +5,7 @@ import de.unituebingen.compilerbau.ast.AccessModifier;
 import de.unituebingen.compilerbau.ast.Clazz;
 import de.unituebingen.compilerbau.ast.Method;
 import de.unituebingen.compilerbau.ast.Type;
+import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
@@ -27,17 +28,17 @@ public class TestMethodParameter extends CompilerTest {
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
         Clazz mockClass = resultMap.get("MockMethodParameter");
 
-        Map<String, Type> parametersA = new HashMap<>();
-        parametersA.put("a", new Type("int"));
+        Vector<Identifier> parametersA = new Vector<>();
+        parametersA.add(new Identifier("a", new Type("int")));
         Method oneParameter = new Method(PUBLIC, false, "method", new Type("void"), parametersA, new Block(Collections.emptyList()));
 
         // TODO: Be consistent in terms of predefined primitive types and custom types
-        Map<String, Type> parametersB = new HashMap<>();
-        parametersB.put("a", new Type("int"));
-        parametersB.put("b", new Type("int"));
-        parametersB.put("c", new Type("int"));
-        parametersB.put("d", new Type("int"));
-        parametersB.put("e", new Type("int"));
+        Vector<Identifier> parametersB = new Vector<>();
+        parametersB.add(new Identifier("a", new Type("int")));
+        parametersB.add(new Identifier("b", new Type("int")));
+        parametersB.add(new Identifier("c", new Type("int")));
+        parametersB.add(new Identifier("d", new Type("int")));
+        parametersB.add(new Identifier("e", new Type("int")));
         Method multipleParameters = new Method(PUBLIC, false, "method", new Type("void"), parametersB, new Block(Collections.emptyList()));
 
         List<Method> methods = new ArrayList<>();

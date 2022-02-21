@@ -35,7 +35,7 @@ public class TestEqual extends CompilerTest {
         Statement statementA = new LocalVarDeclaration("a", new Equal(new IntLiteral(42), new IntLiteral(43)));
         Statement statementB = new LocalVarDeclaration("b", new Equal(new IntLiteral(42), new IntLiteral(42)));
         Block body = new Block(Arrays.asList(statementA, statementB));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

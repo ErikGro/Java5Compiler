@@ -32,7 +32,7 @@ public class TestBlock extends CompilerTest {
         Clazz mockClass = resultMap.get("MockBlock");
 
         Block body = new Block(Arrays.asList(new Block(Collections.emptyList())));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(

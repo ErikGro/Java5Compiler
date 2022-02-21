@@ -30,7 +30,7 @@ public class TestStaticMethod extends CompilerTest {
         Clazz mockClass = resultMap.get("MockStaticMethod");
 
         // TODO: Might it make sense to also use for void a predefined type?
-        Method staticMethod = new Method(PUBLIC, true, "staticMethod", new Type("void"), Collections.emptyMap(), new Block(Collections.emptyList()));
+        Method staticMethod = new Method(PUBLIC, true, "staticMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
 
         List<Method> methods = new ArrayList<>();
         methods.add(staticMethod);
