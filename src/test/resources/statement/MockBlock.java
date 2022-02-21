@@ -1,9 +1,5 @@
 public class MockBlock {
-    {
-
-    }
-
-    void test() {
+    public void test() {
         {
 
         }

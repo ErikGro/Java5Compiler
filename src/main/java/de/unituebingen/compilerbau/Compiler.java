@@ -29,8 +29,7 @@ public class Compiler
      * <p>
      * Output: { "Source.class" : bytecode, "Second.class" : bytecode }
      */
-    public Map<String, byte[]> compile(String filePath) throws CompilerException, IOException
-    {
+    public Map<String, byte[]> compile(String filePath) throws CompilerException, IOException, CloneNotSupportedException {
         String input = readFromInputStream(new FileInputStream(filePath));
 
         // Generate AST from input file

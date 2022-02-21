@@ -1,3 +1,3 @@
 public class MockStaticMethod {
-    static void staticMethod() {}
+    public static void staticMethod() {}
 }

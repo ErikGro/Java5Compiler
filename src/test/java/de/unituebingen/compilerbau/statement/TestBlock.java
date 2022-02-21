@@ -1,51 +1,56 @@
 package de.unituebingen.compilerbau.statement;
 
 import de.unituebingen.compilerbau.CompilerTest;
+import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.expression.Identifier;
+import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
+import de.unituebingen.compilerbau.ast.expression.unary.Negate;
+import de.unituebingen.compilerbau.ast.statements.Block;
+import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
-import de.unituebingen.compilerbau.ast.Clazz;
-
-import java.io.IOException;
-
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
-import de.unituebingen.compilerbau.typing.TypeChecker;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
 
 public class TestBlock extends CompilerTest {
-    @Override
-    public String getFileName() {
-        return "/statement/MockBlock";
+    public String getMockFilePath() {
+        return "/statement/MockBlock.java";
     }
 
     @Override
-    public void testAST() throws ASTException, IOException {
-        // TODO: Implement test for AST generation
-        ScannerParser scannerParser = new ScannerParser();
-        Clazz ast = scannerParser.parse(this.getSourcecode());
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+        Clazz mockClass = resultMap.get("MockBlock");
 
-        Clazz expectedAST = null;
+        Block body = new Block(Arrays.asList(new Block(Collections.emptyList())));
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        List<Method> methods = Arrays.asList(testMethod);
 
-        assertEquals(ast, expectedAST);
+        final Clazz expectedAST = new Clazz(
+                PUBLIC,
+                "MockBlock",
+                Collections.emptyList(),
+                methods);
+
+        assertEquals(expectedAST, mockClass);
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-        // TODO: Implement test for type checked AST
-        Clazz ast = null;
 
-        TypeChecker typeChecker = new TypeChecker();
-        Clazz modifiedAST = typeChecker.check(ast);
-
-        Clazz expectedAST = null;
-
-        assertEquals(modifiedAST, expectedAST);
     }
 
     @Override
-    public void testGeneratedBytecode() throws CompilerException, IOException {
-        byte[] byteCode = compiler.compile(this.getFileName() + ".java");
-        assertEquals(byteCode, this.getExpectedByteCode());
+    public void testGeneratedBytecode() throws CompilerException {
+
     }
 }

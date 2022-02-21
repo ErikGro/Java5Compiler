@@ -1,5 +1,5 @@
 public class MockNonVoidReturnMethod {
-    int intMethod() {
+    public int intMethod() {
         return 42;
     }
 }

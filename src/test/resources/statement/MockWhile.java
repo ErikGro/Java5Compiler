@@ -1,5 +1,5 @@
 public class MockWhile {
-    void test() {
+    public void test() {
         while (true) {
 
         }

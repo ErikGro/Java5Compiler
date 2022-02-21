@@ -6,6 +6,7 @@ public class Type {
     public static final Type CHAR = new Type("C");
     public static final Type INT = new Type("I");
     public static final Type BOOLEAN = new Type("Z");
+    public static final Type VOID = new Type("V");
 
     public String name;
 
@@ -33,6 +34,13 @@ public class Type {
         if (!(o instanceof Type)) return false;
         Type type = (Type) o;
         return Objects.equals(name, type.name);
+    }
+
+    @Override
+    public String toString() {
+        return "Type{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
     @Override

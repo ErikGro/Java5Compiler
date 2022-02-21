@@ -7,24 +7,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public abstract class CompilerTest {
-    public final Compiler compiler = new Compiler();
+    /* Below functions to be implemented by subclasses */
 
-    private String sourcecode;
-    private byte[] expectedByteCode;
-
-    public String getSourcecode() {
-        return sourcecode;
-    }
-
-    public byte[] getExpectedByteCode() {
-        return expectedByteCode;
-    }
-
-    // File name to test from resource folder without suffix
-    public abstract String getFileName();
+    public abstract String getMockFilePath();
 
     @Test
     public abstract void testAST() throws ASTException, IOException;
@@ -35,26 +28,37 @@ public abstract class CompilerTest {
     @Test
     public abstract void testGeneratedBytecode() throws CompilerException, IOException;
 
+    /* Below functions for initializing test case */
+
+    Class clazz = null;
+
+    private String sourcecode;
+
+    public String getSourcecode() {
+        return sourcecode;
+    }
+
     @Before
     public void loadTestFiles() {
-        String sourceFileName = getFileName() + ".java";
-        String byteCodeFileName = getFileName() + ".class";
-
-        File source = new File(this.getClass().getResource(sourceFileName).getFile());
-        File byteCode = new File(this.getClass().getResource(byteCodeFileName).getFile());
+        File source = new File(this.getClass().getResource(getMockFilePath()).getFile());
 
         try {
             InputStream isSource = new FileInputStream(source);
             sourcecode = readFromInputStream(isSource);
-
-            expectedByteCode = Files.readAllBytes(byteCode.toPath());
         } catch (IOException e) {
-            System.err.println("Couldnt read file: " + getFileName());
-            System.err.println("Input file need to be in the classpath");
+            System.err.println("Couldn't read file: " + getMockFilePath());
+            System.err.println("Input file needs to be in classpath");
             e.printStackTrace();
             return;
         }
     }
+
+//    @Before
+//    public void instantiateExpectedClassInstance() throws Exception {
+//        URL target = Paths.get("target", "test-classes").toUri().toURL();
+//        URLClassLoader loader = new URLClassLoader(new URL[]{target});
+//        this.clazz = loader.loadClass("clazz.MockEmptyClass");
+//    }
 
     private String readFromInputStream(InputStream inputStream) throws IOException {
         StringBuilder resultStringBuilder = new StringBuilder();

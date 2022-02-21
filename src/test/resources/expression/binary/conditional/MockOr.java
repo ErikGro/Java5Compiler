@@ -1,8 +1,8 @@
 public class MockOr {
-    void test() {
-        boolean a = (true || true);
-        boolean b = (true || false);
-        boolean c = (false || false || false || false || false || false || false);
-        boolean d = (false || false || false || false || false || false || true);
+    public void test() {
+        boolean a = true || true;
+        boolean b = true || false;
+        boolean c = true || true || true;
+        boolean d = true || true || false || true;
     }
 }

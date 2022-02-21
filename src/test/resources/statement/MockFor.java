@@ -1,5 +1,5 @@
 public class MockFor {
-    void test() {
+    public void test() {
         for (int i = 0; i < 42; i++) {
 
         }

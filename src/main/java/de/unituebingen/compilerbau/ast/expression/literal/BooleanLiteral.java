@@ -30,4 +30,11 @@ public class BooleanLiteral extends Literal {
     public int hashCode() {
         return Objects.hash(value);
     }
+
+    @Override
+    public String toString() {
+        return "BooleanLiteral{" +
+                "value=" + value +
+                '}';
+    }
 }

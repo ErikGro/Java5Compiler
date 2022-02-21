@@ -1,51 +1,56 @@
 package de.unituebingen.compilerbau.expression.binary.arithmetic;
 
 import de.unituebingen.compilerbau.CompilerTest;
+import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.expression.arithmetic.Add;
+import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
+import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
+import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
+import de.unituebingen.compilerbau.ast.statements.Block;
+import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
-import de.unituebingen.compilerbau.ast.Clazz;
-
-import java.io.IOException;
-
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
-import de.unituebingen.compilerbau.typing.TypeChecker;
 
+import java.util.*;
+
+import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
 
 public class TestAdd extends CompilerTest {
-    @Override
-    public String getFileName() {
-        return "/expression/binary/arithmetic/MockAdd";
+    public String getMockFilePath() {
+        return "/expression/binary/arithmetic/MockAdd.java";
     }
 
     @Override
-    public void testAST() throws ASTException, IOException {
-        // TODO: Implement test for AST generation
-        ScannerParser scannerParser = new ScannerParser();
-        Clazz ast = scannerParser.parse(this.getSourcecode());
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+        Clazz mockClass = resultMap.get("MockAdd");
 
-        Clazz expectedAST = null;
+        Statement addIntStatement = new LocalVarDeclaration("a", new Add(new IntLiteral(42), new IntLiteral(43)));
+        Statement addCharStatement = new LocalVarDeclaration("c", new Add(new CharLiteral('a'), new CharLiteral('b')));
+        Block body = new Block(Arrays.asList(addIntStatement, addCharStatement));
+        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyMap(), body);
+        List<Method> methods = Arrays.asList(testMethod);
 
-        assertEquals(ast, expectedAST);
+        final Clazz expectedAST = new Clazz(
+                PUBLIC,
+                "MockAdd",
+                Collections.emptyList(),
+                methods);
+
+        assertEquals(expectedAST, mockClass);
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-        // TODO: Implement test for type checked AST
-        Clazz ast = null;
 
-        TypeChecker typeChecker = new TypeChecker();
-        Clazz modifiedAST = typeChecker.check(ast);
-
-        Clazz expectedAST = null;
-
-        assertEquals(modifiedAST, expectedAST);
     }
 
     @Override
-    public void testGeneratedBytecode() throws CompilerException, IOException {
-        byte[] byteCode = compiler.compile(this.getFileName() + ".java");
-        assertEquals(byteCode, this.getExpectedByteCode());
+    public void testGeneratedBytecode() throws CompilerException {
+
     }
 }

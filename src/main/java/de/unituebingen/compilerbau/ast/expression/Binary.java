@@ -30,4 +30,13 @@ public abstract class Binary implements Expression {
         Binary binary = (Binary) o;
         return Objects.equals(left, binary.left) && Objects.equals(right, binary.right);
     }
+
+    @Override
+    public String toString() {
+        return "Binary{" +
+                "left=" + left +
+                ", right=" + right +
+                ", type=" + type +
+                '}';
+    }
 }
