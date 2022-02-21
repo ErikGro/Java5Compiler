@@ -587,6 +587,10 @@ public class CodeGenerator {
             method.body.visit(visitor);
             mv.visitEnd();
         }
+        for (Field f: input.fields) {
+            cw.visitField(f.access.asm, f.getName(), f.getType().name, null, null);
+        }
+
         cw.visitEnd();
         return cw.toByteArray();
     }
