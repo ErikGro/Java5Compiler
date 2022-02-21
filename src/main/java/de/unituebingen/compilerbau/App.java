@@ -70,7 +70,7 @@ public class App {
 
     private static void saveByteCodeToFiles(Map<String, byte[]> resultMap, String targetDirectory) {
         for (Map.Entry<String, byte[]> entry : resultMap.entrySet()) {
-            File classFile = new File(targetDirectory + "/" + entry.getKey());
+            File classFile = new File(targetDirectory + "/" + entry.getKey() + ".class");
 
             try {
                 classFile.createNewFile();

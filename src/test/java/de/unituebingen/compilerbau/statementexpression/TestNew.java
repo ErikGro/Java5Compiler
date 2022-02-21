@@ -32,13 +32,13 @@ public class TestNew extends CompilerTest {
         Clazz mockSubClass = resultMap.get("Hans");
 
         List<Field> fields = new ArrayList<>();
-        Field hans = new Field(null, PUBLIC, false, "hans", new New(Collections.emptyList()), null);
+        Field hans = new Field(null, PUBLIC, false, "hans", new New(Collections.emptyList()), new Type("Hans"));
         fields.add(hans);
 
         List<Method> methods = new ArrayList<>();
         Statement initHans = new LocalVarDeclaration("h", new New(Collections.emptyList()));
         Block body = new Block(Arrays.asList(initHans));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
         methods.add(testMethod);
 
         final Clazz expectedASTMockNew = new Clazz(
@@ -48,7 +48,7 @@ public class TestNew extends CompilerTest {
                 methods);
 
         final Clazz expectedASTHans = new Clazz(
-                PUBLIC,
+                null,
                 "Hans",
                 Collections.emptyList(),
                 Collections.emptyList());

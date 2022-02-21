@@ -4,7 +4,7 @@ import org.objectweb.asm.Opcodes;
 
 public enum AccessModifier
 {
-    PUBLIC(Opcodes.ACC_PUBLIC), PROTECTED(Opcodes.ACC_PROTECTED), PRIVATE(Opcodes.ACC_PRIVATE);
+    PUBLIC(Opcodes.ACC_PUBLIC), PROTECTED(Opcodes.ACC_PROTECTED), PRIVATE(Opcodes.ACC_PRIVATE), PACKAGEPRIVATE(0);
 
     public final int asm;
 

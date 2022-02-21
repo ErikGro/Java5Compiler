@@ -12,6 +12,11 @@ import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PRIVATE;
@@ -66,6 +71,23 @@ public class TestClass extends CompilerTest {
 
     @Override
     public void testGeneratedBytecode() throws CompilerException {
-
+        try {
+            URL url = new File("/Users/privat/repos/compilerbau_ws2021/src/main/resources/InputClass.class").toURI().toURL();
+            URLClassLoader loader = new URLClassLoader(new URL[]{url});
+            Class clazz = loader.loadClass("InputClass");
+            Object instance = clazz.getDeclaredConstructor().newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException a) {
+            a.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 }
