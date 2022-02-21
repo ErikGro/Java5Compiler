@@ -569,7 +569,7 @@ public class CodeGenerator {
 
     private byte[] generateBytecode(Clazz input) throws CodeGenException {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-        cw.visit(V1_4, ACC_PUBLIC | ACC_SUPER, input.name, null, "java/lang/Object", null);
+        cw.visit(V1_4, input.access.asm | ACC_SUPER, input.name, null, "java/lang/Object", null);
 
         Scope classScope = new Scope(null);
         input.fields.forEach(classScope::add);
@@ -577,7 +577,8 @@ public class CodeGenerator {
         boolean hasConstructor = false;
         for (Method method: input.methods) {
             String methodName = method.name;
-            if (method.name == input.name) {
+            boolean isConstructor = method.name == input.name;
+            if (isConstructor) {
                 hasConstructor = true;
                 methodName = "<init>";
             }
@@ -590,6 +591,10 @@ public class CodeGenerator {
             method.parameters.forEach(visitor::addLocal);
 
             mv.visitCode();
+            if (isConstructor) {
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+            }
             method.body.visit(visitor);
             mv.visitMaxs(0, 0);
             mv.visitEnd();
