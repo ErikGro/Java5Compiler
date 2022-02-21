@@ -11,6 +11,7 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.awt.*;
 import java.util.*;
@@ -25,12 +26,7 @@ public class TestNew extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockNew");
-        Clazz mockSubClass = resultMap.get("Hans");
-
+    public Map<String, Clazz> getExpectedClassMap() {
         List<Field> fields = new ArrayList<>();
         Field hans = new Field(null, PUBLIC, false, "hans", new New(Collections.emptyList()), new Type("Hans"));
         fields.add(hans);
@@ -53,14 +49,27 @@ public class TestNew extends CompilerTest {
                 Collections.emptyList(),
                 Collections.emptyList());
 
-        assertEquals(expectedASTMockNew, mockClass);
-        assertEquals(expectedASTHans, mockSubClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedASTMockNew.name, expectedASTMockNew);
+        classMap.put(expectedASTHans.name, expectedASTHans);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+
+        assertEquals(getExpectedClassMap().get("MockNew"), resultMap.get("MockNew"));
+        assertEquals(getExpectedClassMap().get("Hans"), resultMap.get("Hans"));
 
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override

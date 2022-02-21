@@ -9,11 +9,11 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.util.*;
 
-import static de.unituebingen.compilerbau.ast.AccessModifier.PRIVATE;
-import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
+import static de.unituebingen.compilerbau.ast.AccessModifier.*;
 import static org.junit.Assert.assertEquals;
 
 public class TestPackagePrivateField extends CompilerTest {
@@ -22,13 +22,8 @@ public class TestPackagePrivateField extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockPackagePrivateField");
-
-        // TODO: Package private (alias no access modifier) should be part of our implementation
-        Field fieldA = new Field(null, PRIVATE, false, "a", null, null);
+    public Map<String, Clazz> getExpectedClassMap() {
+        Field fieldA = new Field(null, PACKAGEPRIVATE, false, "a", null, null);
         List<Field> fields = new ArrayList<>();
         fields.add(fieldA);
 
@@ -38,12 +33,24 @@ public class TestPackagePrivateField extends CompilerTest {
                 fields,
                 Collections.emptyList());
 
-        assertEquals(expectedAST, mockClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+
+        assertEquals(getExpectedClassMap().get("MockPackagePrivateField"), resultMap.get("MockPackagePrivateField"));
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override

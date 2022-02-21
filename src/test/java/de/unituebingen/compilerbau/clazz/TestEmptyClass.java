@@ -7,8 +7,10 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -20,23 +22,32 @@ public class TestEmptyClass extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockEmptyClass = resultMap.get("MockEmptyClass");
-
+    public Map<String, Clazz> getExpectedClassMap() {
         final Clazz expectedAST = new Clazz(
                 AccessModifier.PUBLIC,
                 "MockEmptyClass",
                 Collections.emptyList(),
                 Collections.emptyList());
 
-        assertEquals(mockEmptyClass, expectedAST);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+        Clazz mockEmptyClass = resultMap.get("MockEmptyClass");
+
+        assertEquals(getExpectedClassMap().get("MockEmptyClass"), resultMap.get("MockEmptyClass"));
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override

@@ -9,11 +9,11 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.util.*;
 
-import static de.unituebingen.compilerbau.ast.AccessModifier.PRIVATE;
-import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
+import static de.unituebingen.compilerbau.ast.AccessModifier.*;
 import static org.junit.Assert.assertEquals;
 
 public class TestMethodAccess extends CompilerTest {
@@ -22,15 +22,10 @@ public class TestMethodAccess extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockMethodAccess");
-
-        Method privateMethod = new Method(PUBLIC, false, "privateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
+    public Map<String, Clazz> getExpectedClassMap() {
+        Method privateMethod = new Method(PRIVATE, false, "privateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
         Method publicMethod = new Method(PUBLIC, false, "publicMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
-        // TODO: Add package private Access
-        Method packagePrivateMethod = new Method(PUBLIC, false, "packagePrivateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
+        Method packagePrivateMethod = new Method(PACKAGEPRIVATE, false, "packagePrivateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
 
         List<Method> methods = new ArrayList<>();
         methods.add(privateMethod);
@@ -43,12 +38,25 @@ public class TestMethodAccess extends CompilerTest {
                 Collections.emptyList(),
                 methods);
 
-        assertEquals(expectedAST, mockClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+        Clazz mockClass = resultMap.get("MockMethodAccess");
+
+        assertEquals(getExpectedClassMap(), mockClass);
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override

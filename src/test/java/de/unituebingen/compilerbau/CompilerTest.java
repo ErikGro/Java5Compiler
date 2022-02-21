@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau;
 
+import de.unituebingen.compilerbau.ast.Clazz;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
@@ -13,17 +14,20 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public abstract class CompilerTest {
     /* Below functions to be implemented by subclasses */
 
     public abstract String getMockFilePath();
 
+    public abstract Map<String, Clazz> getExpectedClassMap();
+
     @Test
     public abstract void testAST() throws ASTException, IOException;
 
     @Test
-    public abstract void testTypeCheckedAST() throws TypeCheckException;
+    public abstract void testTypeCheckedAST() throws TypeCheckException, CloneNotSupportedException;
 
     @Test
     public abstract void testGeneratedBytecode() throws CompilerException, IOException;

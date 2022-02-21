@@ -11,6 +11,7 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.util.*;
 
@@ -23,23 +24,18 @@ public class TestMethodParameter extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockMethodParameter");
-
+    public Map<String, Clazz> getExpectedClassMap() {
         Vector<Identifier> parametersA = new Vector<>();
         parametersA.add(new Identifier("a", new Type("int")));
-        Method oneParameter = new Method(PUBLIC, false, "method", new Type("void"), parametersA, new Block(Collections.emptyList()));
+        Method oneParameter = new Method(PUBLIC, false, "method", Type.VOID, parametersA, new Block(Collections.emptyList()));
 
-        // TODO: Be consistent in terms of predefined primitive types and custom types
         Vector<Identifier> parametersB = new Vector<>();
-        parametersB.add(new Identifier("a", new Type("int")));
-        parametersB.add(new Identifier("b", new Type("int")));
-        parametersB.add(new Identifier("c", new Type("int")));
-        parametersB.add(new Identifier("d", new Type("int")));
-        parametersB.add(new Identifier("e", new Type("int")));
-        Method multipleParameters = new Method(PUBLIC, false, "method", new Type("void"), parametersB, new Block(Collections.emptyList()));
+        parametersB.add(new Identifier("a", Type.INT));
+        parametersB.add(new Identifier("b", Type.INT));
+        parametersB.add(new Identifier("c", Type.INT));
+        parametersB.add(new Identifier("d", Type.INT));
+        parametersB.add(new Identifier("e", Type.INT));
+        Method multipleParameters = new Method(PUBLIC, false, "method", Type.VOID, parametersB, new Block(Collections.emptyList()));
 
         List<Method> methods = new ArrayList<>();
         methods.add(oneParameter);
@@ -51,12 +47,25 @@ public class TestMethodParameter extends CompilerTest {
                 Collections.emptyList(),
                 methods);
 
-        assertEquals(expectedAST, mockClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+        Clazz mockClass = resultMap.get("MockMethodParameter");
+
+        assertEquals(getExpectedClassMap(), mockClass);
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override

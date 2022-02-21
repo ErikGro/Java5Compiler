@@ -12,6 +12,7 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.util.*;
 
@@ -24,15 +25,11 @@ public class TestAdd extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockAdd");
-
+    public Map<String, Clazz> getExpectedClassMap() {
         Statement addIntStatement = new LocalVarDeclaration("a", new Add(new IntLiteral(42), new IntLiteral(43)));
         Statement addCharStatement = new LocalVarDeclaration("c", new Add(new CharLiteral('a'), new CharLiteral('b')));
         Block body = new Block(Arrays.asList(addIntStatement, addCharStatement));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(
@@ -41,12 +38,24 @@ public class TestAdd extends CompilerTest {
                 Collections.emptyList(),
                 methods);
 
-        assertEquals(expectedAST, mockClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+
+        assertEquals(getExpectedClassMap().get("MockAdd"), resultMap.get("MockAdd"));
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override

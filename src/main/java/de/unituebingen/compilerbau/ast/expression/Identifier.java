@@ -42,4 +42,12 @@ public class Identifier implements Expression {
     public int hashCode() {
         return Objects.hash(name, type);
     }
+
+    @Override
+    public String toString() {
+        return "Identifier{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                '}';
+    }
 }

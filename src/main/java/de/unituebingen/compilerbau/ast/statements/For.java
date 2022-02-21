@@ -47,4 +47,14 @@ public class For extends Statement
     public int hashCode() {
         return Objects.hash(init, termination, increment, body);
     }
+
+    @Override
+    public String toString() {
+        return "For{" +
+                "init=" + init +
+                ", termination=" + termination +
+                ", increment=" + increment +
+                ", body=" + body +
+                '}';
+    }
 }

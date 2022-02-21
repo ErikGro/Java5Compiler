@@ -17,11 +17,9 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
@@ -32,11 +30,7 @@ public class TestIf extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockIf");
-
+    public Map<String, Clazz> getExpectedClassMap() {
         Block emptyBody = new Block(Collections.emptyList());
 
         Statement if1 = new If(new Greater(new IntLiteral(42), new IntLiteral(0)), emptyBody, null);
@@ -46,7 +40,7 @@ public class TestIf extends CompilerTest {
         Statement if3 = new If(new Equal(new IntLiteral(42), new IntLiteral(42)), emptyBody, elseIf);
 
         Block body = new Block(Arrays.asList(if1, if2, if3));
-        Method testMethod = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), body);
+        Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(
@@ -55,12 +49,24 @@ public class TestIf extends CompilerTest {
                 Collections.emptyList(),
                 methods);
 
-        assertEquals(expectedAST, mockClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+
+        assertEquals(getExpectedClassMap().get("MockIf"), resultMap.get("MockIf"));
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override

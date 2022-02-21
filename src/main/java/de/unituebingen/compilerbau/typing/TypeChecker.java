@@ -31,7 +31,7 @@ public class TypeChecker implements ASTVisitor {
      * @param input Abstract Syntax tree
      * @return true, if the input has no type errors
      */
-    public boolean check(Map<String, Clazz> input) throws TypeCheckException, CloneNotSupportedException {
+    public boolean check(Map<String, Clazz> input) throws TypeCheckException {
         this.clazzes = input;
         for (String name: input.keySet()) {
             this.current = name;

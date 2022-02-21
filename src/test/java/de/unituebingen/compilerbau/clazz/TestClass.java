@@ -11,6 +11,7 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -29,18 +30,12 @@ public class TestClass extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockClass");
-
-        // TODO: Why is owner always null? Expected behaviour? Should this be done in TypeChecking?
-        // TODO: Why is type null here? The explicit type information would be lost otherwise, or?
-        Field fieldA = new Field(null, PUBLIC, false, "a", null, null);
-        Field fieldB = new Field(null, PUBLIC, false, "b", null, null);
-        Field fieldC = new Field(null, PUBLIC, true, "c", null, null);
-        Field fieldD = new Field(null, PRIVATE, false, "d", null, null);
-        Field fieldE = new Field(null, PRIVATE, true, "e", null, null);
+    public Map<String, Clazz> getExpectedClassMap() {
+        Field fieldA = new Field(null, PUBLIC, false, "a", null, Type.INT);
+        Field fieldB = new Field(null, PUBLIC, false, "b", null, Type.INT);
+        Field fieldC = new Field(null, PUBLIC, true, "c", null, Type.INT);
+        Field fieldD = new Field(null, PRIVATE, false, "d", null, Type.INT);
+        Field fieldE = new Field(null, PRIVATE, true, "e", null, Type.INT);
         List<Field> fields = new ArrayList<>();
         fields.add(fieldA);
         fields.add(fieldB);
@@ -48,46 +43,57 @@ public class TestClass extends CompilerTest {
         fields.add(fieldD);
         fields.add(fieldE);
 
-        Method test = new Method(PUBLIC, false, "test", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
-        // TODO: Be consistent in terms of Type, use predefined Type if exists - or use always string value
-        Method test2 = new Method(PUBLIC, false, "test2", new Type("int"), Collections.emptyList(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
+        Method test = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), new Block(Collections.emptyList()));
+        Method test2 = new Method(PUBLIC, false, "test2", Type.INT, Collections.emptyList(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
         List<Method> methods = new ArrayList<>();
         methods.add(test);
         methods.add(test2);
 
-        final Clazz expectedAST = new Clazz(
+        Clazz expectedAST = new Clazz(
                 PUBLIC,
                 "MockClass",
                 fields,
                 methods);
 
-        assertEquals(expectedAST, mockClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
     }
 
     @Override
-    public void testTypeCheckedAST() throws TypeCheckException {
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
 
+        assertEquals(getExpectedClassMap().get("MockClass"), resultMap.get("MockClass"));
+    }
+
+    @Override
+    public void testTypeCheckedAST() throws TypeCheckException, CloneNotSupportedException {
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override
     public void testGeneratedBytecode() throws CompilerException {
-        try {
-            URL url = new File("/Users/privat/repos/compilerbau_ws2021/src/main/resources/InputClass.class").toURI().toURL();
-            URLClassLoader loader = new URLClassLoader(new URL[]{url});
-            Class clazz = loader.loadClass("InputClass");
-            Object instance = clazz.getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException a) {
-            a.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            URL url = new File("/Users/privat/repos/compilerbau_ws2021/src/main/resources/InputClass.class").toURI().toURL();
+//            URLClassLoader loader = new URLClassLoader(new URL[]{url});
+//            Class clazz = loader.loadClass("InputClass");
+//            Object instance = clazz.getDeclaredConstructor().newInstance();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (MalformedURLException a) {
+//            a.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
     }
 }

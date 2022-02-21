@@ -12,6 +12,7 @@ import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
+import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.util.*;
 
@@ -24,13 +25,8 @@ public class TestStaticMethod extends CompilerTest {
     }
 
     @Override
-    public void testAST() throws ASTException {
-        final ScannerParser scannerParser = new ScannerParser();
-        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockStaticMethod");
-
-        // TODO: Might it make sense to also use for void a predefined type?
-        Method staticMethod = new Method(PUBLIC, true, "staticMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
+    public Map<String, Clazz> getExpectedClassMap() {
+        Method staticMethod = new Method(PUBLIC, true, "staticMethod", Type.VOID, Collections.emptyList(), new Block(Collections.emptyList()));
 
         List<Method> methods = new ArrayList<>();
         methods.add(staticMethod);
@@ -41,12 +37,24 @@ public class TestStaticMethod extends CompilerTest {
                 Collections.emptyList(),
                 methods);
 
-        assertEquals(expectedAST, mockClass);
+        Map<String, Clazz> classMap = new HashMap<>();
+        classMap.put(expectedAST.name, expectedAST);
+
+        return classMap;
+    }
+
+    @Override
+    public void testAST() throws ASTException {
+        final ScannerParser scannerParser = new ScannerParser();
+        Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
+
+        assertEquals(getExpectedClassMap().get("MockStaticMethod"), resultMap.get("MockStaticMethod"));
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
-
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.check(getExpectedClassMap());
     }
 
     @Override
