@@ -601,6 +601,7 @@ public class CodeGenerator {
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
             mv.visitInsn(RETURN);
             mv.visitMaxs(0, 0);
+            mv.visitEnd();
         }
 
         for (Field f: input.fields) {
