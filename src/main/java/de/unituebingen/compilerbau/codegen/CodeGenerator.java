@@ -574,8 +574,14 @@ public class CodeGenerator {
         Scope classScope = new Scope(null);
         input.fields.forEach(classScope::add);
 
+        boolean hasConstructor = false;
         for (Method method: input.methods) {
-            MethodVisitor mv = cw.visitMethod(method.access.asm, method.name, method.getDescriptor(), null, null);
+            String methodName = input.name;
+            if (method.name == input.name) {
+                hasConstructor = true;
+                methodName = "<init>";
+            }
+            MethodVisitor mv = cw.visitMethod(method.access.asm, methodName, method.getDescriptor(), null, null);
 
             Visitor visitor = new Visitor(input, new Scope(classScope), mv);
             if (!method.isStatic) {
@@ -587,6 +593,14 @@ public class CodeGenerator {
             method.body.visit(visitor);
             mv.visitEnd();
         }
+
+        if (!hasConstructor) {
+            MethodVisitor mv = cw.visitMethod(AccessModifier.PROTECTED.asm, "<init>","()V", null, null);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+            mv.visitInsn(RETURN);
+        }
+
         for (Field f: input.fields) {
             cw.visitField(f.access.asm, f.getName(), f.getType().name, null, null);
         }
