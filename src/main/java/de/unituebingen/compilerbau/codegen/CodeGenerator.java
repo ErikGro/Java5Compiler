@@ -596,7 +596,7 @@ public class CodeGenerator {
         }
 
         if (!hasConstructor) {
-            MethodVisitor mv = cw.visitMethod(AccessModifier.PROTECTED.asm, "<init>","()V", null, null);
+            MethodVisitor mv = cw.visitMethod(AccessModifier.PUBLIC.asm, "<init>","()V", null, null);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
             mv.visitInsn(RETURN);
