@@ -591,6 +591,7 @@ public class CodeGenerator {
 
             mv.visitCode();
             method.body.visit(visitor);
+            mv.visitMaxs(0, 0);
             mv.visitEnd();
         }
 
