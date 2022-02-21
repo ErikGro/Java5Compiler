@@ -59,8 +59,12 @@ public class TestNonVoidReturnMethod extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockNonVoidReturnMethod");
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("intMethod").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }

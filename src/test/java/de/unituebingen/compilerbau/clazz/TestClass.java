@@ -78,7 +78,7 @@ public class TestClass extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockClass");
     }

@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,7 +33,7 @@ public abstract class CompilerTest {
     public abstract void testTypeCheckedAST() throws TypeCheckException, CloneNotSupportedException;
 
     @Test
-    public abstract void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException;
+    public abstract void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ReflectiveOperationException;
 
     /* Below functions for initializing test case */
 
