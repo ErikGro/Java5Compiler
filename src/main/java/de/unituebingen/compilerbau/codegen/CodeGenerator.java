@@ -453,10 +453,11 @@ public class CodeGenerator {
         @Override
         public void visit(MethodCall methodCall) {
             Method method = methodCall.getMethod();
-            if (!method.isStatic) {
-                if (methodCall.expr == null)
-                    mv.visitVarInsn(ALOAD, 0);
-                else methodCall.expr.visit(this);
+            if (!method.isStatic && methodCall.expr == null) {
+                mv.visitVarInsn(ALOAD, 0);
+            }
+            if (methodCall.expr instanceof DotOperator) {
+                ((DotOperator) methodCall.expr).left.visit(this);
             }
             for (Expression expr : methodCall.args) {
                 expr.visit(this);
