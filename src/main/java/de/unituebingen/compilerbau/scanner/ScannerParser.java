@@ -256,7 +256,7 @@ public class ScannerParser
             Statement increment = null;
             // init, termination and increment are optional thats why we need to check
             // if they are present
-            if (ctx.getChild(2) instanceof JavaFiveGrammarParser.LocalVarDeclarationStatementContext)
+            if (ctx.getChild(2) instanceof JavaFiveGrammarParser.ForInitContext)
             {
                 init = visitForInit(ctx.forInit());
             }
@@ -264,7 +264,7 @@ public class ScannerParser
             {
                 termination = visitExpression(ctx.expression());
             }
-            if (ctx.getChild(6) instanceof JavaFiveGrammarParser.StatementExpressionContext)
+            if (ctx.getChild(6) instanceof JavaFiveGrammarParser.ForIncrementContext)
             {
                 increment = visitForIncrement(ctx.forIncrement());
             }
