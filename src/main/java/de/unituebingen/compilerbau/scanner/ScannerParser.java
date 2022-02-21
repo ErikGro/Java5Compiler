@@ -140,7 +140,7 @@ public class ScannerParser
         {
             if (accessModifier == null)
             {
-                return null;
+                return AccessModifier.PACKAGEPRIVATE;
             }
             switch (accessModifier.getText())
             {
