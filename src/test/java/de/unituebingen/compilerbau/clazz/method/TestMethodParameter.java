@@ -13,6 +13,7 @@ import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
+import java.io.IOException;
 import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
@@ -26,7 +27,7 @@ public class TestMethodParameter extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Vector<Identifier> parametersA = new Vector<>();
-        parametersA.add(new Identifier("a", new Type("int")));
+        parametersA.add(new Identifier("a", Type.INT));
         Method oneParameter = new Method(PUBLIC, false, "method", Type.VOID, parametersA, new Block(Collections.emptyList()));
 
         Vector<Identifier> parametersB = new Vector<>();
@@ -57,9 +58,8 @@ public class TestMethodParameter extends CompilerTest {
     public void testAST() throws ASTException {
         final ScannerParser scannerParser = new ScannerParser();
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockMethodParameter");
 
-        assertEquals(getExpectedClassMap(), mockClass);
+        assertEquals(getExpectedClassMap().get("MockMethodParameter"), resultMap.get("MockMethodParameter"));
     }
 
     @Override
@@ -69,7 +69,8 @@ public class TestMethodParameter extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws CompilerException {
-
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+        compileAndLoadClasses();
+        Class c = this.compiledClasses.get("MockMethodParameter");
     }
 }

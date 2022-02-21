@@ -4,6 +4,7 @@ import de.unituebingen.compilerbau.ast.Clazz;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,6 +15,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class CompilerTest {
@@ -30,17 +32,19 @@ public abstract class CompilerTest {
     public abstract void testTypeCheckedAST() throws TypeCheckException, CloneNotSupportedException;
 
     @Test
-    public abstract void testGeneratedBytecode() throws CompilerException, IOException;
+    public abstract void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException;
 
     /* Below functions for initializing test case */
 
-    Class clazz = null;
-
-    private String sourcecode;
+    public Map<String, Class> compiledClasses = new HashMap<>();
 
     public String getSourcecode() {
         return sourcecode;
     }
+
+    private String sourcecode;
+
+    private String tmpDirectory = System.getProperty("user.dir");
 
     @Before
     public void loadTestFiles() {
@@ -57,12 +61,29 @@ public abstract class CompilerTest {
         }
     }
 
-//    @Before
-//    public void instantiateExpectedClassInstance() throws Exception {
-//        URL target = Paths.get("target", "test-classes").toUri().toURL();
-//        URLClassLoader loader = new URLClassLoader(new URL[]{target});
-//        this.clazz = loader.loadClass("clazz.MockEmptyClass");
-//    }
+    @After
+    public void cleanTemporaryClassFiles() {
+        for (File f : new File(tmpDirectory).listFiles()) {
+            if (f.getName().endsWith(".class")) {
+                f.delete();
+            }
+        }
+    }
+
+    /* Helper methods below */
+
+    public void compileAndLoadClasses() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+        Compiler compiler = new Compiler();
+        Map<String, byte[]> classMap = compiler.compile("src/test/resources/" + getMockFilePath());
+
+        saveByteCodeToFiles(classMap, tmpDirectory);
+
+        for (String entry : classMap.keySet()) {
+            URL projectDir = new File(tmpDirectory).toURI().toURL();
+            URLClassLoader loader = new URLClassLoader(new URL[]{projectDir});
+            this.compiledClasses.put(entry, loader.loadClass(entry));
+        }
+    }
 
     private String readFromInputStream(InputStream inputStream) throws IOException {
         StringBuilder resultStringBuilder = new StringBuilder();
@@ -75,5 +96,19 @@ public abstract class CompilerTest {
         }
 
         return resultStringBuilder.toString();
+    }
+    private void saveByteCodeToFiles(Map<String, byte[]> resultMap, String targetDirectory) {
+        for (Map.Entry<String, byte[]> entry : resultMap.entrySet()) {
+            File classFile = new File(targetDirectory + "/" + entry.getKey() + ".class");
+
+            try {
+                classFile.createNewFile();
+                FileOutputStream outputStream = new FileOutputStream(classFile);
+                outputStream.write(entry.getValue());
+                System.out.println("Created: " + classFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

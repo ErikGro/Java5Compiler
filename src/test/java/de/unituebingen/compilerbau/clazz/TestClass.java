@@ -1,5 +1,6 @@
 package de.unituebingen.compilerbau.clazz;
 
+import de.unituebingen.compilerbau.Compiler;
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
@@ -14,6 +15,7 @@ import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -76,24 +78,8 @@ public class TestClass extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws CompilerException {
-//        try {
-//            URL url = new File("/Users/privat/repos/compilerbau_ws2021/src/main/resources/InputClass.class").toURI().toURL();
-//            URLClassLoader loader = new URLClassLoader(new URL[]{url});
-//            Class clazz = loader.loadClass("InputClass");
-//            Object instance = clazz.getDeclaredConstructor().newInstance();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (MalformedURLException a) {
-//            a.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        }
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+        compileAndLoadClasses();
+        Class c = this.compiledClasses.get("MockClass");
     }
 }

@@ -19,6 +19,7 @@ import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
+import java.io.IOException;
 import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
@@ -70,7 +71,8 @@ public class TestIf extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws CompilerException {
-
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+        compileAndLoadClasses();
+        Class c = this.compiledClasses.get("MockIf");
     }
 }

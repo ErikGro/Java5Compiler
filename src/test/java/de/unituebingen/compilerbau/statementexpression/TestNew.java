@@ -14,9 +14,11 @@ import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+import static de.unituebingen.compilerbau.ast.AccessModifier.PACKAGEPRIVATE;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
 
@@ -44,7 +46,7 @@ public class TestNew extends CompilerTest {
                 methods);
 
         final Clazz expectedASTHans = new Clazz(
-                null,
+                PACKAGEPRIVATE,
                 "Hans",
                 Collections.emptyList(),
                 Collections.emptyList());
@@ -73,7 +75,9 @@ public class TestNew extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws CompilerException {
-
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+        compileAndLoadClasses();
+        Class cMockNew = this.compiledClasses.get("MockNew");
+        Class cHans = this.compiledClasses.get("Hans");
     }
 }

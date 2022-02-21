@@ -11,6 +11,7 @@ import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
+import java.io.IOException;
 import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.*;
@@ -23,9 +24,9 @@ public class TestMethodAccess extends CompilerTest {
 
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
-        Method privateMethod = new Method(PRIVATE, false, "privateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
-        Method publicMethod = new Method(PUBLIC, false, "publicMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
-        Method packagePrivateMethod = new Method(PACKAGEPRIVATE, false, "packagePrivateMethod", new Type("void"), Collections.emptyList(), new Block(Collections.emptyList()));
+        Method privateMethod = new Method(PRIVATE, false, "privateMethod", Type.VOID, Collections.emptyList(), new Block(Collections.emptyList()));
+        Method publicMethod = new Method(PUBLIC, false, "publicMethod", Type.VOID, Collections.emptyList(), new Block(Collections.emptyList()));
+        Method packagePrivateMethod = new Method(PACKAGEPRIVATE, false, "packagePrivateMethod", Type.VOID, Collections.emptyList(), new Block(Collections.emptyList()));
 
         List<Method> methods = new ArrayList<>();
         methods.add(privateMethod);
@@ -48,9 +49,8 @@ public class TestMethodAccess extends CompilerTest {
     public void testAST() throws ASTException {
         final ScannerParser scannerParser = new ScannerParser();
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockMethodAccess");
 
-        assertEquals(getExpectedClassMap(), mockClass);
+        assertEquals(getExpectedClassMap().get("MockMethodAccess"), resultMap.get("MockMethodAccess"));
     }
 
     @Override
@@ -60,7 +60,8 @@ public class TestMethodAccess extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws CompilerException {
-
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+        compileAndLoadClasses();
+        Class c = this.compiledClasses.get("MockMethodAccess");
     }
 }
