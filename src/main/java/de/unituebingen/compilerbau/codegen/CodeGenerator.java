@@ -488,7 +488,7 @@ public class CodeGenerator {
             _for.body.visit(this);
             _for.increment.visit(this);
             System.out.println(_for.increment.getType());
-            if (_for.increment.getType() != null) {
+            if (!_for.increment.getType().equals(Type.VOID)) {
                 mv.visitInsn(POP);
             }
             mv.visitJumpInsn(GOTO, start);
