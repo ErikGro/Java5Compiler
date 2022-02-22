@@ -9,7 +9,7 @@ public class MockClass {
 
     }
 
-    public int test2() {
+    public int returns42() {
         return 42;
     }
 }

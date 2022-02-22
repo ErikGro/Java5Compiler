@@ -8,6 +8,7 @@ import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
 import de.unituebingen.compilerbau.ast.statementexpressions.MethodCall;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
+import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
@@ -44,7 +45,14 @@ public class TestMethodCall extends CompilerTest {
         params2.add(new Identifier("b", Type.INT));
         Method method2Param = new Method(PUBLIC, false, "method2Param", Type.VOID, params2, new Block(Collections.emptyList()));
 
-        List<Method> methods = Arrays.asList(testMethod, methodEmpty, method1Param, method2Param);
+        Block body3 = new Block(Arrays.asList(new Return(new MethodCall(null, "methodReturnsInt", Collections.emptyList()))));
+        Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body3);
+
+        Block body4 = new Block(Arrays.asList(new Return(new IntLiteral(42))));
+        Method returnsIntMethod = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body4);
+
+
+        List<Method> methods = Arrays.asList(testMethod, methodEmpty, method1Param, method2Param, returns42Method, returnsIntMethod);
 
         final Clazz expectedAST = new Clazz(
                 PUBLIC,
@@ -73,8 +81,13 @@ public class TestMethodCall extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockMethodCall");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }

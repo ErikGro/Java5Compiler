@@ -16,4 +16,12 @@ public class MockIf {
 
         }
     }
+
+    public int returns42() {
+        if (true) {
+            return 42;
+        } else {
+            return 0;
+        }
+    }
 }

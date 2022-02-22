@@ -3,16 +3,15 @@ package de.unituebingen.compilerbau.statement;
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
+import de.unituebingen.compilerbau.ast.expression.Ternary;
 import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.Equal;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.Greater;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.Less;
+import de.unituebingen.compilerbau.ast.expression.unary.Not;
 import de.unituebingen.compilerbau.ast.statementexpressions.Increment;
-import de.unituebingen.compilerbau.ast.statements.Block;
-import de.unituebingen.compilerbau.ast.statements.For;
-import de.unituebingen.compilerbau.ast.statements.If;
-import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
+import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
@@ -42,7 +41,13 @@ public class TestIf extends CompilerTest {
 
         Block body = new Block(Arrays.asList(if1, if2, if3));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
-        List<Method> methods = Arrays.asList(testMethod);
+
+        If ifStmt = new If( new BooleanLiteral(true),
+                            new Block(Arrays.asList(new Return(new IntLiteral(42)))),
+                            new Block(Arrays.asList(new Return(new IntLiteral(0)))));
+        Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), ifStmt);
+
+        List<Method> methods = Arrays.asList(testMethod, returns42Method);
 
         final Clazz expectedAST = new Clazz(
                 PUBLIC,
@@ -71,8 +76,13 @@ public class TestIf extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockIf");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }

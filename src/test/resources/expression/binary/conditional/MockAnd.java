@@ -5,4 +5,13 @@ public class MockAnd {
         boolean c = true && true && true;
         boolean d = true && true && false && true;
     }
+
+    public int returns42() {
+        boolean a = true && true;
+        if (a) {
+            return 42;
+        } else {
+            return 0;
+        }
+    }
 }

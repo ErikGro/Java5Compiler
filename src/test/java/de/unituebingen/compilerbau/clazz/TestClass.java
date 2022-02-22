@@ -46,7 +46,7 @@ public class TestClass extends CompilerTest {
         fields.add(fieldE);
 
         Method test = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), new Block(Collections.emptyList()));
-        Method test2 = new Method(PUBLIC, false, "test2", Type.INT, Collections.emptyList(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
+        Method test2 = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
         List<Method> methods = new ArrayList<>();
         methods.add(test);
         methods.add(test2);

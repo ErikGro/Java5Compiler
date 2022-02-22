@@ -60,6 +60,5 @@ public class TestReturn extends CompilerTest {
     @Override
     public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
         compileAndLoadClasses();
-        Class c = this.compiledClasses.get("MockReturn");
     }
 }

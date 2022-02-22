@@ -8,6 +8,7 @@ import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
+import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
@@ -30,7 +31,11 @@ public class TestDivide extends CompilerTest {
         Statement addIntStatement = new LocalVarDeclaration("a", new Divide(new IntLiteral(10), new IntLiteral(5)));
         Block body = new Block(Arrays.asList(addIntStatement));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
-        List<Method> methods = Arrays.asList(testMethod);
+
+        Block body2 = new Block(Arrays.asList(new Return(new Divide(new IntLiteral(84), new IntLiteral(2)))));
+        Method return42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
+
+        List<Method> methods = Arrays.asList(testMethod, return42Method);
 
         final Clazz expectedAST = new Clazz(
                 PUBLIC,
@@ -59,8 +64,13 @@ public class TestDivide extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockDivide");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }

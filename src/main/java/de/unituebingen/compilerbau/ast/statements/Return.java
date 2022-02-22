@@ -37,4 +37,11 @@ public class Return extends Statement
     public int hashCode() {
         return Objects.hash(expr);
     }
+
+    @Override
+    public String toString() {
+        return "Return{" +
+                "expr=" + expr +
+                '}';
+    }
 }
