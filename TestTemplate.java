@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestEmptyClass extends CompilerTest {
+public class TestTemplate extends CompilerTest {
     @Override
     public String getMockFilePath() {
         return "/MockFolder/MockTemplate.java";
@@ -26,6 +26,7 @@ public class TestEmptyClass extends CompilerTest {
                 "MockTemplate",
                 Collections.emptyList(),
                 Collections.emptyList());
+        // TODO: Add AST
 
         Map<String, Clazz> classMap = new HashMap<>();
         classMap.put(expectedAST.name, expectedAST);
@@ -37,7 +38,6 @@ public class TestEmptyClass extends CompilerTest {
     public void testAST() throws ASTException {
         final ScannerParser scannerParser = new ScannerParser();
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockEmptyClass = resultMap.get("MockTemplate");
 
         assertEquals(getExpectedClassMap().get("MockTemplate"), resultMap.get("MockTemplate"));
     }
@@ -52,5 +52,7 @@ public class TestEmptyClass extends CompilerTest {
     public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockTemplate");
+
+        // TODO: Add code gen tests
     }
 }
