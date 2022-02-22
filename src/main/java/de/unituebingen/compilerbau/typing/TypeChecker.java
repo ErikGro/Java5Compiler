@@ -68,8 +68,15 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Identifier identifier) throws TypeCheckException {
-        // TODO: Check if name is declared!
-        identifier.setType(this.env.lookup(identifier.name));
+        if (identifier.name.equals("this"))
+            identifier.setType(new Type(current));
+        else {
+            Type type = this.env.lookup(identifier.name);
+            if (type == null)
+                throw new TypeCheckException("Name '" + identifier.name + "' is not declared");
+
+            identifier.setType(type);
+        }
     }
 
     @Override
