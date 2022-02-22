@@ -61,18 +61,9 @@ public abstract class CompilerTest {
         }
     }
 
-//    @After
-//    public void cleanTemporaryClassFiles() {
-//        for (File f : new File(tmpDirectory).listFiles()) {
-//            if (f.getName().endsWith(".class")) {
-//                f.delete();
-//            }
-//        }
-//    }
-
     /* Helper methods below */
 
-    private String getMockFileDirecoty() {
+    private String getMockFileDirectory() {
         String[] components = getMockFilePath().split("/");
         if (components.length > 1) {
             components = Arrays.copyOf(components, components.length-1);
@@ -84,10 +75,10 @@ public abstract class CompilerTest {
         Compiler compiler = new Compiler();
         Map<String, byte[]> classMap = compiler.compile("src/test/resources/" + getMockFilePath());
 
-        saveByteCodeToFiles(classMap, getMockFileDirecoty());
+        saveByteCodeToFiles(classMap, getMockFileDirectory());
 
         for (String entry : classMap.keySet()) {
-            URL projectDir = new File(getMockFileDirecoty()).toURI().toURL();
+            URL projectDir = new File(getMockFileDirectory()).toURI().toURL();
             URLClassLoader loader = new URLClassLoader(new URL[]{projectDir});
             this.compiledClasses.put(entry, loader.loadClass(entry));
         }
