@@ -3,4 +3,13 @@ public class MockBitAnd {
         int a = 1 & 2;
         int b = 42 & 295;
     }
+
+    public int returns42() {
+        int a = 1 & 2;
+        if (a == 0) {
+            return 42;
+        } else {
+            return 0;
+        }
+    }
 }

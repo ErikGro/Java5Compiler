@@ -8,6 +8,7 @@ import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
+import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
@@ -31,7 +32,11 @@ public class TestAdd extends CompilerTest {
         Statement addCharStatement = new LocalVarDeclaration("c", new Add(new CharLiteral('a'), new CharLiteral('b')));
         Block body = new Block(Arrays.asList(addIntStatement, addCharStatement));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
-        List<Method> methods = Arrays.asList(testMethod);
+
+        Block body2 = new Block(Arrays.asList(new Return(new Add(new IntLiteral(41), new IntLiteral(1)))));
+        Method return42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
+
+        List<Method> methods = Arrays.asList(testMethod, return42Method);
 
         final Clazz expectedAST = new Clazz(
                 PUBLIC,
@@ -60,8 +65,13 @@ public class TestAdd extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockAdd");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }

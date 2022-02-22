@@ -225,6 +225,7 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Increment increment) throws TypeCheckException {
+        System.out.println(increment);
         // TODO: Only identifiers may be incremented!
         expect(Type.INT, increment.expression);
         increment.setType(Type.INT);
@@ -270,7 +271,9 @@ public class TypeChecker implements ASTVisitor {
     @Override
     public void visit(For _for) throws TypeCheckException {
         env.openScope();
-        expect(Type.BOOLEAN, _for.termination);
+        if (_for.init != null ) _for.init.visit(this);
+        if (_for.termination != null) expect(Type.BOOLEAN, _for.termination);
+        if (_for.increment != null) _for.increment.visit(this);
         _for.body.visit(this);
         _for.setType(_for.body.getType());
         env.closeScope();

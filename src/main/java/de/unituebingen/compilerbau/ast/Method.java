@@ -1,6 +1,7 @@
 package de.unituebingen.compilerbau.ast;
 
 import de.unituebingen.compilerbau.ast.expression.Identifier;
+import de.unituebingen.compilerbau.ast.statements.Block;
 
 import java.util.List;
 import java.util.Objects;
@@ -64,13 +65,22 @@ public class Method {
 
     @Override
     public String toString() {
+        String bodyString = "";
+        if (body instanceof Block) {
+            for (Statement s : ((Block) body).body) {
+                bodyString += s.toString() + "\n";
+            }
+        } else {
+            bodyString = body.toString();
+        }
+
         return "Method{" +
-                "access=" + access +
-                ", isStatic=" + isStatic +
-                ", name='" + name + '\'' +
-                ", returnType=" + returnType +
-                ", parameters=" + parameters +
-                ", body=" + body +
+                "\n\taccess=" + access +
+                ", \n\tisStatic=" + isStatic +
+                ", \n\tname='" + name +
+                ", \n\treturnType=" + returnType +
+                ", \n\tparameters=" + parameters +
+                ", \n\tbody=" + bodyString +
                 ", descriptor='" + descriptor + '\'' +
                 '}';
     }

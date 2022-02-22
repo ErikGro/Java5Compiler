@@ -27,7 +27,7 @@ public class TestNonVoidReturnMethod extends CompilerTest {
 
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
-        Method nonVoidReturnMethod = new Method(PUBLIC, false, "intMethod", Type.INT, Collections.emptyList(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
+        Method nonVoidReturnMethod = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), new Block(Arrays.asList(new Return(new IntLiteral(42)))));
 
         List<Method> methods = new ArrayList<>();
         methods.add(nonVoidReturnMethod);
@@ -63,7 +63,7 @@ public class TestNonVoidReturnMethod extends CompilerTest {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockNonVoidReturnMethod");
         Object instance = c.getDeclaredConstructor().newInstance();
-        int returnValue = (int) c.getDeclaredMethod("intMethod").invoke(instance);
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
 
         assertEquals(42, returnValue);
     }

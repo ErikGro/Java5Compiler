@@ -64,6 +64,5 @@ public class TestLocalVarDeclaration extends CompilerTest {
     @Override
     public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
         compileAndLoadClasses();
-        Class c = this.compiledClasses.get("MockLocalVarDeclaration");
     }
 }

@@ -28,9 +28,12 @@ public class TestStaticMethod extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Method staticMethod = new Method(PUBLIC, true, "staticMethod", Type.VOID, Collections.emptyList(), new Block(Collections.emptyList()));
+        Block body = new Block(Arrays.asList(new Return(new IntLiteral(42))));
+        Method return42Method = new Method(PUBLIC, true, "returns42", Type.INT, Collections.emptyList(), body);
 
         List<Method> methods = new ArrayList<>();
         methods.add(staticMethod);
+        methods.add(return42Method);
 
         final Clazz expectedAST = new Clazz(
                 PUBLIC,
@@ -59,8 +62,13 @@ public class TestStaticMethod extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockStaticMethod");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }

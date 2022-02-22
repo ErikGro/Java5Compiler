@@ -43,4 +43,13 @@ public class If extends Statement
     public int hashCode() {
         return Objects.hash(condition, body, elseBody);
     }
+
+    @Override
+    public String toString() {
+        return "If{" +
+                "condition=" + condition +
+                ", body=" + body +
+                ", elseBody=" + elseBody +
+                '}';
+    }
 }

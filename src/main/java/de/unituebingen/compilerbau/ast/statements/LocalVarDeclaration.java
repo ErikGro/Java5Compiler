@@ -40,6 +40,7 @@ public class LocalVarDeclaration extends Statement
         return "LocalVarDeclaration{" +
                 "name='" + name + '\'' +
                 ", expression=" + expression +
+                ", type=" + getType() +
                 '}';
     }
 
