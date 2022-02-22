@@ -47,6 +47,7 @@ public class CodeGenerator {
 
         LocalOrFieldVar get(String name) {
             LocalOrFieldVar variable = vars.get(name);
+            if (variable != null) return variable;
             if (variable == null && parent != null) {
                 return parent.get(name);
             }
@@ -596,6 +597,9 @@ public class CodeGenerator {
                 mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
             }
             method.body.visit(visitor);
+            if (method.returnType.equals(Type.VOID)) {
+                mv.visitInsn(RETURN);
+            }
             mv.visitMaxs(0, 0);
             mv.visitEnd();
         }
@@ -610,7 +614,7 @@ public class CodeGenerator {
         }
 
         for (Field f: input.fields) {
-            cw.visitField(f.access.asm, f.getName(), f.getType().name, null, null);
+            cw.visitField(f.access.asm | (f.isStatic ? ACC_STATIC : 0), f.getName(), f.getType().name, null, null).visitEnd();
         }
 
         cw.visitEnd();
