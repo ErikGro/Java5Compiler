@@ -302,7 +302,14 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(LocalVarDeclaration localVarDeclaration) throws TypeCheckException {
-        // TODO:
+        // LocalVarDeclaration has its type already set by the parser!
+        this.env.addToScope(new Identifier(localVarDeclaration.name, localVarDeclaration.getType()));
+        if (localVarDeclaration.expression != null) {
+            localVarDeclaration.expression.visit(this);
+            if (localVarDeclaration.expression.getType() != localVarDeclaration.getType())
+                throw new TypeCheckException("Assigned value does not match the declared type of " +
+                        localVarDeclaration.name);
+        }
     }
 
     @Override

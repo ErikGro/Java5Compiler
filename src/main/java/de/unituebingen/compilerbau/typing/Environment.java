@@ -32,7 +32,12 @@ public class Environment implements Cloneable {
         this.prev = this.prev.prev;
     }
 
-    public void addToScope(Identifier id) {
+    public void addToScope(Identifier id) throws TypeCheckException{
+        for (Identifier i: this.scope) {
+            if (i.name.equals(id.name))
+                throw new TypeCheckException("Redeclaration of " + id.name);
+        }
+
         this.scope.add(id);
     }
 
