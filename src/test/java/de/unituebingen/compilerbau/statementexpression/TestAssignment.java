@@ -29,8 +29,10 @@ public class TestAssignment extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement initA = new LocalVarDeclaration("a", null);
+        initA.setType(Type.INT);
         Statement assignment = new Assignment(new Identifier("a", null), new IntLiteral(42));
         Statement b = new LocalVarDeclaration("b", new IntLiteral(43));
+        b.setType(Type.INT);
 
         Block body = new Block(Arrays.asList(initA, assignment, b));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);

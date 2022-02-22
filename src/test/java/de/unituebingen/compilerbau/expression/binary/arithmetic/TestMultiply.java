@@ -28,6 +28,7 @@ public class TestMultiply extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement multiplyIntsStatement = new LocalVarDeclaration("a", new Multiply(new IntLiteral(42), new IntLiteral(43)));
+        multiplyIntsStatement.setType(Type.INT);
         Block body = new Block(Arrays.asList(multiplyIntsStatement));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

@@ -35,6 +35,7 @@ public class TestWhile extends CompilerTest {
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement iDecl = new LocalVarDeclaration("i", new IntLiteral(0));
+        iDecl.setType(Type.INT);
         Statement whileLoop2 = new While(new Less(new Identifier("i", null), new IntLiteral(42)),
                 new Block(Arrays.asList(new Increment(new Identifier("i", null), true)))
                 );

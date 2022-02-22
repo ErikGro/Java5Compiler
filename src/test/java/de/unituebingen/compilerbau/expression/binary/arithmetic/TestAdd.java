@@ -29,7 +29,9 @@ public class TestAdd extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement addIntStatement = new LocalVarDeclaration("a", new Add(new IntLiteral(42), new IntLiteral(43)));
+        addIntStatement.setType(Type.INT);
         Statement addCharStatement = new LocalVarDeclaration("c", new Add(new CharLiteral('a'), new CharLiteral('b')));
+        addCharStatement.setType(Type.CHAR);
         Block body = new Block(Arrays.asList(addIntStatement, addCharStatement));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

@@ -30,6 +30,7 @@ public class TestLocalVarDeclaration extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement s = new LocalVarDeclaration("test", null);
+        s.setType(Type.INT);
 
         Block body = new Block(Arrays.asList(s));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);

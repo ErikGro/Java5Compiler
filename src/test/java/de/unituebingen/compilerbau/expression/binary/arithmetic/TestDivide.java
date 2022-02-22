@@ -29,6 +29,7 @@ public class TestDivide extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement addIntStatement = new LocalVarDeclaration("a", new Divide(new IntLiteral(10), new IntLiteral(5)));
+        addIntStatement.setType(Type.INT);
         Block body = new Block(Arrays.asList(addIntStatement));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

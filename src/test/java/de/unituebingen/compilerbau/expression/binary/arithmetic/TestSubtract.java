@@ -28,6 +28,7 @@ public class TestSubtract extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement subtractStatement = new LocalVarDeclaration("a", new Subtract(new IntLiteral(42), new IntLiteral(43)));
+        subtractStatement.setType(Type.INT);
         Block body = new Block(Arrays.asList(subtractStatement));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

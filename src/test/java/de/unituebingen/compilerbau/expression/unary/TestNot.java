@@ -32,8 +32,11 @@ public class TestNot extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new Not(new BooleanLiteral(true)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new Not(new Not(new BooleanLiteral(true))));
+        statementB.setType(Type.BOOLEAN);
         Statement statementC = new LocalVarDeclaration("c", new Not(new Greater(new IntLiteral(42), new IntLiteral(43))));
+        statementC.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB, statementC));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

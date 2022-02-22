@@ -31,7 +31,9 @@ public class TestTerniary extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new Ternary(new BooleanLiteral(true), new IntLiteral(42), new IntLiteral(43)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new Ternary(new BooleanLiteral(false), new IntLiteral(42), new IntLiteral(43)));
+        statementB.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

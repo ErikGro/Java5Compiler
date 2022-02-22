@@ -34,6 +34,7 @@ public class TestNew extends CompilerTest {
         fields.add(hans);
 
         Statement initHans = new LocalVarDeclaration("h", new New(Collections.emptyList()));
+        initHans.setType(new Type("Hans"));
         Block body = new Block(Arrays.asList(initHans));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

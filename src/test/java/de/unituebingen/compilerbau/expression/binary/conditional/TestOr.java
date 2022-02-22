@@ -31,13 +31,18 @@ public class TestOr extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new Or(new BooleanLiteral(true), new BooleanLiteral(true)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new Or(new BooleanLiteral(true), new BooleanLiteral(false)));
+        statementB.setType(Type.BOOLEAN);
         Statement statementC = new LocalVarDeclaration("c", new Or(new Or(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(true)));
+        statementC.setType(Type.BOOLEAN);
         Statement statementD = new LocalVarDeclaration("d", new Or(new Or(new Or(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(false)), new BooleanLiteral(true)));
+        statementD.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB, statementC, statementD));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement aDecl = new LocalVarDeclaration("a", new Or(new BooleanLiteral(true), new BooleanLiteral(false)));
+        aDecl.setType(Type.BOOLEAN);
         Statement ifStmt = new If(
                         new Identifier("a", null),
                         new Block(Arrays.asList(new Return(new IntLiteral(42)))),

@@ -32,11 +32,14 @@ public class TestBitAnd extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement bitAndA = new LocalVarDeclaration("a", new BitAnd(new IntLiteral(1), new IntLiteral(2)));
+        bitAndA.setType(Type.INT);
         Statement bitAndB = new LocalVarDeclaration("b", new BitAnd(new IntLiteral(42), new IntLiteral(295)));
+        bitAndB.setType(Type.INT);
         Block body = new Block(Arrays.asList(bitAndA, bitAndB));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement aDecl = new LocalVarDeclaration("a", new BitAnd(new IntLiteral(1), new IntLiteral(2)));
+        aDecl.setType(Type.INT);
         Statement ifStmt = new If(
                         new Equal(new Identifier("a", null), new IntLiteral(0)),
                         new Block(Arrays.asList(new Return(new IntLiteral(42)))),

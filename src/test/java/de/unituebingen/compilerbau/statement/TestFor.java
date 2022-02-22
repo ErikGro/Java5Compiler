@@ -36,6 +36,7 @@ public class TestFor extends CompilerTest {
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement init2 = new LocalVarDeclaration("i", new IntLiteral(0));
+        init2.setType(Type.INT);
         Expression termination2 = new LessOrEqual(new Identifier("i", null), new IntLiteral(42));
         Statement increment2 = new Increment(new Identifier("i", null), true);
         If bodyForLoop = new If(

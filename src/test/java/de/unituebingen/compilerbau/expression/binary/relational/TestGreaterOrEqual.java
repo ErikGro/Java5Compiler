@@ -31,12 +31,16 @@ public class TestGreaterOrEqual extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new GreaterOrEqual(new IntLiteral(42), new IntLiteral(43)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new GreaterOrEqual(new IntLiteral(42), new IntLiteral(42)));
+        statementB.setType(Type.BOOLEAN);
         Statement statementC = new LocalVarDeclaration("c", new GreaterOrEqual(new IntLiteral(42), new IntLiteral(41)));
+        statementC.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB, statementC));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement aDecl = new LocalVarDeclaration("a", new GreaterOrEqual(new IntLiteral(44), new IntLiteral(43)));
+        aDecl.setType(Type.BOOLEAN);
         Statement ifStmt = new If(
                         new Identifier("a", null),
                         new Block(Arrays.asList(new Return(new IntLiteral(42)))),

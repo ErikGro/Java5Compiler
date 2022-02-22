@@ -31,11 +31,14 @@ public class TestEqual extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new Equal(new IntLiteral(42), new IntLiteral(43)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new Equal(new IntLiteral(42), new IntLiteral(42)));
+        statementB.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement aDecl = new LocalVarDeclaration("a", new Equal(new IntLiteral(44), new IntLiteral(44)));
+        aDecl.setType(Type.BOOLEAN);
         Statement ifStmt = new If(
                         new Identifier("a", null),
                         new Block(Arrays.asList(new Return(new IntLiteral(42)))),
