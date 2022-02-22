@@ -25,6 +25,8 @@ import org.antlr.v4.tool.DOTGenerator;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.util.CheckClassAdapter;
+
 import static org.objectweb.asm.Opcodes.*;
 
 import java.util.HashMap;
@@ -485,6 +487,10 @@ public class CodeGenerator {
             mv.visitJumpInsn(IFEQ, end);
             _for.body.visit(this);
             _for.increment.visit(this);
+            System.out.println(_for.increment.getType());
+            if (_for.increment.getType() != null) {
+                mv.visitInsn(POP);
+            }
             mv.visitJumpInsn(GOTO, start);
             mv.visitLabel(end);
             scope = scope.parent;
