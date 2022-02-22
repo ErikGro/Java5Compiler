@@ -16,7 +16,6 @@ import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PACKAGEPRIVATE;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;

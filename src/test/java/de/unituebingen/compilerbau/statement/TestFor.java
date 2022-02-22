@@ -10,7 +10,6 @@ import de.unituebingen.compilerbau.ast.expression.relationaloperators.LessOrEqua
 import de.unituebingen.compilerbau.ast.statementexpressions.Increment;
 import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;

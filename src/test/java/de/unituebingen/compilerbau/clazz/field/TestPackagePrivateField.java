@@ -1,7 +1,9 @@
 package de.unituebingen.compilerbau.clazz.field;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Field;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.exception.ASTException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
@@ -10,7 +12,8 @@ import de.unituebingen.compilerbau.typing.TypeChecker;
 import java.io.IOException;
 import java.util.*;
 
-import static de.unituebingen.compilerbau.ast.AccessModifier.*;
+import static de.unituebingen.compilerbau.ast.AccessModifier.PACKAGEPRIVATE;
+import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
 
 public class TestPackagePrivateField extends CompilerTest {

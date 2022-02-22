@@ -4,7 +4,6 @@ import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.ast.AccessModifier;
 import de.unituebingen.compilerbau.ast.Clazz;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
