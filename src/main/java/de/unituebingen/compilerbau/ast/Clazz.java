@@ -16,6 +16,24 @@ public class Clazz {
         this.methods = methods;
     }
 
+    public Field fieldByName(String name) {
+        for (Field f: this.fields) {
+            if (f.getName().equals(name))
+                return f;
+        }
+
+        return null;
+    }
+
+    public Method methodByName(String name) {
+        for (Method m: this.methods) {
+            if (m.name.equals(name))
+                return m;
+        }
+
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
