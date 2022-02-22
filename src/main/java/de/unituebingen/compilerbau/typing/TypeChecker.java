@@ -253,7 +253,16 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(MethodCall methodCall) throws TypeCheckException {
-        // TODO:
+        // TODO: The class might not exist!
+        methodCall.expr.visit(this);
+        Clazz clazz = this.clazzes.get(methodCall.expr.getType().name);
+        // TODO: The method might not exist!
+        for (Expression arg: methodCall.args)
+            arg.visit(this);
+        Method method = clazz.findMethod(methodCall.name, methodCall.args);
+
+        // TODO: Need to implement the things I was asked to!
+        methodCall.setType(method.returnType);
     }
 
     @Override

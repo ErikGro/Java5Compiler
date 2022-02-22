@@ -25,10 +25,16 @@ public class Clazz {
         return null;
     }
 
-    public Method methodByName(String name) {
+    public Method findMethod(String name, List<Expression> params) {
         for (Method m: this.methods) {
-            if (m.name.equals(name))
-                return m;
+            if (m.name.equals(name) && m.parameters.size() == params.size()) {
+                boolean matches = true;
+                for (int i = 0; i < params.size(); i++)
+                    matches &= m.parameters.get(i).getType() == params.get(i).getType();
+
+                if (matches)
+                    return m;
+            }
         }
 
         return null;
