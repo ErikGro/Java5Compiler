@@ -16,6 +16,7 @@ public class MethodCall extends StatementExpression
     public Expression expr;
     public final String name;
     public final List<Expression> args;
+    public boolean isStatic;
     protected Method method;
 
     public MethodCall(

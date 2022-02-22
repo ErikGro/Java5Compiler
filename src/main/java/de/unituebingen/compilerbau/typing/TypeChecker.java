@@ -93,13 +93,9 @@ public class TypeChecker implements ASTVisitor {
         // TODO: Does this class exist?
         Clazz clazz = this.clazzes.get(dotOperator.left.getType().name);
         // TODO: Does this field exist in that class?
-        for (Field field: clazz.fields) {
-            if (field.getName().equals(dotOperator.right)) {
-                // TODO: Is it public?
-                dotOperator.setType(field.getType());
-                break;
-            }
-        }
+        Field field = clazz.fieldByName(dotOperator.right);
+        dotOperator.setType(field.getType());
+        dotOperator.setStatic(field.isStatic);
     }
 
     @Override
@@ -262,6 +258,7 @@ public class TypeChecker implements ASTVisitor {
         Method method = clazz.findMethod(methodCall.name, methodCall.args);
 
         // TODO: Need to implement the things I was asked to!
+        methodCall.isStatic = method.isStatic;
         methodCall.setType(method.returnType);
     }
 
