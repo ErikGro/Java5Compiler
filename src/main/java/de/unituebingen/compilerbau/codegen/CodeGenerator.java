@@ -584,7 +584,7 @@ public class CodeGenerator {
         boolean hasConstructor = false;
         for (Method method: input.methods) {
             String methodName = method.name;
-            boolean isConstructor = method.name == input.name;
+            boolean isConstructor = method.name.equals(input.name);
             if (isConstructor) {
                 hasConstructor = true;
                 methodName = "<init>";
