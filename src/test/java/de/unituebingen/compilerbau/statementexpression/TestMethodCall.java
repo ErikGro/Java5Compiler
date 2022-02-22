@@ -49,7 +49,7 @@ public class TestMethodCall extends CompilerTest {
         Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body3);
 
         Block body4 = new Block(Arrays.asList(new Return(new IntLiteral(42))));
-        Method returnsIntMethod = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body4);
+        Method returnsIntMethod = new Method(PUBLIC, false, "methodReturnsInt", Type.INT, Collections.emptyList(), body4);
 
 
         List<Method> methods = Arrays.asList(testMethod, methodEmpty, method1Param, method2Param, returns42Method, returnsIntMethod);

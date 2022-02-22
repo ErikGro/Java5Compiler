@@ -12,6 +12,6 @@ public class MockFor {
             }
         }
 
-        return -1;
+        return 0;
     }
 }

@@ -39,8 +39,8 @@ public class TestLess extends CompilerTest {
         Statement aDecl = new LocalVarDeclaration("a", new Less(new IntLiteral(42), new IntLiteral(43)));
         Statement ifStmt = new If(
                 new Identifier("a", null),
-                new Return(new IntLiteral(42)),
-                new Return(new IntLiteral(0)));
+                new Block(Arrays.asList(new Return(new IntLiteral(42)))),
+                new Block(Arrays.asList(new Return(new IntLiteral(0)))));
         Block body2 = new Block(Arrays.asList(aDecl, ifStmt));
         Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
 
@@ -62,7 +62,6 @@ public class TestLess extends CompilerTest {
     public void testAST() throws ASTException {
         final ScannerParser scannerParser = new ScannerParser();
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockClass = resultMap.get("MockLess");
 
         assertEquals(getExpectedClassMap().get("MockLess"), resultMap.get("MockLess"));
     }

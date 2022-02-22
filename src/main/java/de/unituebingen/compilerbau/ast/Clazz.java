@@ -41,14 +41,14 @@ public class Clazz {
 
         String methodsString = "";
         for (Method m : methods) {
-            methodsString += m.toString() + "\n";
+            methodsString += m.toString();
         }
 
         return "Clazz{" +
                 "\naccess=" + access +
                 ",\nname='" + name + '\'' +
-                ",\nfields=" + fieldsString +
-                ",\nmethods=" + methodsString +
+                ",\nfields=\n" + fieldsString +
+                ",\nmethods=\n" + methodsString +
                 '}';
     }
 }

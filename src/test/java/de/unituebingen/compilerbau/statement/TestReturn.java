@@ -28,7 +28,7 @@ public class TestReturn extends CompilerTest {
         Statement s = new Return(new IntLiteral(42));
 
         Block body = new Block(Arrays.asList(s));
-        Method testMethod = new Method(PUBLIC, false, "test", Type.INT, Collections.emptyList(), body);
+        Method testMethod = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body);
         List<Method> methods = Arrays.asList(testMethod);
 
         final Clazz expectedAST = new Clazz(
@@ -58,7 +58,13 @@ public class TestReturn extends CompilerTest {
     }
 
     @Override
-    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException {
+    public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
+        Class c = this.compiledClasses.get("MockNonVoidReturnMethod");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }

@@ -3,6 +3,7 @@ package de.unituebingen.compilerbau.expression.binary.relational;
 import de.unituebingen.compilerbau.CompilerTest;
 import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
+import de.unituebingen.compilerbau.ast.expression.conditionaloperators.ConditionalOperator;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.LessOrEqual;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.NotEqual;
@@ -20,7 +21,9 @@ import java.io.IOException;
 import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class TestNotEqual extends CompilerTest {
     public String getMockFilePath() {
@@ -35,10 +38,11 @@ public class TestNotEqual extends CompilerTest {
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement aDecl = new LocalVarDeclaration("a", new NotEqual(new IntLiteral(1), new IntLiteral(0)));
+        aDecl.setType(Type.BOOLEAN);
         Statement ifStmt = new If(
                 new Identifier("a", null),
-                new Return(new IntLiteral(42)),
-                new Return(new IntLiteral(0)));
+                new Block(Arrays.asList(new Return(new IntLiteral(42)))),
+                new Block(Arrays.asList(new Return(new IntLiteral(0)))));
         Block body2 = new Block(Arrays.asList(aDecl, ifStmt));
         Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
 
@@ -61,7 +65,7 @@ public class TestNotEqual extends CompilerTest {
         final ScannerParser scannerParser = new ScannerParser();
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
 
-        assertEquals(getExpectedClassMap().get("MockNotEqual"), resultMap.get("MockNotEqual"));
+        assertThat(resultMap.get("MockNotEqual"), is(getExpectedClassMap().get("MockNotEqual")));
     }
 
     @Override

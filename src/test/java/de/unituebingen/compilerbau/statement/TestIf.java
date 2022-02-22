@@ -32,20 +32,18 @@ public class TestIf extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Block emptyBody = new Block(Collections.emptyList());
-
         Statement if1 = new If(new Greater(new IntLiteral(42), new IntLiteral(0)), emptyBody, null);
         Statement if2 = new If(new Less(new IntLiteral(42), new IntLiteral(0)), emptyBody, null);
-
         Statement elseIf = new If(new BooleanLiteral(true), emptyBody, emptyBody);
         Statement if3 = new If(new Equal(new IntLiteral(42), new IntLiteral(42)), emptyBody, elseIf);
-
         Block body = new Block(Arrays.asList(if1, if2, if3));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         If ifStmt = new If( new BooleanLiteral(true),
                             new Block(Arrays.asList(new Return(new IntLiteral(42)))),
                             new Block(Arrays.asList(new Return(new IntLiteral(0)))));
-        Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), ifStmt);
+        Block body2 = new Block(Arrays.asList(ifStmt));
+        Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
 
         List<Method> methods = Arrays.asList(testMethod, returns42Method);
 

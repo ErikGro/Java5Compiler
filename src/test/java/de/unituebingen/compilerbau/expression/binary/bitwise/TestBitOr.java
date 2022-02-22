@@ -37,9 +37,9 @@ public class TestBitOr extends CompilerTest {
 
         Statement aDecl = new LocalVarDeclaration("a", new BitOr(new IntLiteral(1), new IntLiteral(2)));
         Statement ifStmt = new If(
-                new Equal(new Identifier("a", null), new IntLiteral(3)),
-                new Return(new IntLiteral(42)),
-                new Return(new IntLiteral(0)));
+                        new Equal(new Identifier("a", null), new IntLiteral(3)),
+                        new Block(Arrays.asList(new Return(new IntLiteral(42)))),
+                        new Block(Arrays.asList(new Return(new IntLiteral(0)))));
         Block body2 = new Block(Arrays.asList(aDecl, ifStmt));
         Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
 

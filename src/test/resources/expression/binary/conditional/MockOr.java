@@ -11,7 +11,7 @@ public class MockOr {
         if (a) {
             return 42;
         } else {
-            return -1;
+            return 0;
         }
     }
 }

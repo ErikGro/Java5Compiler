@@ -32,7 +32,6 @@ public class TestFor extends CompilerTest {
         Expression termination = new Less(new Identifier("i", null), new IntLiteral(42));
         Statement increment = new Increment(new Identifier("i", null), true);
         Statement forLoop = new For(init, termination, increment, new Block(Collections.emptyList()));
-
         Block body = new Block(Arrays.asList(forLoop));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
@@ -42,11 +41,11 @@ public class TestFor extends CompilerTest {
         If bodyForLoop = new If(
                 new Equal(new Identifier("i", null), new IntLiteral(42)),
                 new Block(Arrays.asList(new Return(new IntLiteral(42)))),
-                new Block(Collections.emptyList()));
+                null);
         Statement forLoop2 = new For(init2, termination2, increment2, new Block(Arrays.asList(bodyForLoop)));
-
-        Block body2 = new Block(Arrays.asList(forLoop2));
-        Method returns42Method = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body2);
+        Statement returnStmt = new Return(new IntLiteral(0));
+        Block body2 = new Block(Arrays.asList(forLoop2, returnStmt));
+        Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
 
         List<Method> methods = Arrays.asList(testMethod, returns42Method);
 

@@ -39,9 +39,9 @@ public class TestGreater extends CompilerTest {
 
         Statement aDecl = new LocalVarDeclaration("a", new Greater(new IntLiteral(44), new IntLiteral(43)));
         Statement ifStmt = new If(
-                new Identifier("a", null),
-                new Return(new IntLiteral(42)),
-                new Return(new IntLiteral(0)));
+                        new Identifier("a", null),
+                        new Block(Arrays.asList(new Return(new IntLiteral(42)))),
+                        new Block(Arrays.asList(new Return(new IntLiteral(0)))));
         Block body2 = new Block(Arrays.asList(aDecl, ifStmt));
         Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);
 

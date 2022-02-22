@@ -5,14 +5,6 @@ public class MockMethodCall {
         method2Param(42, 42);
     }
 
-    public int returns42() {
-        return methodReturnsInt();
-    }
-
-    public int methodReturnsInt() {
-        return 42;
-    }
-
     public void method() {
 
     }
@@ -23,5 +15,13 @@ public class MockMethodCall {
 
     public void method2Param(int a, int b) {
 
+    }
+
+    public int returns42() {
+        return methodReturnsInt();
+    }
+
+    public int methodReturnsInt() {
+        return 42;
     }
 }
