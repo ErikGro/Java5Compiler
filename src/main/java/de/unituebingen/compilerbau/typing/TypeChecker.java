@@ -269,6 +269,7 @@ public class TypeChecker implements ASTVisitor {
             throw new TypeCheckException("Method '" + methodCall.name + "' is not defined in " + clazz.name);
 
         // TODO: Need to implement the things I was asked to!
+        methodCall.setMethod(method);
         methodCall.isStatic = method.isStatic;
         methodCall.setType(method.returnType);
     }
@@ -318,7 +319,7 @@ public class TypeChecker implements ASTVisitor {
             localVarDeclaration.expression.visit(this);
             if (localVarDeclaration.expression.getType() != localVarDeclaration.getType())
                 throw new TypeCheckException("Assigned value does not match the declared type of " +
-                        localVarDeclaration.name);
+                        localVarDeclaration.getType());
         }
     }
 
