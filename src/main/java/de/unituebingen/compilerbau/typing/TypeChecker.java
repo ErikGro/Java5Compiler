@@ -96,10 +96,12 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(DotOperator dotOperator) throws TypeCheckException {
+        // TODO: Static fields are accessed using a Type-name!
         dotOperator.left.visit(this);
         // TODO: Does this class exist?
         Clazz clazz = this.clazzes.get(dotOperator.left.getType().name);
         // TODO: Does this field exist in that class?
+        // TODO: Is the field private?
         Field field = clazz.fieldByName(dotOperator.right);
         dotOperator.setType(field.getType());
         dotOperator.setStatic(field.isStatic);
@@ -257,13 +259,14 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(MethodCall methodCall) throws TypeCheckException {
-        // TODO: The class might not exist!
         methodCall.expr.visit(this);
         Clazz clazz = this.clazzes.get(methodCall.expr.getType().name);
-        // TODO: The method might not exist!
+
         for (Expression arg: methodCall.args)
             arg.visit(this);
         Method method = clazz.findMethod(methodCall.name, methodCall.args);
+        if (method == null)
+            throw new TypeCheckException("Method '" + methodCall.name + "' is not defined in " + clazz.name);
 
         // TODO: Need to implement the things I was asked to!
         methodCall.isStatic = method.isStatic;
