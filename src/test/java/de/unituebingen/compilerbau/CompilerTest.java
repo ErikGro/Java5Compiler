@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public abstract class CompilerTest {
     public abstract void testTypeCheckedAST() throws TypeCheckException, CloneNotSupportedException;
 
     @Test
-    public abstract void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ReflectiveOperationException;
+    public abstract void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException;
 
     /* Below functions for initializing test case */
 
@@ -44,8 +45,6 @@ public abstract class CompilerTest {
     }
 
     private String sourcecode;
-
-    private String tmpDirectory = System.getProperty("user.dir");
 
     @Before
     public void loadTestFiles() {
@@ -62,25 +61,33 @@ public abstract class CompilerTest {
         }
     }
 
-    @After
-    public void cleanTemporaryClassFiles() {
-        for (File f : new File(tmpDirectory).listFiles()) {
-            if (f.getName().endsWith(".class")) {
-                f.delete();
-            }
-        }
-    }
+//    @After
+//    public void cleanTemporaryClassFiles() {
+//        for (File f : new File(tmpDirectory).listFiles()) {
+//            if (f.getName().endsWith(".class")) {
+//                f.delete();
+//            }
+//        }
+//    }
 
     /* Helper methods below */
+
+    private String getMockFileDirecoty() {
+        String[] components = getMockFilePath().split("/");
+        if (components.length > 1) {
+            components = Arrays.copyOf(components, components.length-1);
+        }
+        return System.getProperty("user.dir") + "/src/test/resources/" + String.join("/", components);
+    }
 
     public void compileAndLoadClasses() throws IOException, CloneNotSupportedException, ClassNotFoundException {
         Compiler compiler = new Compiler();
         Map<String, byte[]> classMap = compiler.compile("src/test/resources/" + getMockFilePath());
 
-        saveByteCodeToFiles(classMap, tmpDirectory);
+        saveByteCodeToFiles(classMap, getMockFileDirecoty());
 
         for (String entry : classMap.keySet()) {
-            URL projectDir = new File(tmpDirectory).toURI().toURL();
+            URL projectDir = new File(getMockFileDirecoty()).toURI().toURL();
             URLClassLoader loader = new URLClassLoader(new URL[]{projectDir});
             this.compiledClasses.put(entry, loader.loadClass(entry));
         }
