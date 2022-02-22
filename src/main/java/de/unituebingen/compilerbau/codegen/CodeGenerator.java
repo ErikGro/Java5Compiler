@@ -87,7 +87,7 @@ public class CodeGenerator {
                 if (!field.isStatic) {
                     mv.visitVarInsn(ALOAD, 0);
                 }
-                mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, clazz.name, field.getName(), field.getType().name);
             }
         }
 
@@ -316,7 +316,7 @@ public class CodeGenerator {
                         mv.visitVarInsn(ALOAD, 0);
                         mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, clazz.name, field.getName(), field.getType().name);
                     if (increment.isPostIncrement) {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
@@ -328,7 +328,7 @@ public class CodeGenerator {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, clazz.name, field.getName(), field.getType().name);
                 } else {
                     throw new CodeGenException("Illegal operation");
                 }
@@ -375,7 +375,7 @@ public class CodeGenerator {
                         mv.visitVarInsn(ALOAD, 0);
                         mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, clazz.name, field.getName(), field.getType().name);
                     if (decrement.isPostDecrement) {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
@@ -387,7 +387,7 @@ public class CodeGenerator {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, clazz.name, field.getName(), field.getType().name);
                 } else {
                     throw new CodeGenException("Illegal operation");
                 }
@@ -434,7 +434,7 @@ public class CodeGenerator {
                     if (!field.isStatic)
                         mv.visitInsn(DUP_X1);
                     else mv.visitInsn(DUP);
-                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, clazz.name, field.getName(), field.getType().name);
                 } else {
                     throw new CodeGenException("Illegal operation");
                 }

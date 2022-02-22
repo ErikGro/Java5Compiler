@@ -133,7 +133,7 @@ public class ScannerParser
             boolean isStatic = ctx.Static() != null;
             LocalVarDeclaration decl =
                     visitLocalVarDeclarationStatement(ctx.localVarDeclarationStatement());
-            return new Field(null, modifier, isStatic, decl.name, decl.expression, decl.getType());
+            return new Field(modifier, isStatic, decl.name, decl.expression, decl.getType());
         }
 
         public AccessModifier parseAccessModifier(TerminalNode accessModifier)
