@@ -329,6 +329,26 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Block block) throws TypeCheckException {
-        // TODO:
+        env.openScope();
+        Type type = Type.VOID;
+        for (Statement stmt: block.body) {
+            stmt.visit(this);
+            // Statement expressions are all void (as statements)
+            if (!(stmt instanceof StatementExpression))
+                type = mergeType(type, stmt.getType());
+        }
+        block.setType(type);
+        env.closeScope();
+    }
+
+    private Type mergeType(Type a, Type b) throws TypeCheckException {
+        // TODO: Refactor this shit show!
+        if (a == Type.VOID)
+            return b;
+        if (b == Type.VOID)
+            return a;
+        if (a != b)
+            throw new TypeCheckException("Conflicting return types");
+        return a;
     }
 }
