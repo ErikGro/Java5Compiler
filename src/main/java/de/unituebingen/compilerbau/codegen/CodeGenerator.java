@@ -636,6 +636,7 @@ public class CodeGenerator {
         if (!hasConstructor) {
             MethodVisitor mv = cw.visitMethod(AccessModifier.PUBLIC.asm, "<init>","()V", null, null);
             Visitor visitor = new Visitor(input, new Scope(classScope), mv);
+            visitor.addLocal(new Identifier("this", new Type(input.name)));
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
             addFieldInitializers(input, visitor);
