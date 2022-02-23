@@ -97,14 +97,32 @@ public class TypeChecker implements ASTVisitor {
     @Override
     public void visit(DotOperator dotOperator) throws TypeCheckException {
         // TODO: Static fields are accessed using a Type-name!
-        dotOperator.left.visit(this);
-        // TODO: Does this class exist?
-        Clazz clazz = this.clazzes.get(dotOperator.left.getType().name);
-        // TODO: Does this field exist in that class?
-        // TODO: Is the field private?
+        Clazz clazz;
+        boolean isStatic = false;
+        if (dotOperator.left instanceof Identifier &&
+                clazzes.containsKey(((Identifier) dotOperator.left).name)) {
+            // Static?
+            clazz = clazzes.get(((Identifier) dotOperator.left).name);
+            isStatic = true;
+        } else {
+            dotOperator.left.visit(this);
+            clazz = this.clazzes.get(dotOperator.left.getType().name);
+        }
+
         Field field = clazz.fieldByName(dotOperator.right);
-        dotOperator.setType(field.getType());
+        // Does the field exist? Is it static?
+        if (field == null)
+            throw new TypeCheckException("Field '" + dotOperator.right + "' does not exits");
+        if (field.access != AccessModifier.PUBLIC)
+            throw new TypeCheckException("Field '" + dotOperator.right + "' is not public");
+
+        if (isStatic && !field.isStatic)
+            throw new TypeCheckException("Field is not static");
+        else if (!isStatic && field.isStatic)
+            throw new TypeCheckException("Non static field cannot be accessed on class");
+
         dotOperator.setStatic(field.isStatic);
+        dotOperator.setType(field.getType());
     }
 
     @Override
