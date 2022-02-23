@@ -30,6 +30,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
 import static org.objectweb.asm.Opcodes.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -574,12 +575,30 @@ public class CodeGenerator {
         return resultMap;
     }
 
+    private void addFieldInitializers(Clazz input, Visitor visitor) {
+        for (Field f: input.fields) {
+            if (!f.isStatic && f.expression != null) {
+                visitor.mv.visitVarInsn(ALOAD, 0);
+                f.expression.visit(visitor);
+                visitor.mv.visitFieldInsn(PUTFIELD, input.name, f.getName(), f.getType().name);
+            }
+        }
+    }
+
     private byte[] generateBytecode(Clazz input) throws CodeGenException {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         cw.visit(V1_4, input.access.asm | ACC_SUPER, input.name, null, "java/lang/Object", null);
 
         Scope classScope = new Scope(null);
         input.fields.forEach(classScope::add);
+        boolean hasStaticInitializer = false;
+
+        for (Field f: input.fields) {
+            cw.visitField(f.access.asm | (f.isStatic ? ACC_STATIC : 0), f.getName(), f.getType().name, null, null).visitEnd();
+            if (f.isStatic && f.expression != null) {
+                hasStaticInitializer = true;
+            }
+        }
 
         boolean hasConstructor = false;
         for (Method method: input.methods) {
@@ -601,6 +620,7 @@ public class CodeGenerator {
             if (isConstructor) {
                 mv.visitVarInsn(ALOAD, 0);
                 mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+                addFieldInitializers(input, visitor);
             }
             method.body.visit(visitor);
             if (method.returnType.equals(Type.VOID)) {
@@ -612,15 +632,27 @@ public class CodeGenerator {
 
         if (!hasConstructor) {
             MethodVisitor mv = cw.visitMethod(AccessModifier.PUBLIC.asm, "<init>","()V", null, null);
+            Visitor visitor = new Visitor(input, new Scope(classScope), mv);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+            addFieldInitializers(input, visitor);
             mv.visitInsn(RETURN);
             mv.visitMaxs(0, 0);
             mv.visitEnd();
         }
 
-        for (Field f: input.fields) {
-            cw.visitField(f.access.asm | (f.isStatic ? ACC_STATIC : 0), f.getName(), f.getType().name, null, null).visitEnd();
+        if (hasStaticInitializer) {
+            MethodVisitor mv = cw.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
+            Visitor visitor = new Visitor(input, new Scope(classScope), mv);
+            for (Field f: input.fields) {
+                if (f.isStatic && f.expression != null) {
+                    f.expression.visit(visitor);
+                    visitor.mv.visitFieldInsn(PUTSTATIC, input.name, f.getName(), f.getType().name);
+                }
+            }
+            mv.visitInsn(RETURN);
+            mv.visitMaxs(0, 0);
+            mv.visitEnd();
         }
 
         cw.visitEnd();

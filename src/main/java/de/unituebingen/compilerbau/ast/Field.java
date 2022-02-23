@@ -6,8 +6,8 @@ public class Field implements LocalOrFieldVar
 {
     public final AccessModifier access;
     public final boolean isStatic;
-    protected String name;
-    protected Expression expression;
+    public final String name;
+    public final Expression expression;
     protected Type type;
 
     public Field(
