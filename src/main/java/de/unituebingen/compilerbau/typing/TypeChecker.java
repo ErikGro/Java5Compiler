@@ -259,13 +259,21 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(MethodCall methodCall) throws TypeCheckException {
-        // TODO: Need to handle static methods specially!
-        // Implicit this
-        Clazz clazz = null;
+        Clazz clazz;
+        boolean isStatic = false;
         if (methodCall.expr != null) {
-            methodCall.expr.visit(this);
-            clazz = this.clazzes.get(methodCall.expr.getType().name);
+            if (methodCall.expr instanceof Identifier &&
+                this.clazzes.containsKey(((Identifier) methodCall.expr).name)) {
+                // Static?
+                clazz = clazzes.get(((Identifier) methodCall.expr).name);
+                isStatic = true;
+            } else {
+                // Called on object
+                methodCall.expr.visit(this);
+                clazz = this.clazzes.get(methodCall.expr.getType().name);
+            }
         } else
+            // Called on this
             clazz = clazzes.get(current);
 
         for (Expression arg: methodCall.args)
@@ -277,6 +285,12 @@ public class TypeChecker implements ASTVisitor {
             throw new TypeCheckException("Method '" + methodCall.name + "' is not defined in " + clazz.name);
         if (method.access != AccessModifier.PUBLIC)
             throw new TypeCheckException(method.name + " cannot be accessed");
+
+        // Is a static method called on an object?
+        if (isStatic && !method.isStatic)
+            throw new TypeCheckException("Method is not static");
+        else if (!isStatic && method.isStatic)
+            throw new TypeCheckException("Non static method cannot be called on class");
 
         methodCall.setMethod(method);
         methodCall.isStatic = method.isStatic;
