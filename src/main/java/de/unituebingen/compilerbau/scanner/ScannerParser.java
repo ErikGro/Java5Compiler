@@ -544,27 +544,32 @@ public class ScannerParser
 
         public Expression visitAssignment(JavaFiveGrammarParser.AssignmentContext ctx)
         {
-            List<TerminalNode> assignments = new ArrayList<>();
-            assignments.addAll(ctx.SimpleAssignmentOp());
-            assignments.addAll(ctx.AdvancedAssignmentOp());
-            List<TerminalNode> identifierList = ctx.Identifier();
+            Expression selectorPart = visitSelectorPart(ctx.selectorPart());
+            Expression assignmentPart = visitAssignmentPart(ctx.assignmentPart());
+            return new Assignment(selectorPart,
+                    handleAssignment(ctx.getChild(1).getText(), selectorPart, assignmentPart)
+            );
+        }
+
+        private Expression visitSelectorPart(JavaFiveGrammarParser.SelectorPartContext ctx)
+        {
+            return ctx.This() != null
+                    ? new DotOperator(new This(), ctx.Identifier().getText())
+                    : new Identifier(ctx.Identifier().getText(), null);
+        }
+
+        private Expression visitAssignmentPart(JavaFiveGrammarParser.AssignmentPartContext ctx)
+        {
+            Expression expr = visitExpression(ctx.expression());
             Assignment assignment = null;
-
-            for (int i = identifierList.size() - 1; i >= 0; i--)
+            for (int i = ctx.getChildCount() - 2; i >= 1; i -= 2)
             {
-                Identifier identifier = new Identifier(identifierList.get(i).getText(), null);
-                String assignmentOp = assignments.get(i).getText();
-
-                if (i == identifierList.size() - 1)
+                String assignmentOp = ctx.getChild(i).getText();
+                Identifier identifier = new Identifier(ctx.getChild(i - 1).getText(), null);
+                if (i == ctx.getChildCount() - 2)
                 {
-                    // init part with most right expression
-                    // e.g a = .... = z = 1
-
                     assignment = new Assignment(identifier,
-                            handleAssignment(assignmentOp,
-                                    identifier,
-                                    visitExpression(ctx.expression())
-                            )
+                            handleAssignment(assignmentOp, identifier, expr)
                     );
                 } else
                 {
@@ -574,8 +579,7 @@ public class ScannerParser
                     assignment = new Assignment(identifier, assignment);
                 }
             }
-
-            return assignment;
+            return assignment == null ? expr : assignment;
         }
 
         private Expression handleAssignment(String op, Expression first, Expression expr)

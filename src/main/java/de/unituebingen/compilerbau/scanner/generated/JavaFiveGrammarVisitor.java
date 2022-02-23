@@ -155,6 +155,18 @@ public interface JavaFiveGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(JavaFiveGrammarParser.AssignmentContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#selectorPart}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSelectorPart(JavaFiveGrammarParser.SelectorPartContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#assignmentPart}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignmentPart(JavaFiveGrammarParser.AssignmentPartContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link JavaFiveGrammarParser#expressionList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -248,6 +248,26 @@ public interface JavaFiveGrammarListener extends ParseTreeListener {
 	 */
 	void exitAssignment(JavaFiveGrammarParser.AssignmentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#selectorPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelectorPart(JavaFiveGrammarParser.SelectorPartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#selectorPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelectorPart(JavaFiveGrammarParser.SelectorPartContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#assignmentPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentPart(JavaFiveGrammarParser.AssignmentPartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaFiveGrammarParser#assignmentPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentPart(JavaFiveGrammarParser.AssignmentPartContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link JavaFiveGrammarParser#expressionList}.
 	 * @param ctx the parse tree
 	 */

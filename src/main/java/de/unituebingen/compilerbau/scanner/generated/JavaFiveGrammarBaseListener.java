@@ -304,6 +304,30 @@ public class JavaFiveGrammarBaseListener implements JavaFiveGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSelectorPart(JavaFiveGrammarParser.SelectorPartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSelectorPart(JavaFiveGrammarParser.SelectorPartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignmentPart(JavaFiveGrammarParser.AssignmentPartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignmentPart(JavaFiveGrammarParser.AssignmentPartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpressionList(JavaFiveGrammarParser.ExpressionListContext ctx) { }
 	/**
 	 * {@inheritDoc}

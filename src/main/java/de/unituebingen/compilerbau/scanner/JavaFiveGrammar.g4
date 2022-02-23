@@ -97,8 +97,15 @@ methodCall:  Identifier LRoundBracket expressionList? RRoundBracket;
 newExp:   New Identifier LRoundBracket expressionList? RRoundBracket;
 
 assignment
-    :   Identifier ((SimpleAssignmentOp|AdvancedAssignmentOp) Identifier)*
-                   (SimpleAssignmentOp|AdvancedAssignmentOp) expression
+    :   selectorPart (SimpleAssignmentOp|AdvancedAssignmentOp) assignmentPart
+    ;
+
+selectorPart
+    :   (This Selector)? Identifier
+    ;
+
+assignmentPart
+    :   (Identifier (SimpleAssignmentOp|AdvancedAssignmentOp))* expression
     ;
 
 

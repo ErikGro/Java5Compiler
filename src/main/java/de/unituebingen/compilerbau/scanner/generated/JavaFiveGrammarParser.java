@@ -34,14 +34,16 @@ public class JavaFiveGrammarParser extends Parser {
 		RULE_forIncrement = 14, RULE_localVarDeclarationStatement = 15, RULE_returnStatement = 16, 
 		RULE_statementExpression = 17, RULE_blockStatement = 18, RULE_type = 19, 
 		RULE_expression = 20, RULE_methodCall = 21, RULE_newExp = 22, RULE_assignment = 23, 
-		RULE_expressionList = 24, RULE_parExpression = 25;
+		RULE_selectorPart = 24, RULE_assignmentPart = 25, RULE_expressionList = 26, 
+		RULE_parExpression = 27;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"javaProgram", "clazz", "clazzMember", "constructor", "method", "parameterList", 
 			"field", "statement", "ifStatement", "switchStatement", "whileStatement", 
 			"doWhileStatement", "forStatement", "forInit", "forIncrement", "localVarDeclarationStatement", 
 			"returnStatement", "statementExpression", "blockStatement", "type", "expression", 
-			"methodCall", "newExp", "assignment", "expressionList", "parExpression"
+			"methodCall", "newExp", "assignment", "selectorPart", "assignmentPart", 
+			"expressionList", "parExpression"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -152,17 +154,17 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(53); 
+			setState(57); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(52);
+				setState(56);
 				clazz();
 				}
 				}
-				setState(55); 
+				setState(59); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==AccessModifier || _la==Class );
@@ -217,37 +219,37 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
+			setState(62);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AccessModifier) {
 				{
-				setState(57);
+				setState(61);
 				match(AccessModifier);
 				}
 			}
 
-			setState(60);
+			setState(64);
 			match(Class);
-			setState(61);
+			setState(65);
 			match(Identifier);
-			setState(62);
-			match(LCurlyBracket);
 			setState(66);
+			match(LCurlyBracket);
+			setState(70);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AccessModifier) | (1L << Primitive) | (1L << Static) | (1L << Identifier))) != 0)) {
 				{
 				{
-				setState(63);
+				setState(67);
 				clazzMember();
 				}
 				}
-				setState(68);
+				setState(72);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(69);
+			setState(73);
 			match(RCurlyBracket);
 			}
 		}
@@ -295,27 +297,27 @@ public class JavaFiveGrammarParser extends Parser {
 		ClazzMemberContext _localctx = new ClazzMemberContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_clazzMember);
 		try {
-			setState(74);
+			setState(78);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(71);
+				setState(75);
 				field();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(72);
+				setState(76);
 				method();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(73);
+				setState(77);
 				constructor();
 				}
 				break;
@@ -369,25 +371,25 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(77);
+			setState(81);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AccessModifier) {
 				{
-				setState(76);
+				setState(80);
 				match(AccessModifier);
 				}
 			}
 
-			setState(79);
-			match(Identifier);
-			setState(80);
-			match(LRoundBracket);
-			setState(81);
-			parameterList();
-			setState(82);
-			match(RRoundBracket);
 			setState(83);
+			match(Identifier);
+			setState(84);
+			match(LRoundBracket);
+			setState(85);
+			parameterList();
+			setState(86);
+			match(RRoundBracket);
+			setState(87);
 			blockStatement();
 			}
 		}
@@ -443,37 +445,37 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(86);
+			setState(90);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AccessModifier) {
 				{
-				setState(85);
+				setState(89);
 				match(AccessModifier);
 				}
 			}
 
-			setState(89);
+			setState(93);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Static) {
 				{
-				setState(88);
+				setState(92);
 				match(Static);
 				}
 			}
 
-			setState(91);
-			type();
-			setState(92);
-			match(Identifier);
-			setState(93);
-			match(LRoundBracket);
-			setState(94);
-			parameterList();
 			setState(95);
-			match(RRoundBracket);
+			type();
 			setState(96);
+			match(Identifier);
+			setState(97);
+			match(LRoundBracket);
+			setState(98);
+			parameterList();
+			setState(99);
+			match(RRoundBracket);
+			setState(100);
 			blockStatement();
 			}
 		}
@@ -529,30 +531,30 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(113);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Primitive || _la==Identifier) {
 				{
-				setState(98);
+				setState(102);
 				type();
-				setState(99);
+				setState(103);
 				match(Identifier);
-				setState(106);
+				setState(110);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==Comma) {
 					{
 					{
-					setState(100);
+					setState(104);
 					match(Comma);
-					setState(101);
+					setState(105);
 					type();
-					setState(102);
+					setState(106);
 					match(Identifier);
 					}
 					}
-					setState(108);
+					setState(112);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
@@ -604,27 +606,27 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(112);
+			setState(116);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AccessModifier) {
 				{
-				setState(111);
+				setState(115);
 				match(AccessModifier);
 				}
 			}
 
-			setState(115);
+			setState(119);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Static) {
 				{
-				setState(114);
+				setState(118);
 				match(Static);
 				}
 			}
 
-			setState(117);
+			setState(121);
 			localVarDeclarationStatement();
 			}
 		}
@@ -693,94 +695,94 @@ public class JavaFiveGrammarParser extends Parser {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_statement);
 		try {
-			setState(133);
+			setState(137);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(119);
+				setState(123);
 				match(Semicolon);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(120);
+				setState(124);
 				blockStatement();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(121);
+				setState(125);
 				ifStatement();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(122);
+				setState(126);
 				switchStatement();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(123);
+				setState(127);
 				whileStatement();
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(124);
+				setState(128);
 				doWhileStatement();
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(125);
+				setState(129);
 				forStatement();
 				}
 				break;
 			case 8:
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(126);
+				setState(130);
 				localVarDeclarationStatement();
 				}
 				break;
 			case 9:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(127);
+				setState(131);
 				returnStatement();
 				}
 				break;
 			case 10:
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(128);
+				setState(132);
 				statementExpression();
 				}
 				break;
 			case 11:
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(129);
+				setState(133);
 				match(Continue);
-				setState(130);
+				setState(134);
 				match(Semicolon);
 				}
 				break;
 			case 12:
 				enterOuterAlt(_localctx, 12);
 				{
-				setState(131);
+				setState(135);
 				match(Break);
-				setState(132);
+				setState(136);
 				match(Semicolon);
 				}
 				break;
@@ -834,20 +836,20 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(135);
+			setState(139);
 			match(If);
-			setState(136);
-			parExpression();
-			setState(137);
-			statement();
 			setState(140);
+			parExpression();
+			setState(141);
+			statement();
+			setState(144);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
 			case 1:
 				{
-				setState(138);
+				setState(142);
 				match(Else);
-				setState(139);
+				setState(143);
 				statement();
 				}
 				break;
@@ -916,19 +918,19 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(142);
+			setState(146);
 			match(Switch);
-			setState(143);
+			setState(147);
 			parExpression();
-			setState(144);
+			setState(148);
 			match(LCurlyBracket);
-			setState(150);
+			setState(154);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==Case || _la==Default) {
 				{
 				{
-				setState(145);
+				setState(149);
 				_la = _input.LA(1);
 				if ( !(_la==Case || _la==Default) ) {
 				_errHandler.recoverInline(this);
@@ -938,17 +940,17 @@ public class JavaFiveGrammarParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(146);
+				setState(150);
 				match(Colon);
-				setState(147);
+				setState(151);
 				statement();
 				}
 				}
-				setState(152);
+				setState(156);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(153);
+			setState(157);
 			match(RCurlyBracket);
 			}
 		}
@@ -996,11 +998,11 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(155);
+			setState(159);
 			match(While);
-			setState(156);
+			setState(160);
 			parExpression();
-			setState(157);
+			setState(161);
 			statement();
 			}
 		}
@@ -1050,15 +1052,15 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(159);
-			match(Do);
-			setState(160);
-			statement();
-			setState(161);
-			match(While);
-			setState(162);
-			parExpression();
 			setState(163);
+			match(Do);
+			setState(164);
+			statement();
+			setState(165);
+			match(While);
+			setState(166);
+			parExpression();
+			setState(167);
 			match(Semicolon);
 			}
 		}
@@ -1119,29 +1121,17 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(165);
+			setState(169);
 			match(For);
-			setState(166);
+			setState(170);
 			match(LRoundBracket);
-			setState(168);
+			setState(172);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Primitive || _la==Identifier) {
 				{
-				setState(167);
-				forInit();
-				}
-			}
-
-			setState(170);
-			match(Semicolon);
-			setState(172);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IncDecOp) | (1L << UnaryOp) | (1L << AddOp) | (1L << LRoundBracket) | (1L << Bool) | (1L << This) | (1L << New) | (1L << Int) | (1L << Char) | (1L << Identifier))) != 0)) {
-				{
 				setState(171);
-				expression(0);
+				forInit();
 				}
 			}
 
@@ -1153,13 +1143,25 @@ public class JavaFiveGrammarParser extends Parser {
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IncDecOp) | (1L << UnaryOp) | (1L << AddOp) | (1L << LRoundBracket) | (1L << Bool) | (1L << This) | (1L << New) | (1L << Int) | (1L << Char) | (1L << Identifier))) != 0)) {
 				{
 				setState(175);
-				forIncrement();
+				expression(0);
 				}
 			}
 
 			setState(178);
+			match(Semicolon);
+			setState(180);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IncDecOp) | (1L << UnaryOp) | (1L << AddOp) | (1L << LRoundBracket) | (1L << Bool) | (1L << This) | (1L << New) | (1L << Int) | (1L << Char) | (1L << Identifier))) != 0)) {
+				{
+				setState(179);
+				forIncrement();
+				}
+			}
+
+			setState(182);
 			match(RRoundBracket);
-			setState(179);
+			setState(183);
 			statement();
 			}
 		}
@@ -1208,13 +1210,13 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(181);
+			setState(185);
 			type();
-			setState(182);
+			setState(186);
 			match(Identifier);
-			setState(183);
+			setState(187);
 			match(SimpleAssignmentOp);
-			setState(184);
+			setState(188);
 			expression(0);
 			}
 		}
@@ -1258,7 +1260,7 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(186);
+			setState(190);
 			expression(0);
 			}
 		}
@@ -1309,23 +1311,23 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(188);
-			type();
-			setState(189);
-			match(Identifier);
 			setState(192);
+			type();
+			setState(193);
+			match(Identifier);
+			setState(196);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==SimpleAssignmentOp) {
 				{
-				setState(190);
+				setState(194);
 				match(SimpleAssignmentOp);
-				setState(191);
+				setState(195);
 				expression(0);
 				}
 			}
 
-			setState(194);
+			setState(198);
 			match(Semicolon);
 			}
 		}
@@ -1371,11 +1373,11 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(196);
+			setState(200);
 			match(Return);
-			setState(197);
+			setState(201);
 			expression(0);
-			setState(198);
+			setState(202);
 			match(Semicolon);
 			}
 		}
@@ -1420,9 +1422,9 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(200);
+			setState(204);
 			expression(0);
-			setState(201);
+			setState(205);
 			match(Semicolon);
 			}
 		}
@@ -1472,23 +1474,23 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(203);
-			match(LCurlyBracket);
 			setState(207);
+			match(LCurlyBracket);
+			setState(211);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IncDecOp) | (1L << UnaryOp) | (1L << AddOp) | (1L << LCurlyBracket) | (1L << LRoundBracket) | (1L << Semicolon) | (1L << Primitive) | (1L << Bool) | (1L << For) | (1L << While) | (1L << Do) | (1L << If) | (1L << Switch) | (1L << Return) | (1L << This) | (1L << New) | (1L << Break) | (1L << Continue) | (1L << Int) | (1L << Char) | (1L << Identifier))) != 0)) {
 				{
 				{
-				setState(204);
+				setState(208);
 				statement();
 				}
 				}
-				setState(209);
+				setState(213);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(210);
+			setState(214);
 			match(RCurlyBracket);
 			}
 		}
@@ -1532,7 +1534,7 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(212);
+			setState(216);
 			_la = _input.LA(1);
 			if ( !(_la==Primitive || _la==Identifier) ) {
 			_errHandler.recoverInline(this);
@@ -1626,12 +1628,12 @@ public class JavaFiveGrammarParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(222);
+			setState(226);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				{
-				setState(215);
+				setState(219);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Bool) | (1L << This) | (1L << Int) | (1L << Char) | (1L << Identifier))) != 0)) ) {
 				_errHandler.recoverInline(this);
@@ -1645,25 +1647,25 @@ public class JavaFiveGrammarParser extends Parser {
 				break;
 			case 2:
 				{
-				setState(216);
+				setState(220);
 				parExpression();
 				}
 				break;
 			case 3:
 				{
-				setState(217);
+				setState(221);
 				methodCall();
 				}
 				break;
 			case 4:
 				{
-				setState(218);
+				setState(222);
 				newExp();
 				}
 				break;
 			case 5:
 				{
-				setState(219);
+				setState(223);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IncDecOp) | (1L << UnaryOp) | (1L << AddOp))) != 0)) ) {
 				_errHandler.recoverInline(this);
@@ -1673,19 +1675,19 @@ public class JavaFiveGrammarParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(220);
+				setState(224);
 				expression(10);
 				}
 				break;
 			case 6:
 				{
-				setState(221);
+				setState(225);
 				assignment();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(261);
+			setState(265);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1693,18 +1695,18 @@ public class JavaFiveGrammarParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(259);
+					setState(263);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,20,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(224);
+						setState(228);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(225);
+						setState(229);
 						match(MultOp);
-						setState(226);
+						setState(230);
 						expression(10);
 						}
 						break;
@@ -1712,11 +1714,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(227);
+						setState(231);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(228);
+						setState(232);
 						match(AddOp);
-						setState(229);
+						setState(233);
 						expression(9);
 						}
 						break;
@@ -1724,11 +1726,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(230);
+						setState(234);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(231);
+						setState(235);
 						match(ShiftOp);
-						setState(232);
+						setState(236);
 						expression(8);
 						}
 						break;
@@ -1736,11 +1738,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(233);
+						setState(237);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(234);
+						setState(238);
 						match(RelationalOp);
-						setState(235);
+						setState(239);
 						expression(7);
 						}
 						break;
@@ -1748,11 +1750,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(236);
+						setState(240);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(237);
+						setState(241);
 						match(EqualityOp);
-						setState(238);
+						setState(242);
 						expression(6);
 						}
 						break;
@@ -1760,11 +1762,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(239);
+						setState(243);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(240);
+						setState(244);
 						match(BitwiseOp);
-						setState(241);
+						setState(245);
 						expression(5);
 						}
 						break;
@@ -1772,11 +1774,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(242);
+						setState(246);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(243);
+						setState(247);
 						match(ConditionalOp);
-						setState(244);
+						setState(248);
 						expression(4);
 						}
 						break;
@@ -1784,15 +1786,15 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(245);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(246);
-						match(QuestionMark);
-						setState(247);
-						expression(0);
-						setState(248);
-						match(Colon);
 						setState(249);
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						setState(250);
+						match(QuestionMark);
+						setState(251);
+						expression(0);
+						setState(252);
+						match(Colon);
+						setState(253);
 						expression(3);
 						}
 						break;
@@ -1800,11 +1802,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(251);
+						setState(255);
 						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
-						setState(252);
+						setState(256);
 						match(Selector);
-						setState(253);
+						setState(257);
 						methodCall();
 						}
 						break;
@@ -1812,11 +1814,11 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(254);
+						setState(258);
 						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
-						setState(255);
+						setState(259);
 						match(Selector);
-						setState(256);
+						setState(260);
 						match(Identifier);
 						}
 						break;
@@ -1824,16 +1826,16 @@ public class JavaFiveGrammarParser extends Parser {
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(257);
+						setState(261);
 						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(258);
+						setState(262);
 						match(IncDecOp);
 						}
 						break;
 					}
 					} 
 				}
-				setState(263);
+				setState(267);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
 			}
@@ -1883,21 +1885,21 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(264);
+			setState(268);
 			match(Identifier);
-			setState(265);
+			setState(269);
 			match(LRoundBracket);
-			setState(267);
+			setState(271);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IncDecOp) | (1L << UnaryOp) | (1L << AddOp) | (1L << LRoundBracket) | (1L << Bool) | (1L << This) | (1L << New) | (1L << Int) | (1L << Char) | (1L << Identifier))) != 0)) {
 				{
-				setState(266);
+				setState(270);
 				expressionList();
 				}
 			}
 
-			setState(269);
+			setState(273);
 			match(RRoundBracket);
 			}
 		}
@@ -1946,23 +1948,23 @@ public class JavaFiveGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(271);
-			match(New);
-			setState(272);
-			match(Identifier);
-			setState(273);
-			match(LRoundBracket);
 			setState(275);
+			match(New);
+			setState(276);
+			match(Identifier);
+			setState(277);
+			match(LRoundBracket);
+			setState(279);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IncDecOp) | (1L << UnaryOp) | (1L << AddOp) | (1L << LRoundBracket) | (1L << Bool) | (1L << This) | (1L << New) | (1L << Int) | (1L << Char) | (1L << Identifier))) != 0)) {
 				{
-				setState(274);
+				setState(278);
 				expressionList();
 				}
 			}
 
-			setState(277);
+			setState(281);
 			match(RRoundBracket);
 			}
 		}
@@ -1978,21 +1980,14 @@ public class JavaFiveGrammarParser extends Parser {
 	}
 
 	public static class AssignmentContext extends ParserRuleContext {
-		public List<TerminalNode> Identifier() { return getTokens(JavaFiveGrammarParser.Identifier); }
-		public TerminalNode Identifier(int i) {
-			return getToken(JavaFiveGrammarParser.Identifier, i);
+		public SelectorPartContext selectorPart() {
+			return getRuleContext(SelectorPartContext.class,0);
 		}
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+		public AssignmentPartContext assignmentPart() {
+			return getRuleContext(AssignmentPartContext.class,0);
 		}
-		public List<TerminalNode> SimpleAssignmentOp() { return getTokens(JavaFiveGrammarParser.SimpleAssignmentOp); }
-		public TerminalNode SimpleAssignmentOp(int i) {
-			return getToken(JavaFiveGrammarParser.SimpleAssignmentOp, i);
-		}
-		public List<TerminalNode> AdvancedAssignmentOp() { return getTokens(JavaFiveGrammarParser.AdvancedAssignmentOp); }
-		public TerminalNode AdvancedAssignmentOp(int i) {
-			return getToken(JavaFiveGrammarParser.AdvancedAssignmentOp, i);
-		}
+		public TerminalNode SimpleAssignmentOp() { return getToken(JavaFiveGrammarParser.SimpleAssignmentOp, 0); }
+		public TerminalNode AdvancedAssignmentOp() { return getToken(JavaFiveGrammarParser.AdvancedAssignmentOp, 0); }
 		public AssignmentContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2017,38 +2012,11 @@ public class JavaFiveGrammarParser extends Parser {
 		enterRule(_localctx, 46, RULE_assignment);
 		int _la;
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(279);
-			match(Identifier);
+			setState(283);
+			selectorPart();
 			setState(284);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,24,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(280);
-					_la = _input.LA(1);
-					if ( !(_la==AdvancedAssignmentOp || _la==SimpleAssignmentOp) ) {
-					_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
-						consume();
-					}
-					setState(281);
-					match(Identifier);
-					}
-					} 
-				}
-				setState(286);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,24,_ctx);
-			}
-			setState(287);
 			_la = _input.LA(1);
 			if ( !(_la==AdvancedAssignmentOp || _la==SimpleAssignmentOp) ) {
 			_errHandler.recoverInline(this);
@@ -2058,7 +2026,148 @@ public class JavaFiveGrammarParser extends Parser {
 				_errHandler.reportMatch(this);
 				consume();
 			}
-			setState(288);
+			setState(285);
+			assignmentPart();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class SelectorPartContext extends ParserRuleContext {
+		public TerminalNode Identifier() { return getToken(JavaFiveGrammarParser.Identifier, 0); }
+		public TerminalNode This() { return getToken(JavaFiveGrammarParser.This, 0); }
+		public TerminalNode Selector() { return getToken(JavaFiveGrammarParser.Selector, 0); }
+		public SelectorPartContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_selectorPart; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JavaFiveGrammarListener ) ((JavaFiveGrammarListener)listener).enterSelectorPart(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JavaFiveGrammarListener ) ((JavaFiveGrammarListener)listener).exitSelectorPart(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaFiveGrammarVisitor ) return ((JavaFiveGrammarVisitor<? extends T>)visitor).visitSelectorPart(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final SelectorPartContext selectorPart() throws RecognitionException {
+		SelectorPartContext _localctx = new SelectorPartContext(_ctx, getState());
+		enterRule(_localctx, 48, RULE_selectorPart);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(289);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==This) {
+				{
+				setState(287);
+				match(This);
+				setState(288);
+				match(Selector);
+				}
+			}
+
+			setState(291);
+			match(Identifier);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class AssignmentPartContext extends ParserRuleContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public List<TerminalNode> Identifier() { return getTokens(JavaFiveGrammarParser.Identifier); }
+		public TerminalNode Identifier(int i) {
+			return getToken(JavaFiveGrammarParser.Identifier, i);
+		}
+		public List<TerminalNode> SimpleAssignmentOp() { return getTokens(JavaFiveGrammarParser.SimpleAssignmentOp); }
+		public TerminalNode SimpleAssignmentOp(int i) {
+			return getToken(JavaFiveGrammarParser.SimpleAssignmentOp, i);
+		}
+		public List<TerminalNode> AdvancedAssignmentOp() { return getTokens(JavaFiveGrammarParser.AdvancedAssignmentOp); }
+		public TerminalNode AdvancedAssignmentOp(int i) {
+			return getToken(JavaFiveGrammarParser.AdvancedAssignmentOp, i);
+		}
+		public AssignmentPartContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_assignmentPart; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JavaFiveGrammarListener ) ((JavaFiveGrammarListener)listener).enterAssignmentPart(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JavaFiveGrammarListener ) ((JavaFiveGrammarListener)listener).exitAssignmentPart(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaFiveGrammarVisitor ) return ((JavaFiveGrammarVisitor<? extends T>)visitor).visitAssignmentPart(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final AssignmentPartContext assignmentPart() throws RecognitionException {
+		AssignmentPartContext _localctx = new AssignmentPartContext(_ctx, getState());
+		enterRule(_localctx, 50, RULE_assignmentPart);
+		int _la;
+		try {
+			int _alt;
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(297);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					{
+					setState(293);
+					match(Identifier);
+					setState(294);
+					_la = _input.LA(1);
+					if ( !(_la==AdvancedAssignmentOp || _la==SimpleAssignmentOp) ) {
+					_errHandler.recoverInline(this);
+					}
+					else {
+						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+						_errHandler.reportMatch(this);
+						consume();
+					}
+					}
+					} 
+				}
+				setState(299);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
+			}
+			setState(300);
 			expression(0);
 			}
 		}
@@ -2105,26 +2214,26 @@ public class JavaFiveGrammarParser extends Parser {
 
 	public final ExpressionListContext expressionList() throws RecognitionException {
 		ExpressionListContext _localctx = new ExpressionListContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_expressionList);
+		enterRule(_localctx, 52, RULE_expressionList);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(290);
+			setState(302);
 			expression(0);
-			setState(295);
+			setState(307);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==Comma) {
 				{
 				{
-				setState(291);
+				setState(303);
 				match(Comma);
-				setState(292);
+				setState(304);
 				expression(0);
 				}
 				}
-				setState(297);
+				setState(309);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -2168,15 +2277,15 @@ public class JavaFiveGrammarParser extends Parser {
 
 	public final ParExpressionContext parExpression() throws RecognitionException {
 		ParExpressionContext _localctx = new ParExpressionContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_parExpression);
+		enterRule(_localctx, 54, RULE_parExpression);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(298);
+			setState(310);
 			match(LRoundBracket);
-			setState(299);
+			setState(311);
 			expression(0);
-			setState(300);
+			setState(312);
 			match(RRoundBracket);
 			}
 		}
@@ -2227,111 +2336,116 @@ public class JavaFiveGrammarParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\61\u0131\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\61\u013d\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\4\32\t\32\4\33\t\33\3\2\6\28\n\2\r\2\16\29\3\3\5\3=\n\3\3\3\3\3\3\3\3"+
-		"\3\7\3C\n\3\f\3\16\3F\13\3\3\3\3\3\3\4\3\4\3\4\5\4M\n\4\3\5\5\5P\n\5\3"+
-		"\5\3\5\3\5\3\5\3\5\3\5\3\6\5\6Y\n\6\3\6\5\6\\\n\6\3\6\3\6\3\6\3\6\3\6"+
-		"\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\7\7k\n\7\f\7\16\7n\13\7\5\7p\n\7\3\b"+
-		"\5\bs\n\b\3\b\5\bv\n\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t"+
-		"\3\t\3\t\3\t\3\t\5\t\u0088\n\t\3\n\3\n\3\n\3\n\3\n\5\n\u008f\n\n\3\13"+
-		"\3\13\3\13\3\13\3\13\3\13\7\13\u0097\n\13\f\13\16\13\u009a\13\13\3\13"+
-		"\3\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\16\5\16\u00ab"+
-		"\n\16\3\16\3\16\5\16\u00af\n\16\3\16\3\16\5\16\u00b3\n\16\3\16\3\16\3"+
-		"\16\3\17\3\17\3\17\3\17\3\17\3\20\3\20\3\21\3\21\3\21\3\21\5\21\u00c3"+
-		"\n\21\3\21\3\21\3\22\3\22\3\22\3\22\3\23\3\23\3\23\3\24\3\24\7\24\u00d0"+
-		"\n\24\f\24\16\24\u00d3\13\24\3\24\3\24\3\25\3\25\3\26\3\26\3\26\3\26\3"+
-		"\26\3\26\3\26\3\26\5\26\u00e1\n\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26"+
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\3\2\6\2<\n\2\r\2\16\2=\3\3\5"+
+		"\3A\n\3\3\3\3\3\3\3\3\3\7\3G\n\3\f\3\16\3J\13\3\3\3\3\3\3\4\3\4\3\4\5"+
+		"\4Q\n\4\3\5\5\5T\n\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\5\6]\n\6\3\6\5\6`\n\6"+
+		"\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\7\7o\n\7\f\7\16\7"+
+		"r\13\7\5\7t\n\7\3\b\5\bw\n\b\3\b\5\bz\n\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u008c\n\t\3\n\3\n\3\n\3\n\3\n"+
+		"\5\n\u0093\n\n\3\13\3\13\3\13\3\13\3\13\3\13\7\13\u009b\n\13\f\13\16\13"+
+		"\u009e\13\13\3\13\3\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\16\3"+
+		"\16\3\16\5\16\u00af\n\16\3\16\3\16\5\16\u00b3\n\16\3\16\3\16\5\16\u00b7"+
+		"\n\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\20\3\20\3\21\3\21\3\21"+
+		"\3\21\5\21\u00c7\n\21\3\21\3\21\3\22\3\22\3\22\3\22\3\23\3\23\3\23\3\24"+
+		"\3\24\7\24\u00d4\n\24\f\24\16\24\u00d7\13\24\3\24\3\24\3\25\3\25\3\26"+
+		"\3\26\3\26\3\26\3\26\3\26\3\26\3\26\5\26\u00e5\n\26\3\26\3\26\3\26\3\26"+
 		"\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26"+
 		"\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26"+
-		"\7\26\u0106\n\26\f\26\16\26\u0109\13\26\3\27\3\27\3\27\5\27\u010e\n\27"+
-		"\3\27\3\27\3\30\3\30\3\30\3\30\5\30\u0116\n\30\3\30\3\30\3\31\3\31\3\31"+
-		"\7\31\u011d\n\31\f\31\16\31\u0120\13\31\3\31\3\31\3\31\3\32\3\32\3\32"+
-		"\7\32\u0128\n\32\f\32\16\32\u012b\13\32\3\33\3\33\3\33\3\33\3\33\2\3*"+
-		"\34\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\2\7\3\2!"+
-		"\"\4\2\30\30++\5\2\31\31%%)+\4\2\3\4\6\6\3\2\r\16\2\u0148\2\67\3\2\2\2"+
-		"\4<\3\2\2\2\6L\3\2\2\2\bO\3\2\2\2\nX\3\2\2\2\fo\3\2\2\2\16r\3\2\2\2\20"+
-		"\u0087\3\2\2\2\22\u0089\3\2\2\2\24\u0090\3\2\2\2\26\u009d\3\2\2\2\30\u00a1"+
-		"\3\2\2\2\32\u00a7\3\2\2\2\34\u00b7\3\2\2\2\36\u00bc\3\2\2\2 \u00be\3\2"+
-		"\2\2\"\u00c6\3\2\2\2$\u00ca\3\2\2\2&\u00cd\3\2\2\2(\u00d6\3\2\2\2*\u00e0"+
-		"\3\2\2\2,\u010a\3\2\2\2.\u0111\3\2\2\2\60\u0119\3\2\2\2\62\u0124\3\2\2"+
-		"\2\64\u012c\3\2\2\2\668\5\4\3\2\67\66\3\2\2\289\3\2\2\29\67\3\2\2\29:"+
-		"\3\2\2\2:\3\3\2\2\2;=\7\27\2\2<;\3\2\2\2<=\3\2\2\2=>\3\2\2\2>?\7\32\2"+
-		"\2?@\7+\2\2@D\7\20\2\2AC\5\6\4\2BA\3\2\2\2CF\3\2\2\2DB\3\2\2\2DE\3\2\2"+
-		"\2EG\3\2\2\2FD\3\2\2\2GH\7\21\2\2H\5\3\2\2\2IM\5\16\b\2JM\5\n\6\2KM\5"+
-		"\b\5\2LI\3\2\2\2LJ\3\2\2\2LK\3\2\2\2M\7\3\2\2\2NP\7\27\2\2ON\3\2\2\2O"+
-		"P\3\2\2\2PQ\3\2\2\2QR\7+\2\2RS\7\22\2\2ST\5\f\7\2TU\7\23\2\2UV\5&\24\2"+
-		"V\t\3\2\2\2WY\7\27\2\2XW\3\2\2\2XY\3\2\2\2Y[\3\2\2\2Z\\\7\33\2\2[Z\3\2"+
-		"\2\2[\\\3\2\2\2\\]\3\2\2\2]^\5(\25\2^_\7+\2\2_`\7\22\2\2`a\5\f\7\2ab\7"+
-		"\23\2\2bc\5&\24\2c\13\3\2\2\2de\5(\25\2el\7+\2\2fg\7\24\2\2gh\5(\25\2"+
-		"hi\7+\2\2ik\3\2\2\2jf\3\2\2\2kn\3\2\2\2lj\3\2\2\2lm\3\2\2\2mp\3\2\2\2"+
-		"nl\3\2\2\2od\3\2\2\2op\3\2\2\2p\r\3\2\2\2qs\7\27\2\2rq\3\2\2\2rs\3\2\2"+
-		"\2su\3\2\2\2tv\7\33\2\2ut\3\2\2\2uv\3\2\2\2vw\3\2\2\2wx\5 \21\2x\17\3"+
-		"\2\2\2y\u0088\7\25\2\2z\u0088\5&\24\2{\u0088\5\22\n\2|\u0088\5\24\13\2"+
-		"}\u0088\5\26\f\2~\u0088\5\30\r\2\177\u0088\5\32\16\2\u0080\u0088\5 \21"+
-		"\2\u0081\u0088\5\"\22\2\u0082\u0088\5$\23\2\u0083\u0084\7(\2\2\u0084\u0088"+
-		"\7\25\2\2\u0085\u0086\7\'\2\2\u0086\u0088\7\25\2\2\u0087y\3\2\2\2\u0087"+
-		"z\3\2\2\2\u0087{\3\2\2\2\u0087|\3\2\2\2\u0087}\3\2\2\2\u0087~\3\2\2\2"+
-		"\u0087\177\3\2\2\2\u0087\u0080\3\2\2\2\u0087\u0081\3\2\2\2\u0087\u0082"+
-		"\3\2\2\2\u0087\u0083\3\2\2\2\u0087\u0085\3\2\2\2\u0088\21\3\2\2\2\u0089"+
-		"\u008a\7\37\2\2\u008a\u008b\5\64\33\2\u008b\u008e\5\20\t\2\u008c\u008d"+
-		"\7#\2\2\u008d\u008f\5\20\t\2\u008e\u008c\3\2\2\2\u008e\u008f\3\2\2\2\u008f"+
-		"\23\3\2\2\2\u0090\u0091\7 \2\2\u0091\u0092\5\64\33\2\u0092\u0098\7\20"+
-		"\2\2\u0093\u0094\t\2\2\2\u0094\u0095\7\26\2\2\u0095\u0097\5\20\t\2\u0096"+
-		"\u0093\3\2\2\2\u0097\u009a\3\2\2\2\u0098\u0096\3\2\2\2\u0098\u0099\3\2"+
-		"\2\2\u0099\u009b\3\2\2\2\u009a\u0098\3\2\2\2\u009b\u009c\7\21\2\2\u009c"+
-		"\25\3\2\2\2\u009d\u009e\7\35\2\2\u009e\u009f\5\64\33\2\u009f\u00a0\5\20"+
-		"\t\2\u00a0\27\3\2\2\2\u00a1\u00a2\7\36\2\2\u00a2\u00a3\5\20\t\2\u00a3"+
-		"\u00a4\7\35\2\2\u00a4\u00a5\5\64\33\2\u00a5\u00a6\7\25\2\2\u00a6\31\3"+
-		"\2\2\2\u00a7\u00a8\7\34\2\2\u00a8\u00aa\7\22\2\2\u00a9\u00ab\5\34\17\2"+
-		"\u00aa\u00a9\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ac\3\2\2\2\u00ac\u00ae"+
-		"\7\25\2\2\u00ad\u00af\5*\26\2\u00ae\u00ad\3\2\2\2\u00ae\u00af\3\2\2\2"+
-		"\u00af\u00b0\3\2\2\2\u00b0\u00b2\7\25\2\2\u00b1\u00b3\5\36\20\2\u00b2"+
-		"\u00b1\3\2\2\2\u00b2\u00b3\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00b5\7\23"+
-		"\2\2\u00b5\u00b6\5\20\t\2\u00b6\33\3\2\2\2\u00b7\u00b8\5(\25\2\u00b8\u00b9"+
-		"\7+\2\2\u00b9\u00ba\7\16\2\2\u00ba\u00bb\5*\26\2\u00bb\35\3\2\2\2\u00bc"+
-		"\u00bd\5*\26\2\u00bd\37\3\2\2\2\u00be\u00bf\5(\25\2\u00bf\u00c2\7+\2\2"+
-		"\u00c0\u00c1\7\16\2\2\u00c1\u00c3\5*\26\2\u00c2\u00c0\3\2\2\2\u00c2\u00c3"+
-		"\3\2\2\2\u00c3\u00c4\3\2\2\2\u00c4\u00c5\7\25\2\2\u00c5!\3\2\2\2\u00c6"+
-		"\u00c7\7$\2\2\u00c7\u00c8\5*\26\2\u00c8\u00c9\7\25\2\2\u00c9#\3\2\2\2"+
-		"\u00ca\u00cb\5*\26\2\u00cb\u00cc\7\25\2\2\u00cc%\3\2\2\2\u00cd\u00d1\7"+
-		"\20\2\2\u00ce\u00d0\5\20\t\2\u00cf\u00ce\3\2\2\2\u00d0\u00d3\3\2\2\2\u00d1"+
-		"\u00cf\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2\u00d4\3\2\2\2\u00d3\u00d1\3\2"+
-		"\2\2\u00d4\u00d5\7\21\2\2\u00d5\'\3\2\2\2\u00d6\u00d7\t\3\2\2\u00d7)\3"+
-		"\2\2\2\u00d8\u00d9\b\26\1\2\u00d9\u00e1\t\4\2\2\u00da\u00e1\5\64\33\2"+
-		"\u00db\u00e1\5,\27\2\u00dc\u00e1\5.\30\2\u00dd\u00de\t\5\2\2\u00de\u00e1"+
-		"\5*\26\f\u00df\u00e1\5\60\31\2\u00e0\u00d8\3\2\2\2\u00e0\u00da\3\2\2\2"+
-		"\u00e0\u00db\3\2\2\2\u00e0\u00dc\3\2\2\2\u00e0\u00dd\3\2\2\2\u00e0\u00df"+
-		"\3\2\2\2\u00e1\u0107\3\2\2\2\u00e2\u00e3\f\13\2\2\u00e3\u00e4\7\5\2\2"+
-		"\u00e4\u0106\5*\26\f\u00e5\u00e6\f\n\2\2\u00e6\u00e7\7\6\2\2\u00e7\u0106"+
-		"\5*\26\13\u00e8\u00e9\f\t\2\2\u00e9\u00ea\7\7\2\2\u00ea\u0106\5*\26\n"+
-		"\u00eb\u00ec\f\b\2\2\u00ec\u00ed\7\b\2\2\u00ed\u0106\5*\26\t\u00ee\u00ef"+
-		"\f\7\2\2\u00ef\u00f0\7\t\2\2\u00f0\u0106\5*\26\b\u00f1\u00f2\f\6\2\2\u00f2"+
-		"\u00f3\7\n\2\2\u00f3\u0106\5*\26\7\u00f4\u00f5\f\5\2\2\u00f5\u00f6\7\13"+
-		"\2\2\u00f6\u0106\5*\26\6\u00f7\u00f8\f\4\2\2\u00f8\u00f9\7\f\2\2\u00f9"+
-		"\u00fa\5*\26\2\u00fa\u00fb\7\26\2\2\u00fb\u00fc\5*\26\5\u00fc\u0106\3"+
-		"\2\2\2\u00fd\u00fe\f\20\2\2\u00fe\u00ff\7\17\2\2\u00ff\u0106\5,\27\2\u0100"+
-		"\u0101\f\17\2\2\u0101\u0102\7\17\2\2\u0102\u0106\7+\2\2\u0103\u0104\f"+
-		"\r\2\2\u0104\u0106\7\3\2\2\u0105\u00e2\3\2\2\2\u0105\u00e5\3\2\2\2\u0105"+
-		"\u00e8\3\2\2\2\u0105\u00eb\3\2\2\2\u0105\u00ee\3\2\2\2\u0105\u00f1\3\2"+
-		"\2\2\u0105\u00f4\3\2\2\2\u0105\u00f7\3\2\2\2\u0105\u00fd\3\2\2\2\u0105"+
-		"\u0100\3\2\2\2\u0105\u0103\3\2\2\2\u0106\u0109\3\2\2\2\u0107\u0105\3\2"+
-		"\2\2\u0107\u0108\3\2\2\2\u0108+\3\2\2\2\u0109\u0107\3\2\2\2\u010a\u010b"+
-		"\7+\2\2\u010b\u010d\7\22\2\2\u010c\u010e\5\62\32\2\u010d\u010c\3\2\2\2"+
-		"\u010d\u010e\3\2\2\2\u010e\u010f\3\2\2\2\u010f\u0110\7\23\2\2\u0110-\3"+
-		"\2\2\2\u0111\u0112\7&\2\2\u0112\u0113\7+\2\2\u0113\u0115\7\22\2\2\u0114"+
-		"\u0116\5\62\32\2\u0115\u0114\3\2\2\2\u0115\u0116\3\2\2\2\u0116\u0117\3"+
-		"\2\2\2\u0117\u0118\7\23\2\2\u0118/\3\2\2\2\u0119\u011e\7+\2\2\u011a\u011b"+
-		"\t\6\2\2\u011b\u011d\7+\2\2\u011c\u011a\3\2\2\2\u011d\u0120\3\2\2\2\u011e"+
-		"\u011c\3\2\2\2\u011e\u011f\3\2\2\2\u011f\u0121\3\2\2\2\u0120\u011e\3\2"+
-		"\2\2\u0121\u0122\t\6\2\2\u0122\u0123\5*\26\2\u0123\61\3\2\2\2\u0124\u0129"+
-		"\5*\26\2\u0125\u0126\7\24\2\2\u0126\u0128\5*\26\2\u0127\u0125\3\2\2\2"+
-		"\u0128\u012b\3\2\2\2\u0129\u0127\3\2\2\2\u0129\u012a\3\2\2\2\u012a\63"+
-		"\3\2\2\2\u012b\u0129\3\2\2\2\u012c\u012d\7\22\2\2\u012d\u012e\5*\26\2"+
-		"\u012e\u012f\7\23\2\2\u012f\65\3\2\2\2\349<DLOX[loru\u0087\u008e\u0098"+
-		"\u00aa\u00ae\u00b2\u00c2\u00d1\u00e0\u0105\u0107\u010d\u0115\u011e\u0129";
+		"\3\26\3\26\3\26\7\26\u010a\n\26\f\26\16\26\u010d\13\26\3\27\3\27\3\27"+
+		"\5\27\u0112\n\27\3\27\3\27\3\30\3\30\3\30\3\30\5\30\u011a\n\30\3\30\3"+
+		"\30\3\31\3\31\3\31\3\31\3\32\3\32\5\32\u0124\n\32\3\32\3\32\3\33\3\33"+
+		"\7\33\u012a\n\33\f\33\16\33\u012d\13\33\3\33\3\33\3\34\3\34\3\34\7\34"+
+		"\u0134\n\34\f\34\16\34\u0137\13\34\3\35\3\35\3\35\3\35\3\35\2\3*\36\2"+
+		"\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668\2\7\3\2!\""+
+		"\4\2\30\30++\5\2\31\31%%)+\4\2\3\4\6\6\3\2\r\16\2\u0153\2;\3\2\2\2\4@"+
+		"\3\2\2\2\6P\3\2\2\2\bS\3\2\2\2\n\\\3\2\2\2\fs\3\2\2\2\16v\3\2\2\2\20\u008b"+
+		"\3\2\2\2\22\u008d\3\2\2\2\24\u0094\3\2\2\2\26\u00a1\3\2\2\2\30\u00a5\3"+
+		"\2\2\2\32\u00ab\3\2\2\2\34\u00bb\3\2\2\2\36\u00c0\3\2\2\2 \u00c2\3\2\2"+
+		"\2\"\u00ca\3\2\2\2$\u00ce\3\2\2\2&\u00d1\3\2\2\2(\u00da\3\2\2\2*\u00e4"+
+		"\3\2\2\2,\u010e\3\2\2\2.\u0115\3\2\2\2\60\u011d\3\2\2\2\62\u0123\3\2\2"+
+		"\2\64\u012b\3\2\2\2\66\u0130\3\2\2\28\u0138\3\2\2\2:<\5\4\3\2;:\3\2\2"+
+		"\2<=\3\2\2\2=;\3\2\2\2=>\3\2\2\2>\3\3\2\2\2?A\7\27\2\2@?\3\2\2\2@A\3\2"+
+		"\2\2AB\3\2\2\2BC\7\32\2\2CD\7+\2\2DH\7\20\2\2EG\5\6\4\2FE\3\2\2\2GJ\3"+
+		"\2\2\2HF\3\2\2\2HI\3\2\2\2IK\3\2\2\2JH\3\2\2\2KL\7\21\2\2L\5\3\2\2\2M"+
+		"Q\5\16\b\2NQ\5\n\6\2OQ\5\b\5\2PM\3\2\2\2PN\3\2\2\2PO\3\2\2\2Q\7\3\2\2"+
+		"\2RT\7\27\2\2SR\3\2\2\2ST\3\2\2\2TU\3\2\2\2UV\7+\2\2VW\7\22\2\2WX\5\f"+
+		"\7\2XY\7\23\2\2YZ\5&\24\2Z\t\3\2\2\2[]\7\27\2\2\\[\3\2\2\2\\]\3\2\2\2"+
+		"]_\3\2\2\2^`\7\33\2\2_^\3\2\2\2_`\3\2\2\2`a\3\2\2\2ab\5(\25\2bc\7+\2\2"+
+		"cd\7\22\2\2de\5\f\7\2ef\7\23\2\2fg\5&\24\2g\13\3\2\2\2hi\5(\25\2ip\7+"+
+		"\2\2jk\7\24\2\2kl\5(\25\2lm\7+\2\2mo\3\2\2\2nj\3\2\2\2or\3\2\2\2pn\3\2"+
+		"\2\2pq\3\2\2\2qt\3\2\2\2rp\3\2\2\2sh\3\2\2\2st\3\2\2\2t\r\3\2\2\2uw\7"+
+		"\27\2\2vu\3\2\2\2vw\3\2\2\2wy\3\2\2\2xz\7\33\2\2yx\3\2\2\2yz\3\2\2\2z"+
+		"{\3\2\2\2{|\5 \21\2|\17\3\2\2\2}\u008c\7\25\2\2~\u008c\5&\24\2\177\u008c"+
+		"\5\22\n\2\u0080\u008c\5\24\13\2\u0081\u008c\5\26\f\2\u0082\u008c\5\30"+
+		"\r\2\u0083\u008c\5\32\16\2\u0084\u008c\5 \21\2\u0085\u008c\5\"\22\2\u0086"+
+		"\u008c\5$\23\2\u0087\u0088\7(\2\2\u0088\u008c\7\25\2\2\u0089\u008a\7\'"+
+		"\2\2\u008a\u008c\7\25\2\2\u008b}\3\2\2\2\u008b~\3\2\2\2\u008b\177\3\2"+
+		"\2\2\u008b\u0080\3\2\2\2\u008b\u0081\3\2\2\2\u008b\u0082\3\2\2\2\u008b"+
+		"\u0083\3\2\2\2\u008b\u0084\3\2\2\2\u008b\u0085\3\2\2\2\u008b\u0086\3\2"+
+		"\2\2\u008b\u0087\3\2\2\2\u008b\u0089\3\2\2\2\u008c\21\3\2\2\2\u008d\u008e"+
+		"\7\37\2\2\u008e\u008f\58\35\2\u008f\u0092\5\20\t\2\u0090\u0091\7#\2\2"+
+		"\u0091\u0093\5\20\t\2\u0092\u0090\3\2\2\2\u0092\u0093\3\2\2\2\u0093\23"+
+		"\3\2\2\2\u0094\u0095\7 \2\2\u0095\u0096\58\35\2\u0096\u009c\7\20\2\2\u0097"+
+		"\u0098\t\2\2\2\u0098\u0099\7\26\2\2\u0099\u009b\5\20\t\2\u009a\u0097\3"+
+		"\2\2\2\u009b\u009e\3\2\2\2\u009c\u009a\3\2\2\2\u009c\u009d\3\2\2\2\u009d"+
+		"\u009f\3\2\2\2\u009e\u009c\3\2\2\2\u009f\u00a0\7\21\2\2\u00a0\25\3\2\2"+
+		"\2\u00a1\u00a2\7\35\2\2\u00a2\u00a3\58\35\2\u00a3\u00a4\5\20\t\2\u00a4"+
+		"\27\3\2\2\2\u00a5\u00a6\7\36\2\2\u00a6\u00a7\5\20\t\2\u00a7\u00a8\7\35"+
+		"\2\2\u00a8\u00a9\58\35\2\u00a9\u00aa\7\25\2\2\u00aa\31\3\2\2\2\u00ab\u00ac"+
+		"\7\34\2\2\u00ac\u00ae\7\22\2\2\u00ad\u00af\5\34\17\2\u00ae\u00ad\3\2\2"+
+		"\2\u00ae\u00af\3\2\2\2\u00af\u00b0\3\2\2\2\u00b0\u00b2\7\25\2\2\u00b1"+
+		"\u00b3\5*\26\2\u00b2\u00b1\3\2\2\2\u00b2\u00b3\3\2\2\2\u00b3\u00b4\3\2"+
+		"\2\2\u00b4\u00b6\7\25\2\2\u00b5\u00b7\5\36\20\2\u00b6\u00b5\3\2\2\2\u00b6"+
+		"\u00b7\3\2\2\2\u00b7\u00b8\3\2\2\2\u00b8\u00b9\7\23\2\2\u00b9\u00ba\5"+
+		"\20\t\2\u00ba\33\3\2\2\2\u00bb\u00bc\5(\25\2\u00bc\u00bd\7+\2\2\u00bd"+
+		"\u00be\7\16\2\2\u00be\u00bf\5*\26\2\u00bf\35\3\2\2\2\u00c0\u00c1\5*\26"+
+		"\2\u00c1\37\3\2\2\2\u00c2\u00c3\5(\25\2\u00c3\u00c6\7+\2\2\u00c4\u00c5"+
+		"\7\16\2\2\u00c5\u00c7\5*\26\2\u00c6\u00c4\3\2\2\2\u00c6\u00c7\3\2\2\2"+
+		"\u00c7\u00c8\3\2\2\2\u00c8\u00c9\7\25\2\2\u00c9!\3\2\2\2\u00ca\u00cb\7"+
+		"$\2\2\u00cb\u00cc\5*\26\2\u00cc\u00cd\7\25\2\2\u00cd#\3\2\2\2\u00ce\u00cf"+
+		"\5*\26\2\u00cf\u00d0\7\25\2\2\u00d0%\3\2\2\2\u00d1\u00d5\7\20\2\2\u00d2"+
+		"\u00d4\5\20\t\2\u00d3\u00d2\3\2\2\2\u00d4\u00d7\3\2\2\2\u00d5\u00d3\3"+
+		"\2\2\2\u00d5\u00d6\3\2\2\2\u00d6\u00d8\3\2\2\2\u00d7\u00d5\3\2\2\2\u00d8"+
+		"\u00d9\7\21\2\2\u00d9\'\3\2\2\2\u00da\u00db\t\3\2\2\u00db)\3\2\2\2\u00dc"+
+		"\u00dd\b\26\1\2\u00dd\u00e5\t\4\2\2\u00de\u00e5\58\35\2\u00df\u00e5\5"+
+		",\27\2\u00e0\u00e5\5.\30\2\u00e1\u00e2\t\5\2\2\u00e2\u00e5\5*\26\f\u00e3"+
+		"\u00e5\5\60\31\2\u00e4\u00dc\3\2\2\2\u00e4\u00de\3\2\2\2\u00e4\u00df\3"+
+		"\2\2\2\u00e4\u00e0\3\2\2\2\u00e4\u00e1\3\2\2\2\u00e4\u00e3\3\2\2\2\u00e5"+
+		"\u010b\3\2\2\2\u00e6\u00e7\f\13\2\2\u00e7\u00e8\7\5\2\2\u00e8\u010a\5"+
+		"*\26\f\u00e9\u00ea\f\n\2\2\u00ea\u00eb\7\6\2\2\u00eb\u010a\5*\26\13\u00ec"+
+		"\u00ed\f\t\2\2\u00ed\u00ee\7\7\2\2\u00ee\u010a\5*\26\n\u00ef\u00f0\f\b"+
+		"\2\2\u00f0\u00f1\7\b\2\2\u00f1\u010a\5*\26\t\u00f2\u00f3\f\7\2\2\u00f3"+
+		"\u00f4\7\t\2\2\u00f4\u010a\5*\26\b\u00f5\u00f6\f\6\2\2\u00f6\u00f7\7\n"+
+		"\2\2\u00f7\u010a\5*\26\7\u00f8\u00f9\f\5\2\2\u00f9\u00fa\7\13\2\2\u00fa"+
+		"\u010a\5*\26\6\u00fb\u00fc\f\4\2\2\u00fc\u00fd\7\f\2\2\u00fd\u00fe\5*"+
+		"\26\2\u00fe\u00ff\7\26\2\2\u00ff\u0100\5*\26\5\u0100\u010a\3\2\2\2\u0101"+
+		"\u0102\f\20\2\2\u0102\u0103\7\17\2\2\u0103\u010a\5,\27\2\u0104\u0105\f"+
+		"\17\2\2\u0105\u0106\7\17\2\2\u0106\u010a\7+\2\2\u0107\u0108\f\r\2\2\u0108"+
+		"\u010a\7\3\2\2\u0109\u00e6\3\2\2\2\u0109\u00e9\3\2\2\2\u0109\u00ec\3\2"+
+		"\2\2\u0109\u00ef\3\2\2\2\u0109\u00f2\3\2\2\2\u0109\u00f5\3\2\2\2\u0109"+
+		"\u00f8\3\2\2\2\u0109\u00fb\3\2\2\2\u0109\u0101\3\2\2\2\u0109\u0104\3\2"+
+		"\2\2\u0109\u0107\3\2\2\2\u010a\u010d\3\2\2\2\u010b\u0109\3\2\2\2\u010b"+
+		"\u010c\3\2\2\2\u010c+\3\2\2\2\u010d\u010b\3\2\2\2\u010e\u010f\7+\2\2\u010f"+
+		"\u0111\7\22\2\2\u0110\u0112\5\66\34\2\u0111\u0110\3\2\2\2\u0111\u0112"+
+		"\3\2\2\2\u0112\u0113\3\2\2\2\u0113\u0114\7\23\2\2\u0114-\3\2\2\2\u0115"+
+		"\u0116\7&\2\2\u0116\u0117\7+\2\2\u0117\u0119\7\22\2\2\u0118\u011a\5\66"+
+		"\34\2\u0119\u0118\3\2\2\2\u0119\u011a\3\2\2\2\u011a\u011b\3\2\2\2\u011b"+
+		"\u011c\7\23\2\2\u011c/\3\2\2\2\u011d\u011e\5\62\32\2\u011e\u011f\t\6\2"+
+		"\2\u011f\u0120\5\64\33\2\u0120\61\3\2\2\2\u0121\u0122\7%\2\2\u0122\u0124"+
+		"\7\17\2\2\u0123\u0121\3\2\2\2\u0123\u0124\3\2\2\2\u0124\u0125\3\2\2\2"+
+		"\u0125\u0126\7+\2\2\u0126\63\3\2\2\2\u0127\u0128\7+\2\2\u0128\u012a\t"+
+		"\6\2\2\u0129\u0127\3\2\2\2\u012a\u012d\3\2\2\2\u012b\u0129\3\2\2\2\u012b"+
+		"\u012c\3\2\2\2\u012c\u012e\3\2\2\2\u012d\u012b\3\2\2\2\u012e\u012f\5*"+
+		"\26\2\u012f\65\3\2\2\2\u0130\u0135\5*\26\2\u0131\u0132\7\24\2\2\u0132"+
+		"\u0134\5*\26\2\u0133\u0131\3\2\2\2\u0134\u0137\3\2\2\2\u0135\u0133\3\2"+
+		"\2\2\u0135\u0136\3\2\2\2\u0136\67\3\2\2\2\u0137\u0135\3\2\2\2\u0138\u0139"+
+		"\7\22\2\2\u0139\u013a\5*\26\2\u013a\u013b\7\23\2\2\u013b9\3\2\2\2\35="+
+		"@HPS\\_psvy\u008b\u0092\u009c\u00ae\u00b2\u00b6\u00c6\u00d5\u00e4\u0109"+
+		"\u010b\u0111\u0119\u0123\u012b\u0135";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
