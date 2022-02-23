@@ -56,7 +56,7 @@ public class TypeChecker implements ASTVisitor {
 
     private void expect(Type t, Expression exp) throws TypeCheckException {
         exp.visit(this);
-        if (exp.getType() != t)
+        if (!exp.getType().equals(t))
             throw new TypeCheckException("Expected type " + t.name + ", got " + exp.getType().name);
     }
 
@@ -177,7 +177,7 @@ public class TypeChecker implements ASTVisitor {
         expect(Type.BOOLEAN, ternary.first);
         ternary.second.visit(this);
         ternary.third.visit(this);
-        if (ternary.second.getType() != ternary.third.getType())
+        if (!ternary.second.getType().equals(ternary.third.getType()))
             throw new TypeCheckException("Both branches of an inline if must be of the same type");
         ternary.setType(ternary.second.getType());
     }
@@ -186,7 +186,7 @@ public class TypeChecker implements ASTVisitor {
     public void visit(Equal equal) throws TypeCheckException {
         equal.left.visit(this);
         equal.right.visit(this);
-        if (equal.left.getType() != equal.right.getType())
+        if (!equal.left.getType().equals(equal.right.getType()))
             throw new TypeCheckException("lhs and rhs of equality must be of the same type");
         equal.setType(Type.BOOLEAN);
     }
@@ -215,7 +215,7 @@ public class TypeChecker implements ASTVisitor {
     public void visit(NotEqual notEqual) throws TypeCheckException {
         notEqual.left.visit(this);
         notEqual.right.visit(this);
-        if (notEqual.left.getType() != notEqual.right.getType())
+        if (!notEqual.left.getType().equals(notEqual.right.getType()))
             throw new TypeCheckException("lhs and rhs of inequality must be of the same type");
         notEqual.setType(Type.BOOLEAN);
     }
@@ -252,23 +252,27 @@ public class TypeChecker implements ASTVisitor {
         // TODO: LHS must be a field/variable!
         assignment.left.visit(this);
         assignment.right.visit(this);
-        if (assignment.left.getType() != assignment.right.getType())
+        if (!assignment.left.getType().equals(assignment.right.getType()))
             throw new TypeCheckException("lhs and rhs of an assignment must be of the same type");
         assignment.setType(assignment.left.getType());
     }
 
     @Override
     public void visit(MethodCall methodCall) throws TypeCheckException {
+        // TODO: Need to handle static methods specially!
         methodCall.expr.visit(this);
         Clazz clazz = this.clazzes.get(methodCall.expr.getType().name);
 
         for (Expression arg: methodCall.args)
             arg.visit(this);
         Method method = clazz.findMethod(methodCall.name, methodCall.args);
+
+        // Does the method exist? Is it public?
         if (method == null)
             throw new TypeCheckException("Method '" + methodCall.name + "' is not defined in " + clazz.name);
+        if (method.access != AccessModifier.PUBLIC)
+            throw new TypeCheckException(method.name + " cannot be accessed");
 
-        // TODO: Need to implement the things I was asked to!
         methodCall.setMethod(method);
         methodCall.isStatic = method.isStatic;
         methodCall.setType(method.returnType);
@@ -303,7 +307,7 @@ public class TypeChecker implements ASTVisitor {
         if (_if.elseBody != null) {
             env.openScope();
             _if.elseBody.visit(this);
-            if (_if.body.getType() != _if.elseBody.getType())
+            if (!_if.body.getType().equals(_if.elseBody.getType()))
                 throw new TypeCheckException("Inconsistent return types");
 
             env.closeScope();
@@ -317,7 +321,7 @@ public class TypeChecker implements ASTVisitor {
         this.env.addToScope(new Identifier(localVarDeclaration.name, localVarDeclaration.getType()));
         if (localVarDeclaration.expression != null) {
             localVarDeclaration.expression.visit(this);
-            if (localVarDeclaration.expression.getType() != localVarDeclaration.getType())
+            if (!localVarDeclaration.expression.getType().equals(localVarDeclaration.getType()))
                 throw new TypeCheckException("Assigned value does not match the declared type of " +
                         localVarDeclaration.getType());
         }
@@ -354,11 +358,11 @@ public class TypeChecker implements ASTVisitor {
 
     private Type mergeType(Type a, Type b) throws TypeCheckException {
         // TODO: Refactor this shit show!
-        if (a == Type.VOID)
+        if (a.equals(Type.VOID))
             return b;
-        if (b == Type.VOID)
+        if (b.equals(Type.VOID))
             return a;
-        if (a != b)
+        if (!a.equals(b))
             throw new TypeCheckException("Conflicting return types");
         return a;
     }
