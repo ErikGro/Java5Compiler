@@ -260,8 +260,13 @@ public class TypeChecker implements ASTVisitor {
     @Override
     public void visit(MethodCall methodCall) throws TypeCheckException {
         // TODO: Need to handle static methods specially!
-        methodCall.expr.visit(this);
-        Clazz clazz = this.clazzes.get(methodCall.expr.getType().name);
+        // Implicit this
+        Clazz clazz = null;
+        if (methodCall.expr != null) {
+            methodCall.expr.visit(this);
+            clazz = this.clazzes.get(methodCall.expr.getType().name);
+        } else
+            clazz = clazzes.get(current);
 
         for (Expression arg: methodCall.args)
             arg.visit(this);
