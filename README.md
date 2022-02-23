@@ -1,6 +1,6 @@
 # Compilerbau_WS2021
 
-In order to compile the compiler run:
+In order to compile and package the compiler run:
 `mvn clean install assembly:single -Dmaven.test.skip`
 
 ## Script - createTestCases.sh

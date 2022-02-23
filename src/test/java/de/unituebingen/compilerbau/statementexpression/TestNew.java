@@ -16,7 +16,6 @@ import de.unituebingen.compilerbau.typing.TypeChecker;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PACKAGEPRIVATE;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
@@ -34,6 +33,7 @@ public class TestNew extends CompilerTest {
         fields.add(hans);
 
         Statement initHans = new LocalVarDeclaration("h", new New(Collections.emptyList()));
+        initHans.setType(new Type("Hans"));
         Block body = new Block(Arrays.asList(initHans));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

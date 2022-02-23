@@ -1,19 +1,19 @@
 package de.unituebingen.compilerbau.statement;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
-import de.unituebingen.compilerbau.ast.expression.Identifier;
-import de.unituebingen.compilerbau.ast.expression.Ternary;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Method;
+import de.unituebingen.compilerbau.ast.Statement;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.Equal;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.Greater;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.Less;
-import de.unituebingen.compilerbau.ast.expression.unary.Not;
-import de.unituebingen.compilerbau.ast.statementexpressions.Increment;
-import de.unituebingen.compilerbau.ast.statements.*;
+import de.unituebingen.compilerbau.ast.statements.Block;
+import de.unituebingen.compilerbau.ast.statements.If;
+import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
