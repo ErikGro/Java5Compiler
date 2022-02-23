@@ -1,12 +1,10 @@
 package de.unituebingen.compilerbau.clazz.field;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
-import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
-import de.unituebingen.compilerbau.ast.statements.Block;
-import de.unituebingen.compilerbau.ast.statements.Return;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Field;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
@@ -14,7 +12,8 @@ import de.unituebingen.compilerbau.typing.TypeChecker;
 import java.io.IOException;
 import java.util.*;
 
-import static de.unituebingen.compilerbau.ast.AccessModifier.*;
+import static de.unituebingen.compilerbau.ast.AccessModifier.PACKAGEPRIVATE;
+import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
 
 public class TestPackagePrivateField extends CompilerTest {
@@ -24,7 +23,7 @@ public class TestPackagePrivateField extends CompilerTest {
 
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
-        Field fieldA = new Field(null, PACKAGEPRIVATE, false, "a", null, Type.INT);
+        Field fieldA = new Field(PACKAGEPRIVATE, false, "a", null, Type.INT);
         List<Field> fields = new ArrayList<>();
         fields.add(fieldA);
 

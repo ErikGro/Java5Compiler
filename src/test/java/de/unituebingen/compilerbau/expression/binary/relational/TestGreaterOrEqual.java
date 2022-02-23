@@ -1,18 +1,18 @@
 package de.unituebingen.compilerbau.expression.binary.relational;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Method;
+import de.unituebingen.compilerbau.ast.Statement;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
-import de.unituebingen.compilerbau.ast.expression.relationaloperators.Equal;
-import de.unituebingen.compilerbau.ast.expression.relationaloperators.Greater;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.GreaterOrEqual;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.If;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
 import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
@@ -31,12 +31,16 @@ public class TestGreaterOrEqual extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new GreaterOrEqual(new IntLiteral(42), new IntLiteral(43)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new GreaterOrEqual(new IntLiteral(42), new IntLiteral(42)));
+        statementB.setType(Type.BOOLEAN);
         Statement statementC = new LocalVarDeclaration("c", new GreaterOrEqual(new IntLiteral(42), new IntLiteral(41)));
+        statementC.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB, statementC));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement aDecl = new LocalVarDeclaration("a", new GreaterOrEqual(new IntLiteral(44), new IntLiteral(43)));
+        aDecl.setType(Type.BOOLEAN);
         Statement ifStmt = new If(
                         new Identifier("a", null),
                         new Block(Arrays.asList(new Return(new IntLiteral(42)))),

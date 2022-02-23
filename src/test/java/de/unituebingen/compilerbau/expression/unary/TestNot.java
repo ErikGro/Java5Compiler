@@ -1,19 +1,19 @@
 package de.unituebingen.compilerbau.expression.unary;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
-import de.unituebingen.compilerbau.ast.expression.Identifier;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Method;
+import de.unituebingen.compilerbau.ast.Statement;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
 import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.Greater;
-import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
 import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
@@ -32,8 +32,11 @@ public class TestNot extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new Not(new BooleanLiteral(true)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new Not(new Not(new BooleanLiteral(true))));
+        statementB.setType(Type.BOOLEAN);
         Statement statementC = new LocalVarDeclaration("c", new Not(new Greater(new IntLiteral(42), new IntLiteral(43))));
+        statementC.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB, statementC));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 

@@ -1,25 +1,19 @@
 package de.unituebingen.compilerbau.clazz;
 
-import de.unituebingen.compilerbau.Compiler;
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
-import de.unituebingen.compilerbau.ast.expression.Identifier;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Field;
+import de.unituebingen.compilerbau.ast.Method;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
-import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PRIVATE;
@@ -33,11 +27,11 @@ public class TestClass extends CompilerTest {
 
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
-        Field fieldA = new Field(null, PUBLIC, false, "a", null, Type.INT);
-        Field fieldB = new Field(null, PUBLIC, false, "b", null, Type.INT);
-        Field fieldC = new Field(null, PUBLIC, true, "c", null, Type.INT);
-        Field fieldD = new Field(null, PRIVATE, false, "d", null, Type.INT);
-        Field fieldE = new Field(null, PRIVATE, true, "e", null, Type.INT);
+        Field fieldA = new Field(PUBLIC, false, "a", null, Type.INT);
+        Field fieldB = new Field(PUBLIC, false, "b", null, Type.INT);
+        Field fieldC = new Field(PUBLIC, true, "c", null, Type.INT);
+        Field fieldD = new Field(PRIVATE, false, "d", null, Type.INT);
+        Field fieldE = new Field(PRIVATE, true, "e", null, Type.INT);
         List<Field> fields = new ArrayList<>();
         fields.add(fieldA);
         fields.add(fieldB);

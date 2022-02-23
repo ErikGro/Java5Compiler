@@ -1,20 +1,19 @@
 package de.unituebingen.compilerbau.expression.binary.conditional;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Method;
+import de.unituebingen.compilerbau.ast.Statement;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
-import de.unituebingen.compilerbau.ast.expression.bitwisebinary.BitAnd;
-import de.unituebingen.compilerbau.ast.expression.bitwisebinary.BitXOR;
 import de.unituebingen.compilerbau.ast.expression.conditionaloperators.And;
 import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
-import de.unituebingen.compilerbau.ast.expression.relationaloperators.Equal;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.If;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
 import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
@@ -33,13 +32,18 @@ public class TestAnd extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new And(new BooleanLiteral(true), new BooleanLiteral(true)));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new And(new BooleanLiteral(true), new BooleanLiteral(false)));
+        statementB.setType(Type.BOOLEAN);
         Statement statementC = new LocalVarDeclaration("c", new And(new And(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(true)));
+        statementC.setType(Type.BOOLEAN);
         Statement statementD = new LocalVarDeclaration("d", new And(new And(new And(new BooleanLiteral(true), new BooleanLiteral(true)), new BooleanLiteral(false)), new BooleanLiteral(true)));
+        statementD.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB, statementC, statementD));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement aDecl = new LocalVarDeclaration("a", new And(new BooleanLiteral(true), new BooleanLiteral(true)));
+        aDecl.setType(Type.BOOLEAN);
         Statement ifStmt = new If(
                         new Identifier("a", null),
                         new Block(Arrays.asList(new Return(new IntLiteral(42)))),

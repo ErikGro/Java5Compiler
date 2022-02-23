@@ -5,21 +5,17 @@ import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.DotOperator;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
-import de.unituebingen.compilerbau.ast.statementexpressions.MethodCall;
 import de.unituebingen.compilerbau.ast.statementexpressions.New;
 import de.unituebingen.compilerbau.ast.statements.Block;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
 import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PACKAGEPRIVATE;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
@@ -33,10 +29,11 @@ public class TestNew extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         List<Field> fields = new ArrayList<>();
-        Field hans = new Field(null, PUBLIC, false, "hans", new New(Collections.emptyList()), new Type("Hans"));
+        Field hans = new Field(PUBLIC, false, "hans", new New(Collections.emptyList()), new Type("Hans"));
         fields.add(hans);
 
         Statement initHans = new LocalVarDeclaration("h", new New(Collections.emptyList()));
+        initHans.setType(new Type("Hans"));
         Block body = new Block(Arrays.asList(initHans));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
@@ -50,7 +47,7 @@ public class TestNew extends CompilerTest {
                 fields,
                 methods);
 
-        Field i = new Field(null, PUBLIC, false, "i", new IntLiteral(42), Type.INT);
+        Field i = new Field(PUBLIC, false, "i", new IntLiteral(42), Type.INT);
         final Clazz expectedASTHans = new Clazz(
                 PACKAGEPRIVATE,
                 "Hans",

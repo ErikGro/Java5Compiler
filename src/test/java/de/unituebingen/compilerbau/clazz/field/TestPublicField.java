@@ -1,12 +1,10 @@
 package de.unituebingen.compilerbau.clazz.field;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.AccessModifier;
 import de.unituebingen.compilerbau.ast.Clazz;
 import de.unituebingen.compilerbau.ast.Field;
 import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
@@ -14,7 +12,6 @@ import de.unituebingen.compilerbau.typing.TypeChecker;
 import java.io.IOException;
 import java.util.*;
 
-import static de.unituebingen.compilerbau.ast.AccessModifier.PRIVATE;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
 
@@ -25,7 +22,7 @@ public class TestPublicField extends CompilerTest {
 
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
-        Field fieldA = new Field(null, PUBLIC, false, "a", null, Type.INT);
+        Field fieldA = new Field(PUBLIC, false, "a", null, Type.INT);
         List<Field> fields = new ArrayList<>();
         fields.add(fieldA);
 

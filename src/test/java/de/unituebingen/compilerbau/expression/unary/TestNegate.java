@@ -1,19 +1,17 @@
 package de.unituebingen.compilerbau.expression.unary;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.*;
+import de.unituebingen.compilerbau.ast.Clazz;
+import de.unituebingen.compilerbau.ast.Method;
+import de.unituebingen.compilerbau.ast.Statement;
+import de.unituebingen.compilerbau.ast.Type;
 import de.unituebingen.compilerbau.ast.expression.Identifier;
-import de.unituebingen.compilerbau.ast.expression.Ternary;
-import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
-import de.unituebingen.compilerbau.ast.expression.relationaloperators.NotEqual;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.statements.Block;
-import de.unituebingen.compilerbau.ast.statements.If;
 import de.unituebingen.compilerbau.ast.statements.LocalVarDeclaration;
 import de.unituebingen.compilerbau.ast.statements.Return;
 import de.unituebingen.compilerbau.exception.ASTException;
-import de.unituebingen.compilerbau.exception.CompilerException;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 import de.unituebingen.compilerbau.scanner.ScannerParser;
 import de.unituebingen.compilerbau.typing.TypeChecker;
@@ -32,11 +30,14 @@ public class TestNegate extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new IntLiteral(42));
+        statementA.setType(Type.BOOLEAN);
         Statement statementB = new LocalVarDeclaration("b", new Negate(new Identifier("a", null)));
+        statementB.setType(Type.BOOLEAN);
         Block body = new Block(Arrays.asList(statementA, statementB));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement negativeDecl = new LocalVarDeclaration("negative", new Negate(new IntLiteral(42)));
+        negativeDecl.setType(Type.BOOLEAN);
         Statement returnStmt = new Return(new Negate(new Identifier("negative", null)));
         Block body2 = new Block(Arrays.asList(negativeDecl, returnStmt));
         Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);

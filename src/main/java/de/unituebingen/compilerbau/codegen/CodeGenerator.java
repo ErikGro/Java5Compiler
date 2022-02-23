@@ -30,6 +30,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
 import static org.objectweb.asm.Opcodes.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -87,7 +88,7 @@ public class CodeGenerator {
                 if (!field.isStatic) {
                     mv.visitVarInsn(ALOAD, 0);
                 }
-                mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, clazz.name, field.getName(), field.getType().name);
             }
         }
 
@@ -316,7 +317,7 @@ public class CodeGenerator {
                         mv.visitVarInsn(ALOAD, 0);
                         mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, clazz.name, field.getName(), field.getType().name);
                     if (increment.isPostIncrement) {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
@@ -328,7 +329,7 @@ public class CodeGenerator {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, clazz.name, field.getName(), field.getType().name);
                 } else {
                     throw new CodeGenException("Illegal operation");
                 }
@@ -375,7 +376,7 @@ public class CodeGenerator {
                         mv.visitVarInsn(ALOAD, 0);
                         mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? GETSTATIC : GETFIELD, clazz.name, field.getName(), field.getType().name);
                     if (decrement.isPostDecrement) {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
@@ -387,7 +388,7 @@ public class CodeGenerator {
                         if (!field.isStatic) mv.visitInsn(DUP_X1);
                         else mv.visitInsn(DUP);
                     }
-                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, clazz.name, field.getName(), field.getType().name);
                 } else {
                     throw new CodeGenException("Illegal operation");
                 }
@@ -434,7 +435,7 @@ public class CodeGenerator {
                     if (!field.isStatic)
                         mv.visitInsn(DUP_X1);
                     else mv.visitInsn(DUP);
-                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, field.owner.name, field.getName(), field.getType().name);
+                    mv.visitFieldInsn(field.isStatic ? PUTSTATIC : PUTFIELD, clazz.name, field.getName(), field.getType().name);
                 } else {
                     throw new CodeGenException("Illegal operation");
                 }
@@ -479,17 +480,20 @@ public class CodeGenerator {
         @Override
         public void visit(For _for) {
             scope = new Scope(scope);
-            _for.init.visit(this);
+            if (_for.init != null)
+                _for.init.visit(this);
             Label start = new Label();
             Label end = new Label();
             mv.visitLabel(start);
-            _for.termination.visit(this);
+            if (_for.termination != null)
+                _for.termination.visit(this);
             mv.visitJumpInsn(IFEQ, end);
             _for.body.visit(this);
-            _for.increment.visit(this);
-            System.out.println(_for.increment.getType());
-            if (_for.increment.getType() != null) {
-                mv.visitInsn(POP);
+            if (_for.increment != null) {
+                _for.increment.visit(this);
+                if (!_for.increment.getType().equals(Type.VOID)) {
+                    mv.visitInsn(POP);
+                }
             }
             mv.visitJumpInsn(GOTO, start);
             mv.visitLabel(end);
@@ -574,17 +578,35 @@ public class CodeGenerator {
         return resultMap;
     }
 
+    private void addFieldInitializers(Clazz input, Visitor visitor) {
+        for (Field f: input.fields) {
+            if (!f.isStatic && f.expression != null) {
+                visitor.mv.visitVarInsn(ALOAD, 0);
+                f.expression.visit(visitor);
+                visitor.mv.visitFieldInsn(PUTFIELD, input.name, f.getName(), f.getType().name);
+            }
+        }
+    }
+
     private byte[] generateBytecode(Clazz input) throws CodeGenException {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         cw.visit(V1_4, input.access.asm | ACC_SUPER, input.name, null, "java/lang/Object", null);
 
         Scope classScope = new Scope(null);
         input.fields.forEach(classScope::add);
+        boolean hasStaticInitializer = false;
+
+        for (Field f: input.fields) {
+            cw.visitField(f.access.asm | (f.isStatic ? ACC_STATIC : 0), f.getName(), f.getType().name, null, null).visitEnd();
+            if (f.isStatic && f.expression != null) {
+                hasStaticInitializer = true;
+            }
+        }
 
         boolean hasConstructor = false;
         for (Method method: input.methods) {
             String methodName = method.name;
-            boolean isConstructor = method.name == input.name;
+            boolean isConstructor = method.name.equals(input.name);
             if (isConstructor) {
                 hasConstructor = true;
                 methodName = "<init>";
@@ -601,6 +623,7 @@ public class CodeGenerator {
             if (isConstructor) {
                 mv.visitVarInsn(ALOAD, 0);
                 mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+                addFieldInitializers(input, visitor);
             }
             method.body.visit(visitor);
             if (method.returnType.equals(Type.VOID)) {
@@ -612,15 +635,28 @@ public class CodeGenerator {
 
         if (!hasConstructor) {
             MethodVisitor mv = cw.visitMethod(AccessModifier.PUBLIC.asm, "<init>","()V", null, null);
+            Visitor visitor = new Visitor(input, new Scope(classScope), mv);
+            visitor.addLocal(new Identifier("this", new Type(input.name)));
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+            addFieldInitializers(input, visitor);
             mv.visitInsn(RETURN);
             mv.visitMaxs(0, 0);
             mv.visitEnd();
         }
 
-        for (Field f: input.fields) {
-            cw.visitField(f.access.asm | (f.isStatic ? ACC_STATIC : 0), f.getName(), f.getType().name, null, null).visitEnd();
+        if (hasStaticInitializer) {
+            MethodVisitor mv = cw.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
+            Visitor visitor = new Visitor(input, new Scope(classScope), mv);
+            for (Field f: input.fields) {
+                if (f.isStatic && f.expression != null) {
+                    f.expression.visit(visitor);
+                    visitor.mv.visitFieldInsn(PUTSTATIC, input.name, f.getName(), f.getType().name);
+                }
+            }
+            mv.visitInsn(RETURN);
+            mv.visitMaxs(0, 0);
+            mv.visitEnd();
         }
 
         cw.visitEnd();
