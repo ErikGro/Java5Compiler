@@ -480,17 +480,20 @@ public class CodeGenerator {
         @Override
         public void visit(For _for) {
             scope = new Scope(scope);
-            _for.init.visit(this);
+            if (_for.init != null)
+                _for.init.visit(this);
             Label start = new Label();
             Label end = new Label();
             mv.visitLabel(start);
-            _for.termination.visit(this);
+            if (_for.termination != null)
+                _for.termination.visit(this);
             mv.visitJumpInsn(IFEQ, end);
             _for.body.visit(this);
-            _for.increment.visit(this);
-            System.out.println(_for.increment.getType());
-            if (!_for.increment.getType().equals(Type.VOID)) {
-                mv.visitInsn(POP);
+            if (_for.increment != null) {
+                _for.increment.visit(this);
+                if (!_for.increment.getType().equals(Type.VOID)) {
+                    mv.visitInsn(POP);
+                }
             }
             mv.visitJumpInsn(GOTO, start);
             mv.visitLabel(end);
