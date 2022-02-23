@@ -19,6 +19,7 @@ import de.unituebingen.compilerbau.ast.statementexpressions.*;
 import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.TypeCheckException;
 
+import java.util.List;
 import java.util.Map;
 
 public class TypeChecker implements ASTVisitor {
@@ -42,6 +43,8 @@ public class TypeChecker implements ASTVisitor {
     }
 
     private void checkClazz(Clazz clazz) throws TypeCheckException {
+        checkFields(clazz.fields);
+
         for (Field field: clazz.fields)
             env.addToScope(new Identifier(field.getName(), field.getType()));
 
@@ -51,6 +54,16 @@ public class TypeChecker implements ASTVisitor {
                 env.addToScope(param);
             meth.body.visit(this);
             env.closeScope();
+        }
+    }
+
+    private void checkFields(List<Field> fields) {
+        for (Field field: fields) {
+            if (field.expression != null) {
+                field.expression.visit(this);
+                if (!field.getType().equals(field.expression.getType()))
+                    throw new TypeCheckException("lhs and rhs of an assignment must be of the same type");
+            }
         }
     }
 
@@ -96,7 +109,6 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(DotOperator dotOperator) throws TypeCheckException {
-        // TODO: Static fields are accessed using a Type-name!
         Clazz clazz;
         boolean isStatic = false;
         if (dotOperator.left instanceof Identifier &&
