@@ -535,7 +535,9 @@ public class CodeGenerator {
         public void visit(Return _return) {
             if (_return.expr != null) {
                 _return.expr.visit(this);
-                mv.visitInsn(IRETURN);
+                if (_return.expr.getType().equals(Type.INT) || _return.expr.getType().equals(Type.BOOLEAN) || _return.expr.getType().equals(Type.CHAR))
+                    mv.visitInsn(IRETURN);
+                else mv.visitInsn(ARETURN);
             } else {
                 mv.visitInsn(RETURN);
             }
