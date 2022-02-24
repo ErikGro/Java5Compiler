@@ -261,21 +261,18 @@ public class TypeChecker implements ASTVisitor {
     @Override
     public void visit(Increment increment) throws TypeCheckException {
         System.out.println(increment);
-        // TODO: Only identifiers may be incremented!
         expect(Type.INT, increment.expression);
         increment.setType(Type.INT);
     }
 
     @Override
     public void visit(Decrement decrement) throws TypeCheckException {
-        // TODO: Only identifiers may be decremented!
         expect(Type.INT, decrement.expression);
         decrement.setType(Type.INT);
     }
 
     @Override
     public void visit(Assignment assignment) throws TypeCheckException {
-        // TODO: LHS must be a field/variable!
         expectSame(assignment.left, assignment.right);
         assignment.setType(assignment.left.getType());
     }
@@ -299,6 +296,7 @@ public class TypeChecker implements ASTVisitor {
             // Called on this
             clazz = clazzes.get(current);
 
+        // Evaluate arguments
         for (Expression arg: methodCall.args)
             arg.visit(this);
         Method method = clazz.findMethod(methodCall.name, methodCall.args);
@@ -322,7 +320,15 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(New _new) throws TypeCheckException {
-        // TODO:
+        Clazz clazz = clazzes.get(_new.getType().name);
+        // Evaluate arguments
+        for (Expression arg: _new.args)
+            arg.visit(this);
+
+        Method constructor = clazz.findMethod("init", _new.args);
+        // Default constructor?
+        if (constructor == null && !_new.args.isEmpty())
+            throw new TypeCheckException("Default constructor takes no arguments");
     }
 
     @Override
