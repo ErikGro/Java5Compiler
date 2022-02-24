@@ -12,13 +12,9 @@ import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
-import de.unituebingen.compilerbau.ast.statementexpressions.Decrement;
-import de.unituebingen.compilerbau.ast.statementexpressions.Increment;
+import de.unituebingen.compilerbau.ast.statementexpressions.*;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
-import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
-import de.unituebingen.compilerbau.ast.statementexpressions.MethodCall;
-import de.unituebingen.compilerbau.ast.statementexpressions.New;
 import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.CodeGenException;
 import org.antlr.v4.tool.DOTGenerator;
@@ -471,8 +467,11 @@ public class CodeGenerator {
 
         @Override
         public void visit(New _new) {
-            mv.visitInsn(NEW);
+            mv.visitTypeInsn(NEW, _new.getType().name);
             mv.visitInsn(DUP);
+            for (Expression expr : _new.args) {
+                expr.visit(this);
+            }
             String descriptor = Method.getDescriptor(_new.args.stream().map(expr -> expr.getType()).collect(Collectors.toList()), null);
             mv.visitMethodInsn(INVOKESPECIAL, _new.getType().name, "<init>", descriptor, false);
         }
@@ -561,7 +560,7 @@ public class CodeGenerator {
                     if (s.getType() != null) {
                         mv.visitInsn(POP);
                     }
-                } else if (s instanceof Increment || s instanceof Decrement || s instanceof Assignment) {
+                } else if (s instanceof StatementExpression) {
                     mv.visitInsn(POP);
                 }
             }
