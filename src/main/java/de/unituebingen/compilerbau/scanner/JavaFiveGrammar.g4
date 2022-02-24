@@ -101,7 +101,7 @@ assignment
     ;
 
 selectorPart
-    :   (This Selector)? Identifier
+    :   (This Selector)? Identifier (Selector Identifier)*
     ;
 
 assignmentPart
