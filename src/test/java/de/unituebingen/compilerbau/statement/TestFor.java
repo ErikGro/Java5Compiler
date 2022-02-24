@@ -28,7 +28,9 @@ public class TestFor extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement init = new LocalVarDeclaration("i", new IntLiteral(0));
-        Expression termination = new Less(new Identifier("i", null), new IntLiteral(42));
+        init.setType(Type.INT);
+        Less termination = new Less(new Identifier("i", null), new IntLiteral(42));
+        termination.setType(Type.BOOLEAN);
         Statement increment = new Increment(new Identifier("i", null), true);
         Statement forLoop = new For(init, termination, increment, new Block(Collections.emptyList()));
         Block body = new Block(Arrays.asList(forLoop));
@@ -36,7 +38,8 @@ public class TestFor extends CompilerTest {
 
         Statement init2 = new LocalVarDeclaration("i", new IntLiteral(0));
         init2.setType(Type.INT);
-        Expression termination2 = new LessOrEqual(new Identifier("i", null), new IntLiteral(42));
+        LessOrEqual termination2 = new LessOrEqual(new Identifier("i", null), new IntLiteral(42));
+        termination2.setType(Type.BOOLEAN);
         Statement increment2 = new Increment(new Identifier("i", null), true);
         If bodyForLoop = new If(
                 new Equal(new Identifier("i", null), new IntLiteral(42)),
