@@ -76,7 +76,7 @@ public class CodeGenerator {
             LocalOrFieldVar var = scope.get(identifier.name);
             if (var instanceof Local) {
                 Local local = (Local) var;
-                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                if (local.getType().equals(Type.BOOLEAN) || local.getType().equals(Type.CHAR) || local.getType().equals(Type.INT))
                     mv.visitVarInsn(ILOAD, local.index);
                 else mv.visitVarInsn(ALOAD, local.index);
             } else if (var instanceof Field) {
@@ -420,7 +420,7 @@ public class CodeGenerator {
                     assignment.right.visit(this);
                     mv.visitInsn(DUP);
                     Local local = (Local) var;
-                    if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                    if (local.getType().equals(Type.BOOLEAN) || local.getType().equals(Type.CHAR) || local.getType().equals(Type.INT))
                         mv.visitVarInsn(ISTORE, local.index);
                     else mv.visitVarInsn(ASTORE, local.index);
                 } else if (var instanceof Field) {
@@ -521,7 +521,7 @@ public class CodeGenerator {
                 localVarDeclaration.expression.visit(this);
 
                 Local local = (Local) scope.get(localVarDeclaration.name);
-                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                if (local.getType().equals(Type.BOOLEAN) || local.getType().equals(Type.CHAR) || local.getType().equals(Type.INT))
                     mv.visitVarInsn(ISTORE, local.index);
                 else mv.visitVarInsn(ASTORE, local.index);
             }
@@ -557,7 +557,7 @@ public class CodeGenerator {
                 s.visit(this);
                 // Pop extra values on the stack
                 if (s instanceof MethodCall) {
-                    if (s.getType() != null) {
+                    if (!s.getType().equals(Type.VOID)) {
                         mv.visitInsn(POP);
                     }
                 } else if (s instanceof StatementExpression) {
