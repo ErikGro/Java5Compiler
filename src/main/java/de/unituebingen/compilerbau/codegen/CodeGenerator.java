@@ -116,7 +116,6 @@ public class CodeGenerator {
         public void visit(DotOperator dotOperator) {
             if (!dotOperator.isStatic())
                 dotOperator.left.visit(this);
-            else mv.visitInsn(POP);
             mv.visitFieldInsn(dotOperator.isStatic() ? GETSTATIC : GETFIELD, dotOperator.left.getType().name, dotOperator.right, getDescriptor(dotOperator.getType()));
         }
 
