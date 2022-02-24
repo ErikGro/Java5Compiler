@@ -383,8 +383,12 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Return _return) throws TypeCheckException {
-        _return.expr.visit(this);
-        _return.setType(_return.expr.getType());
+        if (_return.expr == null)
+            _return.setType(Type.VOID);
+        else {
+            _return.expr.visit(this);
+            _return.setType(_return.expr.getType());
+        }
     }
 
     @Override
