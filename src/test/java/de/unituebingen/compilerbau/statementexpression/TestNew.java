@@ -20,6 +20,7 @@ import java.util.*;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PACKAGEPRIVATE;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestNew extends CompilerTest {
     public String getMockFilePath() {
@@ -72,13 +73,12 @@ public class TestNew extends CompilerTest {
 
         assertEquals(getExpectedClassMap().get("MockNew"), resultMap.get("MockNew"));
         assertEquals(getExpectedClassMap().get("Hans"), resultMap.get("Hans"));
-
     }
 
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
         TypeChecker typeChecker = new TypeChecker();
-        typeChecker.check(getExpectedClassMap());
+        assertTrue(typeChecker.check(getExpectedClassMap()));
     }
 
     @Override

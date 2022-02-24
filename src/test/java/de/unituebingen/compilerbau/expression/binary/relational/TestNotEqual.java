@@ -22,8 +22,7 @@ import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestNotEqual extends CompilerTest {
     public String getMockFilePath() {
@@ -73,7 +72,7 @@ public class TestNotEqual extends CompilerTest {
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
         TypeChecker typeChecker = new TypeChecker();
-        typeChecker.check(getExpectedClassMap());
+        assertTrue(typeChecker.check(getExpectedClassMap()));
     }
 
     @Override

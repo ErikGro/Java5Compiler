@@ -652,7 +652,10 @@ public class ScannerParser
 
         private Expression makePostOrPreIncrement(Expression expr, boolean add, boolean postfix)
         {
-            if (!(expr instanceof Identifier || expr instanceof This))
+            if (!(expr instanceof Identifier
+                    || expr instanceof This
+                    || expr instanceof DotOperator
+            ))
             {
                 throw new ASTException("Variable expected but got " + expr);
             }

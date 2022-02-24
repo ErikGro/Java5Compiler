@@ -19,6 +19,7 @@ import java.util.*;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PRIVATE;
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestClass extends CompilerTest {
     public String getMockFilePath() {
@@ -68,12 +69,17 @@ public class TestClass extends CompilerTest {
     @Override
     public void testTypeCheckedAST() throws TypeCheckException, CloneNotSupportedException {
         TypeChecker typeChecker = new TypeChecker();
-        typeChecker.check(getExpectedClassMap());
+        assertTrue(typeChecker.check(getExpectedClassMap()));
     }
 
     @Override
     public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockClass");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }
