@@ -307,9 +307,9 @@ public class TypeChecker implements ASTVisitor {
 
         // Does the method exist? Is it public?
         if (method == null)
-            throw new TypeCheckException("Method '" + methodCall.name + "' is not defined in " + clazz.name);
+            throw new TypeCheckException("Method '" + methodCall.name + "' is not defined in '" + clazz.name + "'");
         if (method.access != AccessModifier.PUBLIC)
-            throw new TypeCheckException(method.name + " cannot be accessed");
+            throw new TypeCheckException("'" + method.name + "' cannot be accessed");
 
         // Is a static method called on an object?
         if (isStatic && !method.isStatic)
@@ -374,8 +374,8 @@ public class TypeChecker implements ASTVisitor {
         if (localVarDeclaration.expression != null) {
             localVarDeclaration.expression.visit(this);
             if (!localVarDeclaration.expression.getType().equals(localVarDeclaration.getType()))
-                throw new TypeCheckException("Assigned value does not match the declared type of " +
-                        localVarDeclaration.getType());
+                throw new TypeCheckException("Assigned value does not match the declared type of '" +
+                        localVarDeclaration.getType() + "'");
         }
     }
 
