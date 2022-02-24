@@ -53,7 +53,7 @@ forIncrement: expression;
 
 localVarDeclarationStatement:   type Identifier (SimpleAssignmentOp expression)? Semicolon;
 
-returnStatement: Return expression Semicolon;
+returnStatement: Return expression? Semicolon;
 
 statementExpression: expression Semicolon;
 
