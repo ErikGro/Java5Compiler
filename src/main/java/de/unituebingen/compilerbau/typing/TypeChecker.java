@@ -50,9 +50,14 @@ public class TypeChecker implements ASTVisitor {
 
         for (Method meth: clazz.methods) {
             env.openScope();
+
             for (Identifier param: meth.parameters)
                 env.addToScope(param);
+
             meth.body.visit(this);
+            if (!meth.body.getType().equals(meth.returnType))
+                throw new TypeCheckException("Returned value does not match declared type in '" + meth.name + "'");
+
             env.closeScope();
         }
     }
@@ -260,7 +265,6 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Increment increment) throws TypeCheckException {
-        System.out.println(increment);
         expect(Type.INT, increment.expression);
         increment.setType(Type.INT);
     }
