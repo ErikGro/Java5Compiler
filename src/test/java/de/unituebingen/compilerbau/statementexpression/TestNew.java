@@ -29,10 +29,14 @@ public class TestNew extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         List<Field> fields = new ArrayList<>();
-        Field hans = new Field(PUBLIC, false, "hans", new New(Collections.emptyList()), new Type("Hans"));
+        New newHans = new New(Collections.emptyList());
+        newHans.setType(new Type("Hans"));
+        Field hans = new Field(PUBLIC, false, "hans", newHans, new Type("Hans"));
         fields.add(hans);
 
-        Statement initHans = new LocalVarDeclaration("h", new New(Collections.emptyList()));
+        New newHans2 = new New(Collections.emptyList());
+        newHans2.setType(new Type("Hans"));
+        Statement initHans = new LocalVarDeclaration("h", newHans2);
         initHans.setType(new Type("Hans"));
         Block body = new Block(Arrays.asList(initHans));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
