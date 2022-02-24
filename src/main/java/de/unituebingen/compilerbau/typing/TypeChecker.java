@@ -125,6 +125,7 @@ public class TypeChecker implements ASTVisitor {
                 clazzes.containsKey(((Identifier) dotOperator.left).name)) {
             // Static?
             clazz = clazzes.get(((Identifier) dotOperator.left).name);
+            ((Identifier) dotOperator.left).setType(new Type(((Identifier) dotOperator.left).name));
             isStatic = true;
         } else {
             dotOperator.left.visit(this);
@@ -290,6 +291,7 @@ public class TypeChecker implements ASTVisitor {
                 this.clazzes.containsKey(((Identifier) methodCall.expr).name)) {
                 // Static?
                 clazz = clazzes.get(((Identifier) methodCall.expr).name);
+                ((Identifier) methodCall.expr).setType(new Type(((Identifier) methodCall.expr).name));
                 isStatic = true;
             } else {
                 // Called on object
