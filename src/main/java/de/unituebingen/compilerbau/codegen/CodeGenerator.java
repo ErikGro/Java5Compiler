@@ -12,13 +12,9 @@ import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.CharLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
 import de.unituebingen.compilerbau.ast.expression.relationaloperators.*;
-import de.unituebingen.compilerbau.ast.statementexpressions.Decrement;
-import de.unituebingen.compilerbau.ast.statementexpressions.Increment;
+import de.unituebingen.compilerbau.ast.statementexpressions.*;
 import de.unituebingen.compilerbau.ast.expression.unary.Negate;
 import de.unituebingen.compilerbau.ast.expression.unary.Not;
-import de.unituebingen.compilerbau.ast.statementexpressions.Assignment;
-import de.unituebingen.compilerbau.ast.statementexpressions.MethodCall;
-import de.unituebingen.compilerbau.ast.statementexpressions.New;
 import de.unituebingen.compilerbau.ast.statements.*;
 import de.unituebingen.compilerbau.exception.CodeGenException;
 import org.antlr.v4.tool.DOTGenerator;
@@ -80,7 +76,7 @@ public class CodeGenerator {
             LocalOrFieldVar var = scope.get(identifier.name);
             if (var instanceof Local) {
                 Local local = (Local) var;
-                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                if (local.getType().equals(Type.BOOLEAN) || local.getType().equals(Type.CHAR) || local.getType().equals(Type.INT))
                     mv.visitVarInsn(ILOAD, local.index);
                 else mv.visitVarInsn(ALOAD, local.index);
             } else if (var instanceof Field) {
@@ -424,7 +420,7 @@ public class CodeGenerator {
                     assignment.right.visit(this);
                     mv.visitInsn(DUP);
                     Local local = (Local) var;
-                    if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                    if (local.getType().equals(Type.BOOLEAN) || local.getType().equals(Type.CHAR) || local.getType().equals(Type.INT))
                         mv.visitVarInsn(ISTORE, local.index);
                     else mv.visitVarInsn(ASTORE, local.index);
                 } else if (var instanceof Field) {
@@ -471,8 +467,11 @@ public class CodeGenerator {
 
         @Override
         public void visit(New _new) {
-            mv.visitInsn(NEW);
+            mv.visitTypeInsn(NEW, _new.getType().name);
             mv.visitInsn(DUP);
+            for (Expression expr : _new.args) {
+                expr.visit(this);
+            }
             String descriptor = Method.getDescriptor(_new.args.stream().map(expr -> expr.getType()).collect(Collectors.toList()), null);
             mv.visitMethodInsn(INVOKESPECIAL, _new.getType().name, "<init>", descriptor, false);
         }
@@ -522,7 +521,7 @@ public class CodeGenerator {
                 localVarDeclaration.expression.visit(this);
 
                 Local local = (Local) scope.get(localVarDeclaration.name);
-                if (local.getType() == Type.BOOLEAN || local.getType() == Type.CHAR || local.getType() == Type.INT)
+                if (local.getType().equals(Type.BOOLEAN) || local.getType().equals(Type.CHAR) || local.getType().equals(Type.INT))
                     mv.visitVarInsn(ISTORE, local.index);
                 else mv.visitVarInsn(ASTORE, local.index);
             }
@@ -558,10 +557,10 @@ public class CodeGenerator {
                 s.visit(this);
                 // Pop extra values on the stack
                 if (s instanceof MethodCall) {
-                    if (s.getType() != null) {
+                    if (!s.getType().equals(Type.VOID)) {
                         mv.visitInsn(POP);
                     }
-                } else if (s instanceof Increment || s instanceof Decrement || s instanceof Assignment) {
+                } else if (s instanceof StatementExpression) {
                     mv.visitInsn(POP);
                 }
             }

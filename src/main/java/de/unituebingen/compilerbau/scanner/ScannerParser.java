@@ -539,7 +539,9 @@ public class ScannerParser
 
         public Expression visitNewExp(JavaFiveGrammarParser.NewExpContext ctx)
         {
-            return new New(visitExpressionList(ctx.expressionList()));
+            New _new = new New(visitExpressionList(ctx.expressionList()));
+            _new.setType(new Type(ctx.Identifier().getText()));
+            return _new;
         }
 
         public Expression visitAssignment(JavaFiveGrammarParser.AssignmentContext ctx)
