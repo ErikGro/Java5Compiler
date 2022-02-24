@@ -75,5 +75,10 @@ public class TestClass extends CompilerTest {
     public void testGeneratedBytecode() throws IOException, CloneNotSupportedException, ReflectiveOperationException {
         compileAndLoadClasses();
         Class c = this.compiledClasses.get("MockClass");
+
+        Object instance = c.getDeclaredConstructor().newInstance();
+        int returnValue = (int) c.getDeclaredMethod("returns42").invoke(instance);
+
+        assertEquals(42, returnValue);
     }
 }
