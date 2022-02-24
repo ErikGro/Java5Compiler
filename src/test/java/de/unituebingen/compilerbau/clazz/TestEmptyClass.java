@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestEmptyClass extends CompilerTest {
     @Override
@@ -39,7 +40,6 @@ public class TestEmptyClass extends CompilerTest {
     public void testAST() throws ASTException {
         final ScannerParser scannerParser = new ScannerParser();
         Map<String, Clazz> resultMap = scannerParser.parse(this.getSourcecode());
-        Clazz mockEmptyClass = resultMap.get("MockEmptyClass");
 
         assertEquals(getExpectedClassMap().get("MockEmptyClass"), resultMap.get("MockEmptyClass"));
     }
@@ -47,7 +47,7 @@ public class TestEmptyClass extends CompilerTest {
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
         TypeChecker typeChecker = new TypeChecker();
-        typeChecker.check(getExpectedClassMap());
+        assertTrue(typeChecker.check(getExpectedClassMap()));
     }
 
     @Override

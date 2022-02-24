@@ -16,6 +16,7 @@ import java.util.*;
 
 import static de.unituebingen.compilerbau.ast.AccessModifier.PUBLIC;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestMethodParameter extends CompilerTest {
     public String getMockFilePath() {
@@ -63,7 +64,7 @@ public class TestMethodParameter extends CompilerTest {
     @Override
     public void testTypeCheckedAST() throws TypeCheckException {
         TypeChecker typeChecker = new TypeChecker();
-        typeChecker.check(getExpectedClassMap());
+        assertTrue(typeChecker.check(getExpectedClassMap()));
     }
 
     @Override
