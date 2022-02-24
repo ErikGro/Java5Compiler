@@ -73,6 +73,11 @@ public class TypeChecker implements ASTVisitor {
             throw new TypeCheckException("Expected type " + t.name + ", got " + exp.getType().name);
     }
 
+    private void expectSame(Expression expr1, Expression expr2) throws TypeCheckException {
+        expr1.visit(this);
+        expect(expr1.getType(), expr2);
+    }
+
     private void checkBinary(Type argT, Type retT, Binary bin) {
         expect(argT, bin.left);
         expect(argT, bin.right);
@@ -205,19 +210,13 @@ public class TypeChecker implements ASTVisitor {
     @Override
     public void visit(Ternary ternary) throws TypeCheckException {
         expect(Type.BOOLEAN, ternary.first);
-        ternary.second.visit(this);
-        ternary.third.visit(this);
-        if (!ternary.second.getType().equals(ternary.third.getType()))
-            throw new TypeCheckException("Both branches of an inline if must be of the same type");
+        expectSame(ternary.second, ternary.third);
         ternary.setType(ternary.second.getType());
     }
 
     @Override
     public void visit(Equal equal) throws TypeCheckException {
-        equal.left.visit(this);
-        equal.right.visit(this);
-        if (!equal.left.getType().equals(equal.right.getType()))
-            throw new TypeCheckException("lhs and rhs of equality must be of the same type");
+        expectSame(equal.left, equal.right);
         equal.setType(Type.BOOLEAN);
     }
 
@@ -243,10 +242,7 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(NotEqual notEqual) throws TypeCheckException {
-        notEqual.left.visit(this);
-        notEqual.right.visit(this);
-        if (!notEqual.left.getType().equals(notEqual.right.getType()))
-            throw new TypeCheckException("lhs and rhs of inequality must be of the same type");
+        expectSame(notEqual.left, notEqual.right);
         notEqual.setType(Type.BOOLEAN);
     }
 
@@ -280,10 +276,7 @@ public class TypeChecker implements ASTVisitor {
     @Override
     public void visit(Assignment assignment) throws TypeCheckException {
         // TODO: LHS must be a field/variable!
-        assignment.left.visit(this);
-        assignment.right.visit(this);
-        if (!assignment.left.getType().equals(assignment.right.getType()))
-            throw new TypeCheckException("lhs and rhs of an assignment must be of the same type");
+        expectSame(assignment.left, assignment.right);
         assignment.setType(assignment.left.getType());
     }
 
