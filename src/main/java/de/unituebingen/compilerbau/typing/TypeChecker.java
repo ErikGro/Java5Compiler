@@ -45,6 +45,7 @@ public class TypeChecker implements ASTVisitor {
     private void checkClazz(Clazz clazz) throws TypeCheckException {
         checkFields(clazz.fields);
 
+        env.openScope();
         for (Field field: clazz.fields)
             env.addToScope(new Identifier(field.getName(), field.getType()));
 
@@ -55,11 +56,13 @@ public class TypeChecker implements ASTVisitor {
                 env.addToScope(param);
 
             meth.body.visit(this);
+            System.out.println(meth.body.getType());
             if (!meth.body.getType().equals(meth.returnType))
                 throw new TypeCheckException("Returned value does not match declared type in '" + meth.name + "'");
 
             env.closeScope();
         }
+        env.closeScope();
     }
 
     private void checkFields(List<Field> fields) {
@@ -150,7 +153,11 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Add add) throws TypeCheckException {
-        checkBinary(Type.INT, Type.INT, add);
+        expectSame(add.left, add.right);
+        if (add.left.getType().equals(Type.INT) || add.left.getType().equals(Type.CHAR))
+            add.setType(add.left.getType());
+        else
+            throw new TypeCheckException("Addition is only defined on INT and CHAR");
     }
 
     @Override
@@ -170,7 +177,11 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(Subtract subtract) throws TypeCheckException {
-        checkBinary(Type.INT, Type.INT, subtract);
+        expectSame(subtract.left, subtract.right);
+        if (subtract.left.getType().equals(Type.INT) || subtract.left.getType().equals(Type.CHAR))
+            subtract.setType(subtract.left.getType());
+        else
+            throw new TypeCheckException("Subtraction is only defined on INT and CHAR");
     }
 
     @Override
@@ -185,17 +196,17 @@ public class TypeChecker implements ASTVisitor {
 
     @Override
     public void visit(BitAnd bitand) throws TypeCheckException {
-        checkBinary(Type.INT, Type.BOOLEAN, bitand);
+        checkBinary(Type.INT, Type.INT, bitand);
     }
 
     @Override
     public void visit(BitOr bitor) throws TypeCheckException {
-        checkBinary(Type.INT, Type.BOOLEAN, bitor);
+        checkBinary(Type.INT, Type.INT, bitor);
     }
 
     @Override
     public void visit(BitXOR bitxor) throws TypeCheckException {
-        checkBinary(Type.INT, Type.BOOLEAN, bitxor);
+        checkBinary(Type.INT, Type.INT, bitxor);
     }
 
     @Override
@@ -327,6 +338,9 @@ public class TypeChecker implements ASTVisitor {
     @Override
     public void visit(New _new) throws TypeCheckException {
         Clazz clazz = clazzes.get(_new.getType().name);
+        if (clazz == null)
+            throw new TypeCheckException("'" + _new.getType().name + "' does not exist");
+
         // Evaluate arguments
         for (Expression arg: _new.args)
             arg.visit(this);
@@ -379,6 +393,7 @@ public class TypeChecker implements ASTVisitor {
                 throw new TypeCheckException("Assigned value does not match the declared type of '" +
                         localVarDeclaration.getType() + "'");
         }
+        localVarDeclaration.setType(Type.VOID);
     }
 
     @Override
