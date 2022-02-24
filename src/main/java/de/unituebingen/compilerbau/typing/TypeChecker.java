@@ -392,6 +392,7 @@ public class TypeChecker implements ASTVisitor {
                 throw new TypeCheckException("Assigned value does not match the declared type of '" +
                         localVarDeclaration.getType() + "'");
         }
+        localVarDeclaration.setFieldType(localVarDeclaration.getType());
         localVarDeclaration.setType(Type.VOID);
     }
 

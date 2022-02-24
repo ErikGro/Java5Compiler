@@ -520,7 +520,8 @@ public class CodeGenerator {
 
         @Override
         public void visit(LocalVarDeclaration localVarDeclaration) {
-            addLocal(new Identifier(localVarDeclaration.name, localVarDeclaration.getType()));
+            Type type = localVarDeclaration.getFieldType();
+            addLocal(new Identifier(localVarDeclaration.name, type));
             if (localVarDeclaration.expression != null) {
                 localVarDeclaration.expression.visit(this);
 

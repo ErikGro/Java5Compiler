@@ -15,10 +15,19 @@ public class LocalVarDeclaration extends Statement
 {
     public final String name;
     public final Expression expression;
+    protected Type fieldType;
 
     public LocalVarDeclaration(String name, Expression expression) {
         this.name = name;
         this.expression = expression;
+    }
+
+    public void setFieldType(Type type) {
+        this.fieldType = type;
+    }
+
+    public Type getFieldType() {
+        return this.fieldType;
     }
 
     @Override
