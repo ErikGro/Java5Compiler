@@ -309,7 +309,7 @@ public class ScannerParser
 
         public Return visitReturn(JavaFiveGrammarParser.ReturnStatementContext ctx)
         {
-            return new Return(visitExpression(ctx.expression()));
+            return new Return(ctx.getChildCount() == 3 ? visitExpression(ctx.expression()) : null);
         }
 
         public Statement visitStatementExpression(JavaFiveGrammarParser.StatementExpressionContext ctx)
