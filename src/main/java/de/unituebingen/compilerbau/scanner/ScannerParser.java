@@ -555,9 +555,19 @@ public class ScannerParser
 
         private Expression visitSelectorPart(JavaFiveGrammarParser.SelectorPartContext ctx)
         {
-            return ctx.This() != null
-                    ? new DotOperator(new This(), ctx.Identifier().getText())
-                    : new Identifier(ctx.Identifier().getText(), null);
+            // single variable
+            if (ctx.getChildCount() == 1)
+            {
+                return new Identifier(ctx.Identifier(0).getText(), null);
+            }
+            Expression dot = ctx.This() == null
+                    ? new Identifier(ctx.Identifier(0).getText(), null)
+                    : new DotOperator(new This(), ctx.Identifier(0).getText());
+            for (int i = 1; i < ctx.Identifier().size(); i++)
+            {
+                dot = new DotOperator(dot, ctx.Identifier(i).getText());
+            }
+            return dot;
         }
 
         private Expression visitAssignmentPart(JavaFiveGrammarParser.AssignmentPartContext ctx)
