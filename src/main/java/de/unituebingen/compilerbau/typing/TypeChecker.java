@@ -56,7 +56,6 @@ public class TypeChecker implements ASTVisitor {
                 env.addToScope(param);
 
             meth.body.visit(this);
-            System.out.println(meth.body.getType());
             if (!meth.body.getType().equals(meth.returnType))
                 throw new TypeCheckException("Returned value does not match declared type in '" + meth.name + "'");
 
