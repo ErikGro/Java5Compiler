@@ -325,7 +325,7 @@ public class TypeChecker implements ASTVisitor {
         for (Expression arg: _new.args)
             arg.visit(this);
 
-        Method constructor = clazz.findMethod("init", _new.args);
+        Method constructor = clazz.findMethod(_new.getType().name, _new.args);
         // Default constructor?
         if (constructor == null && !_new.args.isEmpty())
             throw new TypeCheckException("Default constructor takes no arguments");
