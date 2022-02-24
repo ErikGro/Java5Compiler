@@ -30,14 +30,14 @@ public class TestNegate extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new IntLiteral(42));
-        statementA.setType(Type.BOOLEAN);
+        statementA.setType(Type.INT);
         Statement statementB = new LocalVarDeclaration("b", new Negate(new Identifier("a", null)));
-        statementB.setType(Type.BOOLEAN);
+        statementB.setType(Type.INT);
         Block body = new Block(Arrays.asList(statementA, statementB));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
         Statement negativeDecl = new LocalVarDeclaration("negative", new Negate(new IntLiteral(42)));
-        negativeDecl.setType(Type.BOOLEAN);
+        negativeDecl.setType(Type.INT);
         Statement returnStmt = new Return(new Negate(new Identifier("negative", null)));
         Block body2 = new Block(Arrays.asList(negativeDecl, returnStmt));
         Method returns42Method = new Method(PUBLIC, false, "returns42", Type.INT, Collections.emptyList(), body2);

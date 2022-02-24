@@ -1,10 +1,7 @@
 package de.unituebingen.compilerbau.expression.terniary;
 
 import de.unituebingen.compilerbau.CompilerTest;
-import de.unituebingen.compilerbau.ast.Clazz;
-import de.unituebingen.compilerbau.ast.Method;
-import de.unituebingen.compilerbau.ast.Statement;
-import de.unituebingen.compilerbau.ast.Type;
+import de.unituebingen.compilerbau.ast.*;
 import de.unituebingen.compilerbau.ast.expression.Ternary;
 import de.unituebingen.compilerbau.ast.expression.literal.BooleanLiteral;
 import de.unituebingen.compilerbau.ast.expression.literal.IntLiteral;
@@ -30,9 +27,9 @@ public class TestTerniary extends CompilerTest {
     @Override
     public Map<String, Clazz> getExpectedClassMap() {
         Statement statementA = new LocalVarDeclaration("a", new Ternary(new BooleanLiteral(true), new IntLiteral(42), new IntLiteral(43)));
-        statementA.setType(Type.BOOLEAN);
+        statementA.setType(Type.INT);
         Statement statementB = new LocalVarDeclaration("b", new Ternary(new BooleanLiteral(false), new IntLiteral(42), new IntLiteral(43)));
-        statementB.setType(Type.BOOLEAN);
+        statementB.setType(Type.INT);
         Block body = new Block(Arrays.asList(statementA, statementB));
         Method testMethod = new Method(PUBLIC, false, "test", Type.VOID, Collections.emptyList(), body);
 
